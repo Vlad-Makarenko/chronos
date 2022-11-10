@@ -1,7 +1,7 @@
 {
   "name": "api",
   "version": "1.0.0",
-  "description": "",
+  "description": "This repository contains the educational project \"Chronos\" that we developed as part of the assignment \"Chronos\" in the Innovation Campus in ucode-connect",
   "main": "app.js",
   "scripts": {
     "client": "npm run start --prefix ../client",
