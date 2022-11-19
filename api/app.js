@@ -1,8 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const mongoose = require('mongoose');
-
+const { InitDB } = require('./models');
 // const errorMiddleware = require('./middleware/apiError.middlware');
 
 require('dotenv').config({ path: './.env' });
@@ -26,7 +25,7 @@ app.get('/', (req, res) => {
 
 const start = async () => {
   try {
-    await mongoose.connect(process.env.DB_URI);
+    await InitDB();
     app.listen(PORT, () => {
       console.log(`server is running on http://${HOST}:${PORT}`);
     });
