@@ -2,7 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const { InitDB } = require('./models');
-// const errorMiddleware = require('./middleware/apiError.middlware');
+const authRouter = require('./routes/auth.routes');
+
+const errorMiddleware = require('./middlewares/apiError.middlware');
 
 require('dotenv').config({ path: './.env' });
 
@@ -17,7 +19,9 @@ app.use(express.static('static'));
 app.use(cookieParser());
 app.use(cors({ credentials: true, origin: process.env.CLIENT_URL }));
 
-// app.use(errorMiddleware);
+app.use('/api/auth', authRouter);
+
+app.use(errorMiddleware);
 
 app.get('/', (req, res) => {
   res.send('OK');

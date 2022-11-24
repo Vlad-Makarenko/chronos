@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 module.exports.tokenSchema = new mongoose.Schema({
-  author: {
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },

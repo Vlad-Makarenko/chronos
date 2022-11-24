@@ -17,6 +17,10 @@ module.exports.userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  avatar: {
+    type: String,
+    default: 'default.png',
+  },
   createdAt: {
     type: Date,
     immutable: true,
