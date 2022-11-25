@@ -1,12 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+require('dotenv').config({ path: './.env' });
 const { InitDB } = require('./models');
 const authRouter = require('./routes/auth.routes');
+const calendarRouter = require('./routes/calendar.routes');
 
-const errorMiddleware = require('./middlewares/apiError.middlware');
-
-require('dotenv').config({ path: './.env' });
+const errorMiddleware = require('./middlewares/apiError.middleware');
 
 const app = express();
 
@@ -20,6 +20,7 @@ app.use(cookieParser());
 app.use(cors({ credentials: true, origin: process.env.CLIENT_URL }));
 
 app.use('/api/auth', authRouter);
+app.use('/api/calendar', calendarRouter)
 
 app.use(errorMiddleware);
 
