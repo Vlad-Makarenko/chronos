@@ -12,6 +12,7 @@ module.exports.eventSchema = new mongoose.Schema({
   type: {
     type: String,
     enum: ['arrangement', 'reminder', 'task', 'default'],
+    default: 'default',
   },
   description: String,
   color: {
