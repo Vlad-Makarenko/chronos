@@ -1,12 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const { InitDB } = require('./models');
-const authRouter = require('./routes/auth.routes');
-
-const errorMiddleware = require('./middlewares/apiError.middlware');
-
 require('dotenv').config({ path: './.env' });
+const { InitDB } = require('./models');
+
+const authRouter = require('./routes/auth.routes');
+const errorMiddleware = require('./middlewares/apiError.middlware');
 
 const app = express();
 

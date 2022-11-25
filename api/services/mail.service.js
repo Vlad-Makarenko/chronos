@@ -15,8 +15,6 @@ class MailService {
   }
 
   async sendGreeting(to) {
-    const { refreshToken } = tokenService.generateTokens({ email: to });
-    const link = `${process.env.API_URL}/api/auth/activate/${refreshToken}`;
     await this.transporter.sendMail({
       from: process.env.SMTP_USER,
       to,

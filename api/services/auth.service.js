@@ -39,13 +39,13 @@ const registration = async (
     fullName,
   });
   // TODO: remake to greeting mail
-  await mailService.sendGreeting(email);
+  mailService.sendGreeting(email);
 
   const tokens = tokenService.generateTokens(userDto(user));
   await tokenService.saveToken(user.id, tokens.refreshToken);
 
   return {
-    ...tokens,
+    accessToken: tokens.accessToken,
     ...userDto(user),
   };
 };
