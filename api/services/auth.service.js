@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const mailService = require('./mail.service');
+const calendarService = require('./calendar.service');
 const tokenService = require('./token.service');
 const ApiError = require('../utils/ApiError');
 const userDto = require('../utils/userDto');
@@ -14,6 +15,7 @@ const registration = async (
   password,
   repeatedPassword,
   fullName,
+  country,
 ) => {
   if (password !== repeatedPassword) {
     throw ApiError.BadRequestError('Passwords don\'t match');
@@ -40,6 +42,7 @@ const registration = async (
   });
   // TODO: remake to greeting mail
   mailService.sendGreeting(email);
+  await calendarService.makeDefaultCalendar(user, country);
 
   const tokens = tokenService.generateTokens(userDto(user));
   await tokenService.saveToken(user.id, tokens.refreshToken);

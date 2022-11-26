@@ -11,7 +11,7 @@ const registration = async (req, res, next) => {
       return next(ApiError.BadRequestError('validation error', errors.array()));
     }
     const {
-      email, login, password, repeatedPassword, fullName,
+      email, login, password, repeatedPassword, fullName, country,
     } = req.body;
     const userData = await authService.registration(
       email,
@@ -19,6 +19,7 @@ const registration = async (req, res, next) => {
       password,
       repeatedPassword,
       fullName,
+      country,
     );
     return res.status(201).json({ ...userData });
   } catch (err) {

@@ -9,6 +9,11 @@ module.exports.calendarSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  type: {
+    type: String,
+    enum: ['main', 'own', 'shared'],
+    default: 'own',
+  },
   description: String,
   participants: [
     {

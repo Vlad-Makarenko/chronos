@@ -1,26 +1,19 @@
-const ApiError = require('./apiError.middleware');
+const ApiError = require('../utils/ApiError');
 const tokenService = require('../services/token.service');
 
-module.exports = async function (req, res, next) {
+module.exports = async (req, res, next) => {
   try {
-    const authorizationHeader = req.headers.authorization;
-
-    if (!authorizationHeader) return next(ApiError.UnathorizedError());
-
-    const accessToken = authorizationHeader.split(' ')[1];
-
-    if (!accessToken) return next(ApiError.UnathorizedError());
-
-    const userData = tokenService.validateAccessToken(accessToken);
-
-    if (!userData) return next(ApiError.UnathorizedError());
-
-    const token = await new Token({}).findBy('userId', userData.id);
-    if (!token) return next(ApiError.UnathorizedError());
-
-    req.user = userData;
+    const token = req.headers.authorization.split(' ')[1];
+    if (!token) {
+      return next(ApiError.UnauthorizedError());
+    }
+    const decoded = tokenService.validateAccessToken(token);
+    if (!decoded) {
+      return next(ApiError.UnauthorizedError());
+    }
+    req.user = decoded;
     next();
-  } catch (e) {
-    return next(ApiError.UnathorizedError());
+  } catch (err) {
+    return next(ApiError.UnauthorizedError());
   }
 };

@@ -13,7 +13,7 @@ module.exports = class ApiError extends Error {
     return new ApiError(400, message, errors);
   }
 
-  static ForbiddenError(message = 'Only admins can do this', errors = []) {
+  static ForbiddenError(message = 'You can\'t do this', errors = []) {
     return new ApiError(403, message, errors);
   }
 
