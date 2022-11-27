@@ -11,6 +11,7 @@ const createCalendar = async (req, res, next) => {
     }
     const { name, description } = req.body;
     const calendar = await calendarService.createCalendar(req.user.id, {
+      author: req.user.id,
       name,
       description,
     });
@@ -67,8 +68,8 @@ const getCalendar = async (req, res, next) => {
 
 const deleteCalendar = async (req, res, next) => {
   try {
-    const { calendarId } = req.params;
-    await calendarService.deleteCalendar(req.user.id, calendarId);
+    const { id } = req.params;
+    await calendarService.deleteCalendar(req.user.id, id);
     res.status(204).json({ message: 'Calendar deleted successfully' });
   } catch (err) {
     next(err);

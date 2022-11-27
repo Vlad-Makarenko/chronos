@@ -3,16 +3,19 @@ const { HolidayAPI } = require('holidayapi');
 const mailService = require('./mail.service');
 const eventService = require('./event.service');
 const ApiError = require('../utils/ApiError');
-const holydayDto = require('../utils/holidayDto');
+const holidayDto = require('../utils/holidayDto');
 
-const { Calendar, Event } = require('../models');
+const { Calendar, User, Event } = require('../models');
 
 const createCalendar = async (userId, calendar) => await Calendar.create(calendar)
-  .then((docCalendar) => User.findByIdAndUpdate(
-    userId,
-    { $push: { events: docCalendar.id } },
-    { new: true, useFindAndModify: false },
-  ));
+  .then((docCalendar) => {
+    User.findByIdAndUpdate(
+      userId,
+      { $push: { calendars: docCalendar.id } },
+      { new: true, useFindAndModify: false },
+    );
+    return docCalendar;
+  })
 
 const makeDefaultCalendar = async (user, country) => {
   const mainCalendar = await createCalendar(user.id, {
@@ -21,15 +24,16 @@ const makeDefaultCalendar = async (user, country) => {
     type: 'main',
     description:
       'This is the main calendar that displays your national holidays',
-  });
+    });
   const holidayApi = new HolidayAPI({ key: process.env.HOLIDAY_API_KEY });
   const holidayArr = await holidayApi
     .holidays({
       country,
       year: '2021',
     })
-    .then((response) => holydayDto(response.holidays));
-  holidayArr.forEach((element) => {
+    .then((response) => holidayDto(response.holidays, user.id));
+    console.log(holidayArr, mainCalendar.id);
+    holidayArr.forEach((element) => {
     eventService.createEvent(mainCalendar.id, element);
   });
 };
@@ -53,7 +57,7 @@ const getAllCalendars = async (userId) => {
   return calendar;
 };
 
-const updateCalendar = async (
+const updateCalendar = async (//TODO: shared?
   userId,
   calendarId,
   name,
@@ -62,7 +66,7 @@ const updateCalendar = async (
   isPublic,
 ) => {
   const calendar = await Calendar.findById(calendarId);
-  if (calendar.author !== userId) {
+  if (calendar.author.toString() !== userId) {
     throw ApiError.ForbiddenError();
   }
   calendar.name = name || calendar.name;
@@ -75,10 +79,11 @@ const updateCalendar = async (
 
 const deleteCalendar = async (userId, calendarId) => {
   const calendar = await Calendar.findById(calendarId);
+  console.log(calendar);
   if (!calendar) {
-    throw ApiError.BadRequestError('Calendar is not exists');
+    throw ApiError.BadRequestError('Calendar does not exist');
   }
-  if (calendar.author !== userId) {
+  if (calendar.author.toString() !== userId) {
     throw ApiError.ForbiddenError();
   }
   calendar.delete();
