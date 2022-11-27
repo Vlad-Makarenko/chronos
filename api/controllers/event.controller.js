@@ -3,25 +3,22 @@ const { validationResult } = require('express-validator');
 const authService = require('../services/auth.service');
 const eventService = require('../services/event.service');
 const tokenService = require('../services/token.service');
-const { Calendar, User, Event } = require('../models');
+const { Calendar, User, Event } = require('../models');с
 const ApiError = require('../utils/ApiError');
 
-const createEvent = async (req, res, next) => {//TODO: мб сразу добавлять участников на ивент чи хуйня
+const createEvent = async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return next(ApiError.BadRequestError('validation error', errors.array()));
     }
     const calendarId = req.params.calendarId;
-    const calendar = await Calendar.findById(calendarId);
-    if(!calendar){
-      return next(ApiError.BadRequestError('no such calendar found', errors.array()));
-    }
-    const {name, type, color, startEvent, endEvent} = req.body;//TODO: я хуй знает, как правильно стянуть тип, а если у нас нема старт ивента или цвета, то проверку сделац, но это завтра
+    const {name, type, color, startEvent, endEvent} = req.body;
     
     //TODO: проверить правильно ли приходит айди и работает ли ваще
-    const event = await eventService.createEvent(calendar.id, {
+    const event = await eventService.createEvent(calendarId, {
       author: req.user.id,
+      parentCalendar: calendarId,//TODO: mb to string()?
       name, 
       type,
       description,
@@ -57,7 +54,7 @@ const updateEvent = async (req, res, next) => {
       isPerformed
     );
 
-    return res.status(201).json({ event });
+    return res.status(201).json(event);
   } catch (err) {
     next(err);
   }

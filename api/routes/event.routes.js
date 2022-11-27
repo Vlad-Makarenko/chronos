@@ -19,7 +19,7 @@ router.post(
 );
 router.patch('/:id', authMiddleware, eventController.updateEvent);
 // router.get('/', authMiddleware, eventController.getAllEvents);
-router.get('/:calendarId', authMiddleware, eventController.getAllEvents);
+router.get('/calendar/:calendarId', authMiddleware, eventController.getAllEvents);
 router.get('/:id', authMiddleware, eventController.getEvent);
 router.delete('/:id', authMiddleware, eventController.deleteEvent);
 

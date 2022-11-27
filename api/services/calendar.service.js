@@ -34,7 +34,7 @@ const makeDefaultCalendar = async (user, country) => {
     .then((response) => holidayDto(response.holidays, user.id));
     console.log(holidayArr, mainCalendar.id);
     holidayArr.forEach((element) => {
-    eventService.createEvent(mainCalendar.id, element);
+    eventService.createEvent(mainCalendar.id, {...element, parentCalendar: mainCalendar.id});
   });
 };
 
@@ -66,6 +66,9 @@ const updateCalendar = async (//TODO: shared?
   isPublic,
 ) => {
   const calendar = await Calendar.findById(calendarId);
+  if(!calendar){
+    throw ApiError.BadRequestError('no such calendar found', errors.array());
+  }
   if (calendar.author.toString() !== userId) {
     throw ApiError.ForbiddenError();
   }

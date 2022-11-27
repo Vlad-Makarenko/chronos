@@ -1,7 +1,11 @@
 const { Calendar, Event } = require('../models');
 const ApiError = require('../utils/ApiError');
 
-const createEvent = async (calendarId, event) =>
+const createEvent = async (calendarId, event) =>{
+  const calendar = await Calendar.findById(calendarId);
+  if(!calendar){
+    throw ApiError.BadRequestError('no such calendar found', errors.array());
+  }
   await Event.create(event).then((docEvent) =>
     Calendar.findByIdAndUpdate(
       calendarId,
@@ -9,7 +13,7 @@ const createEvent = async (calendarId, event) =>
       { new: true, useFindAndModify: false }
     )
   );
-
+}
 const updateEvent = async (
   //TODO: shared? идобавлять ли возможность изменять дату, и вообще что тут можно изменять? чи ток название и выполнено чи не
   authorId, //TODO:а если нет автора?
@@ -22,7 +26,10 @@ const updateEvent = async (
   endEvent,
   isPerformed
 ) => {
-  const event = await Event.findById(eventId);
+  const event = await Event.findById(eventId); //TODO: если тайп ивента холидей то не апдейтить
+  if (!event) {
+    throw ApiError.BadRequestError('no such event found', errors.array());
+  }
   if (event.author.toString() !== authorId) {
     throw ApiError.ForbiddenError();
   }
@@ -37,63 +44,41 @@ const updateEvent = async (
   return event;
 };
 
-const getAllEvents = async(calendarId) => {
+const getAllEvents = async (calendarId) => {
+  const events = await Event.find().where('parentCalendar').equals(calendarId);
+  if(!events){
+    throw ApiError.NothingFoundError('no events found', errors.array());
+  }
+  return events;
+};
 
-}
-// const getAllCalendars = async (userId) => {
-//   const calendar = await Calendar.find()
-//     .where('author')
-//     .equals(userId)
-//     .select('name type description isHidden isPublic');
-//   return calendar;
-// };
 
-const getEventById = async (id, userId) => {//TODO: добавлять ли юзерайди
-  const event = await Event.findById(id)
-  .populate({ path: 'sharedParticipants', select: 'login fullName avatar id' });
-  if(!event) {//TODO: сделать нормальное условие
+const getEventById = async (id, userId) => {
+  const event = await Event.findById(id).populate({
+    path: 'sharedParticipants',
+    select: 'login fullName avatar id',
+  });
+  if (!event || (event.author.id !== userId || event.sharedParticipants.includes(userId))) {
     return null;
   }
   return event;
-}
-// const getCalendarById = async (id, userId) => {
-//   const calendar = await Calendar.findById(id)
-//     .populate('events')
-//     .populate({ path: 'author', select: 'login fullName avatar id' })
-//     .populate({ path: 'participants', select: 'login fullName avatar id' });
-//   if (!calendar || (!calendar.isPublic && calendar.author.id !== userId)) {
-//     return null;
-//   }
-//   return calendar;
-// };
-
+};
 
 const deleteEvent = async (userId, eventId) => {
-  const event  = await Event.findById(eventId);
+  const event = await Event.findById(eventId);
   if (!event) {
     throw ApiError.BadRequestError('Event does not exist');
   }
-  if (eventId.author.toString() !== userId) {
+  if (eventId.author.toString() !== userId) {//TODO: если выдаём возможность удалять то и другие юзеры тоже могут(чисто удалять себя из котрибьюторов)
     throw ApiError.ForbiddenError();
   }
   eventId.delete();
-}
-// const deleteCalendar = async (userId, calendarId) => {
-//   const calendar = await Calendar.findById(calendarId);
-//   console.log(calendar);
-//   if (!calendar) {
-//     throw ApiError.BadRequestError('Calendar is not exists');
-//   }
-//   if (calendar.author.toString() !== userId) {
-//     throw ApiError.ForbiddenError();
-//   }
-//   calendar.delete();
-// };
+};
 
 module.exports = {
   createEvent,
   updateEvent,
   getAllEvents,
   getEventById,
-  deleteEvent
+  deleteEvent,
 };

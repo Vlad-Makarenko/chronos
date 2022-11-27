@@ -1,6 +1,7 @@
 const { validationResult } = require('express-validator');
 
 const calendarService = require('../services/calendar.service');
+const { Calendar, User, Event } = require('../models');с
 const ApiError = require('../utils/ApiError');
 
 const createCalendar = async (req, res, next) => {
@@ -39,7 +40,7 @@ const updateCalendar = async (req, res, next) => {
       isPublic,
     );
 
-    return res.status(201).json({ calendar });
+    return res.status(201).json(calendar);
   } catch (err) {
     next(err);
   }
