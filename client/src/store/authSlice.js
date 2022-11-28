@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import decode from 'jwt-decode';
 import { toast } from 'react-toastify';
 import api from '../http';
 import { API_URL } from '../utils/constants';
@@ -17,7 +18,7 @@ export const checkAuth = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
-  },
+  }
 );
 
 export const signIn = createAsyncThunk(
@@ -31,32 +32,38 @@ export const signIn = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
-  },
+  }
 );
 
 export const resetPassword = createAsyncThunk(
   'auth/resetPassword',
   async ({ token, password, repeatedPassword }, { rejectWithValue }) => {
     try {
-      const response = await api.post(`${API_URL}/auth/password-reset/${token}`, { password, repeatedPassword });
+      const response = await api.post(
+        `${API_URL}/auth/password-reset/${token}`,
+        { password, repeatedPassword }
+      );
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
-  },
+  }
 );
 
 export const resetPswd = createAsyncThunk(
   'auth/resetPswd',
   async (payload, { rejectWithValue }) => {
     try {
-      const response = await api.post(`${API_URL}/auth/password-reset`, payload);
+      const response = await api.post(
+        `${API_URL}/auth/password-reset`,
+        payload
+      );
       // console.table({ ...response.data });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
-  },
+  }
 );
 
 export const signUp = createAsyncThunk(
@@ -69,7 +76,7 @@ export const signUp = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
-  },
+  }
 );
 
 export const logOut = createAsyncThunk(
@@ -82,7 +89,7 @@ export const logOut = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
-  },
+  }
 );
 
 const authSlice = createSlice({
@@ -98,8 +105,25 @@ const authSlice = createSlice({
     isAuthenticated: false,
     isLoading: false,
     success: false,
+    buf: true,
   },
-  reducers: {},
+  reducers: {
+    buffOff(state) {
+      state.buf = false;
+    },
+    tokenAuth(state) {
+      const decodedToken = decode(localStorage.getItem('token'));
+      if (decodedToken.exp * 1000 < new Date().getTime()) {
+        state.me = {};
+        state.isAuthenticated = false;
+        state.buf = false;
+      } else {
+        state.me = decodedToken;
+        state.isAuthenticated = true;
+        state.buf = false;
+      }
+    },
+  },
   extraReducers: {
     [signIn.pending]: (state) => {
       state.isLoading = true;
@@ -127,7 +151,9 @@ const authSlice = createSlice({
       state.isLoading = false;
     },
     [signUp.fulfilled]: (state) => {
-      toast.success('Registration was successful. Confirm your email and log in');
+      toast.success(
+        'Registration was successful. Confirm your email and log in'
+      );
       state.success = true;
       state.isLoading = false;
     },
@@ -145,6 +171,7 @@ const authSlice = createSlice({
       state.me = { ...action.payload, accessToken: undefined };
       state.isAuthenticated = true;
       state.isLoading = false;
+      state.buf = false;
     },
     [logOut.fulfilled]: (state) => {
       state.me = {};
@@ -157,9 +184,10 @@ const authSlice = createSlice({
     [resetPswd.rejected]: errorHandler,
     [checkAuth.rejected]: (state, action) => {
       state.isLoading = false;
+      state.buf = false;
       console.log('req error: ', action.payload);
     },
   },
 });
-
+export const { tokenAuth, buffOff } = authSlice.actions;
 export default authSlice.reducer;

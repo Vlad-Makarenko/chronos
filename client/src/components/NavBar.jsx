@@ -4,7 +4,7 @@ import { BiPowerOff, BiUserCircle } from 'react-icons/bi';
 import { GoGear, GoEyeClosed, GoHome } from 'react-icons/go';
 import { BsCalendarRangeFill, BsNewspaper } from 'react-icons/bs';
 import { Switch, useDarkreader } from 'react-darkreader';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { logOut } from '../store/authSlice';
 import logoImg from '../assets/logo.png';
@@ -13,6 +13,7 @@ export const NavBar = () => {
   const [active, setActive] = useState('home');
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { me, isAuthenticated } = useSelector((state) => state.auth);
   const [isDark, { toggle }] = useDarkreader(
     localStorage.getItem('theme') === 'true'

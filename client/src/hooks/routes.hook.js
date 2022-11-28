@@ -9,29 +9,41 @@ import { Calendar } from '../pages/Calendar';
 import { Profile } from '../pages/Profile';
 import { Hidden } from '../pages/Hidden';
 import { Auth } from '../pages/Auth';
+import { CheckLogin } from '../components/CheckLogin';
 
 export const useRoutes = () => {
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated, buf } = useSelector((state) => state.auth);
 
-  if (isAuthenticated) {
-    return (
-      <Routes path>
-        <Route path='/' element={<Main />} exact />
-        <Route path='/home' element={<Home />} exact />
-        <Route path='/calendar/:id' element={<Calendar />} exact />
-        <Route path='/profile' element={<Profile />} exact />
-        <Route path='/hidden' element={<Hidden />} exact />
-        <Route path='/password-reset/:token' element={<ResetPassword />} exact />
-        <Route path='*' element={<Navigate to='/' replace />} />
-      </Routes>
-    );
-  }
   return (
     <Routes path>
-      <Route path='/' element={<Main />} exact />
-      <Route path='/auth' element={<Auth/>} exact />
-      <Route path='/password-reset/:token' element={<ResetPassword />} exact />
-      <Route path='*' element={<Navigate to='/auth' replace />} />
+      <Route element={<CheckLogin />}>
+        {isAuthenticated || buf ? (
+          <>
+            <Route path='/' element={<Main />} exact />
+            <Route path='/home' element={<Home />} exact />
+            <Route path='/calendar/:id' element={<Calendar />} exact />
+            <Route path='/profile' element={<Profile />} exact />
+            <Route path='/hidden' element={<Hidden />} exact />
+            <Route
+              path='/password-reset/:token'
+              element={<ResetPassword />}
+              exact
+            />
+            <Route path='*' element={<Navigate to='/' replace />} />
+          </>
+        ) : (
+          <>
+            <Route path='/' element={<Main />} exact />
+            <Route path='/auth' element={<Auth />} exact />
+            <Route
+              path='/password-reset/:token'
+              element={<ResetPassword />}
+              exact
+            />
+            <Route path='*' element={<Navigate to='/auth' replace />} />
+          </>
+        )}
+      </Route>
     </Routes>
   );
 };

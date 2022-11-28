@@ -63,7 +63,6 @@ const authorization = async (login, password) => {
 
   const tokens = tokenService.generateTokens(userDto(user));
   await tokenService.saveToken(user.id, tokens.refreshToken);
-
   return {
     ...tokens,
     ...userDto(user),
@@ -79,11 +78,10 @@ const refreshToken = async (Token) => {
   if (!userInfo || !tokenFromDB) {
     throw ApiError.UnauthorizedError();
   }
-  const user = await User.findOne({ id: userInfo.id });
+  const user = await User.findById(userInfo.id);
   const tokens = tokenService.generateTokens(userDto(user));
   await tokenService.saveToken(
     user.id,
-    tokens.accessToken,
     tokens.refreshToken,
   );
 

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BsFillPersonFill } from 'react-icons/bs';
+import { IoPersonSharp } from 'react-icons/io5';
 
 import { signIn } from '../../store/authSlice';
 import { PswdInput } from './PwsdInput';
@@ -35,7 +35,7 @@ export const Login = ({ setFormType }) => {
         Login:
       </label>
       <div className='flex items-center justify-center w-full border border-green-500 rounded-md hover:shadow-md hover:shadow-green-400'>
-        <BsFillPersonFill color='green' className='mx-3' />
+        <IoPersonSharp color='green' className='mx-3' />
         <input
           required
           type='text'

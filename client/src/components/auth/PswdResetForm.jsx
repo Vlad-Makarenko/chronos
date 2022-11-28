@@ -7,7 +7,7 @@ import { resetPswd } from '../../store/authSlice';
 export const PswdResetForm = ({ setFormType }) => {
   const dispatch = useDispatch();
   const [form, setForm] = useState({
-    login: '',
+    email: '',
   });
   const { isLoading, isAuthenticated, success } = useSelector(
     (state) => state.auth
