@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 const tokenService = require('./token.service');
-const {Event, Calendar} = require('../models');
+const { Event, Calendar } = require('../models');
 
 class MailService {
   constructor() {
@@ -29,9 +29,9 @@ class MailService {
     });
   }
 
-  async sendInviteCalendar(to, token, from, calendarId){//TODO: добавить от кого письмо, что б оформить красивее  а ещё тут проблема в to ибо там покамесь хранится наш емейл
+  async sendInviteCalendar(to, token, from, calendarId) {
     const calendar = await Calendar.findById(calendarId);
-    const link = `${process.env.API_URL}/api/calendar/acceptInvite/${token}`;//TODO: хз как ссылку правильнее sdelat`
+    const link = `${process.env.API_URL}/api/calendar/acceptInvite/${token}`;
     await this.transporter.sendMail({
       from: process.env.SMTP_USER,
       to,
@@ -48,7 +48,7 @@ class MailService {
     });
   }
 
-  async sendInviteEvent(to, token, from, eventId){
+  async sendInviteEvent(to, token, from, eventId) {
     const event = await Event.findById(eventId);
     const link = `${process.env.API_URL}/api/event/acceptInvite/${token}`;
     await this.transporter.sendMail({

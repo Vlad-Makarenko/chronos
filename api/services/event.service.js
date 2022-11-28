@@ -1,20 +1,18 @@
 const { Calendar, Event, User } = require('../models');
 const ApiError = require('../utils/ApiError');
 
-const createEvent = async (calendarId, event) =>{
+const createEvent = async (calendarId, event) => {
   const calendar = await Calendar.findById(calendarId);
-  if(!calendar){
+  if (!calendar) {
     throw ApiError.BadRequestError('no such calendar found', errors.array());
   }
-  const createdEvent = await Event.create(event).then((docEvent) =>
-    Calendar.findByIdAndUpdate(
-      calendarId,
-      { $push: { events: docEvent.id } },
-      { new: true, useFindAndModify: false }
-    )
-  );
+  const createdEvent = await Event.create(event).then((docEvent) => Calendar.findByIdAndUpdate(
+    calendarId,
+    { $push: { events: docEvent.id } },
+    { new: true, useFindAndModify: false },
+  ));
   return createdEvent;
-}
+};
 
 const addParticipant = async (eventId, participantId) => {
   const participant = await User.findById(participantId);
@@ -24,13 +22,13 @@ const addParticipant = async (eventId, participantId) => {
   const event = await Event.findByIdAndUpdate(
     eventId,
     { $push: { sharedParticipants: participantId } },
-    { new: true, useFindAndModify: false }//TODO: ЧТО ЗНАЧИТ ЭТА СТРОКА??????????????????????????
-  )
+    { new: true, useFindAndModify: false },
+  );
   return event;
-}
+};
 
 const updateEvent = async (
-  authorId, 
+  authorId,
   eventId,
   name,
   type,
@@ -38,9 +36,9 @@ const updateEvent = async (
   color,
   startEvent,
   endEvent,
-  isPerformed
+  isPerformed,
 ) => {
-  const event = await Event.findById(eventId); //TODO: если тайп ивента холидей то не апдейтить
+  const event = await Event.findById(eventId); // TODO: если тайп ивента холидей то не апдейтить
   if (!event) {
     throw ApiError.BadRequestError('no such event found', errors.array());
   }
@@ -60,19 +58,22 @@ const updateEvent = async (
 
 const getAllEvents = async (calendarId) => {
   const events = await Event.find().where('parentCalendar').equals(calendarId);
-  if(!events){
+  if (!events) {
     throw ApiError.NothingFoundError('no events found', errors.array());
   }
   return events;
 };
-
 
 const getEventById = async (id, userId) => {
   const event = await Event.findById(id).populate({
     path: 'sharedParticipants',
     select: 'login fullName avatar id',
   });
-  if (!event || (event.author.toString() !== userId || event.sharedParticipants.includes(userId))) {
+  if (
+    !event
+    || event.author.toString() !== userId
+    || event.sharedParticipants.includes(userId)
+  ) {
     return null;
   }
   return event;
@@ -83,7 +84,9 @@ const deleteEvent = async (userId, eventId) => {
   if (!event) {
     throw ApiError.BadRequestError('Event does not exist');
   }
-  if (event.author.toString() !== userId) {//TODO: если выдаём возможность удалять то и другие юзеры тоже могут(чисто удалять себя из котрибьюторов)
+  if (event.author.toString() !== userId) {
+    // TODO: если выдаём возможность удалять то и другие юзеры тоже могут
+    // (чисто удалять себя из котрибьюторов)
     throw ApiError.ForbiddenError();
   }
   event.delete();
@@ -95,5 +98,5 @@ module.exports = {
   getAllEvents,
   getEventById,
   deleteEvent,
-  addParticipant
+  addParticipant,
 };

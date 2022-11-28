@@ -7,12 +7,12 @@ const holidayDto = require('../utils/holidayDto');
 
 const { Calendar, User, Event } = require('../models');
 
-const createCalendar = async (userId, calendar) =>
-  await Calendar.create(calendar).then((docCalendar) => {
+const createCalendar = async (userId, calendar) => await Calendar.create(calendar)
+  .then((docCalendar) => {
     User.findByIdAndUpdate(
       userId,
       { $push: { calendars: docCalendar.id } },
-      { new: true, useFindAndModify: false }
+      { new: true, useFindAndModify: false },
     );
     return docCalendar;
   });
@@ -25,7 +25,7 @@ const addParticipant = async (calendarId, participantId) => {
   const calendar = await Calendar.findByIdAndUpdate(
     calendarId,
     { $push: { sharedParticipants: participantId } },
-    { new: true, useFindAndModify: false } //TODO: ЧТО ЗНАЧИТ ЭТА СТРОКА??????????????????????????
+    { new: true, useFindAndModify: false },
   );
   return calendar;
 };
@@ -74,13 +74,13 @@ const getAllCalendars = async (userId) => {
 };
 
 const updateCalendar = async (
-  //TODO: shared?
+  // TODO: shared?
   userId,
   calendarId,
   name,
   description,
   isHidden,
-  isPublic
+  isPublic,
 ) => {
   const calendar = await Calendar.findById(calendarId);
   if (!calendar) {
@@ -106,7 +106,7 @@ const deleteCalendar = async (userId, calendarId) => {
   if (calendar.author.toString() !== userId) {
     throw ApiError.ForbiddenError();
   }
-  await Event.deleteMany({ parentCalendar: calendar.id }); //TODO:
+  await Event.deleteMany({ parentCalendar: calendar.id }); // TODO:
   calendar.delete();
 };
 
@@ -117,5 +117,5 @@ module.exports = {
   createCalendar,
   updateCalendar,
   deleteCalendar,
-  addParticipant
+  addParticipant,
 };

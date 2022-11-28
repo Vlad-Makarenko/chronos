@@ -40,7 +40,6 @@ const registration = async (
     password: hashPassword,
     fullName,
   });
-  // TODO: remake to greeting mail
   mailService.sendGreeting(email);
   await calendarService.makeDefaultCalendar(user, country);
 
