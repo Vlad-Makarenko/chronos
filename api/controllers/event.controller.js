@@ -14,11 +14,10 @@ const createEvent = async (req, res, next) => {
     }
     const calendarId = req.params.calendarId;
     const {name, type, description, color, startEvent, endEvent} = req.body;
-    
-    //TODO: проверить правильно ли приходит айди и работает ли ваще
+
     const event = await eventService.createEvent(calendarId, {
       author: req.user.id,
-      parentCalendar: calendarId,//TODO: mb to string()?
+      parentCalendar: calendarId,
       name, 
       type,
       description,
@@ -91,13 +90,13 @@ const deleteEvent = async (req, res, next) => {
   }
 };
 
-const sendInvite = async (req, res, next) => {
+const sendInvite = async (req, res, next) => {//TODO: Бля тут дохуя переделывать(смотри строку с отправкой письма 100, юзер емейл это наш а не тот, кому отправлять, поэтому переделать нада)
   try {
     const token = jwt.sign({from: req.user.id, event: req.params.id, to: req.body.participant}, process.env.JWT_ACCESS_SECRET, {
       expiresIn: '7d',
     });
     const user = await User.findById(req.body.participant);
-    await mailService.sendInviteEvent(user.email, token);//TODO: добавить от кого письмо, что б оформить красивее
+    await mailService.sendInviteEvent(req.body.participant.email, token, user.fullName, req.params.id);//TODO: добавить от кого письмо, что б оформить красивее
     res.status(200).json({ message: 'Invite sent successfully' });
   } catch (err) {
     next(err);
@@ -111,7 +110,7 @@ const acceptInvite = async (req, res, next) => {
     if(!participant){
       return next(ApiError.BadRequestError('link expired or participant invalid'));
     }
-    //TODO: add func of updating participant
+    await eventService.addParticipant(participant.event, participant.to.id);
   } catch (err) {
     next(err);
   }

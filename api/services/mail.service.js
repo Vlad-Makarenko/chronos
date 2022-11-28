@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 const tokenService = require('./token.service');
+const {Event, Calendar} = require('../models');
 
 class MailService {
   constructor() {
@@ -28,32 +29,38 @@ class MailService {
     });
   }
 
-  async sendInviteCalendar(to, token){//TODO: добавить от кого письмо, что б оформить красивее
+  async sendInviteCalendar(to, token, from, calendarId){//TODO: добавить от кого письмо, что б оформить красивее  а ещё тут проблема в to ибо там покамесь хранится наш емейл
+    const calendar = await Calendar.findById(calendarId);
     const link = `${process.env.API_URL}/api/calendar/acceptInvite/${token}`;//TODO: хз как ссылку правильнее sdelat`
     await this.transporter.sendMail({
       from: process.env.SMTP_USER,
       to,
-      subject: `You have been invited to Calendar *calendar_name* by *fullName of who invites*`,
+      subject: `You have been invited to Calendar ${calendar.name} by ${from}`,
       text: '',
       html: `
                 <div>
-                    <h1>Here is your invitation link</h1>
-                    <a href="${link}">click me become a participant!</a>
+                <h1>Here is your invitation link. It expires in 7 days.</h1>
+                <h2>${calendar.name}<h2>
+                <p>${calendar.description}<p>
+                <a href="${link}">click me become a participant!</a>
                 </div>
             `,
     });
   }
 
-  async sendInviteEvent(to, token){//TODO: добавить от кого письмо, что б оформить красивее
-    const link = `${process.env.API_URL}/api/event/acceptInvite/${token}`;//TODO: хз как ссылку правильнее sdelat`
+  async sendInviteEvent(to, token, from, eventId){
+    const event = await Event.findById(eventId);
+    const link = `${process.env.API_URL}/api/event/acceptInvite/${token}`;
     await this.transporter.sendMail({
       from: process.env.SMTP_USER,
       to,
-      subject: `You have been invited to Event *event_name* by *fullName of who invites*`,
+      subject: `You have been invited to Event ${event.name} by ${from}`,
       text: '',
       html: `
                 <div>
-                    <h1>Here is your invitation link</h1>
+                    <h1>Here is your invitation link. It expires in 7 days.</h1>
+                    <h2>${event.name}<h2>
+                    <p>${event.description}<p>
                     <a href="${link}">click me become a participant!</a>
                 </div>
             `,

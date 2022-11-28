@@ -85,7 +85,7 @@ const sendInvite = async (req, res, next) => {
       expiresIn: '7d',
     });
     const user = await User.findById(req.body.participant);
-    await mailService.sendInviteCalendar(user.email, token);//TODO: добавить от кого письмо, что б оформить красивее
+    await mailService.sendInviteCalendar(req.body.participant.email, token, user.fullName, req.params.id);
     res.status(200).json({ message: 'Invite sent successfully' });
   } catch (err) {
     next(err);
@@ -99,7 +99,7 @@ const acceptInvite = async (req, res, next) => {
     if(!participant){
       return next(ApiError.BadRequestError('link expired or participant invalid'));
     }
-    //TODO: add func of updating participant
+    await calendarService.addParticipant(participant.event, participant.to.id);
   } catch (err) {
     next(err);
   }

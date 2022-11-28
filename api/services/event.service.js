@@ -1,4 +1,4 @@
-const { Calendar, Event } = require('../models');
+const { Calendar, Event, User } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 const createEvent = async (calendarId, event) =>{
@@ -13,9 +13,22 @@ const createEvent = async (calendarId, event) =>{
       { new: true, useFindAndModify: false }
     )
   );
-  return createdEvent;//TODO: возвращается весь календарь а не просто ивент
-
+  return createdEvent;
 }
+
+const addParticipant = async (eventId, participantId) => {
+  const participant = await User.findById(participantId);
+  if (!participant) {
+    throw ApiError.BadRequestError('wrong user');
+  }
+  const event = await Event.findByIdAndUpdate(
+    eventId,
+    { $push: { sharedParticipants: participantId } },
+    { new: true, useFindAndModify: false }//TODO: ЧТО ЗНАЧИТ ЭТА СТРОКА??????????????????????????
+  )
+  return event;
+}
+
 const updateEvent = async (
   authorId, 
   eventId,
@@ -39,7 +52,7 @@ const updateEvent = async (
   event.type = type || event.type;
   event.color = color || event.color;
   event.startEvent = startEvent || event.startEvent;
-  event.endEvent = endEvent || eventId.endEvent;
+  event.endEvent = endEvent || event.endEvent;
   event.isPerformed = isPerformed || event.isPerformed;
   await event.save();
   return event;
@@ -66,7 +79,6 @@ const getEventById = async (id, userId) => {
 };
 
 const deleteEvent = async (userId, eventId) => {
-  console.log(eventId);
   const event = await Event.findById(eventId);
   if (!event) {
     throw ApiError.BadRequestError('Event does not exist');
@@ -83,4 +95,5 @@ module.exports = {
   getAllEvents,
   getEventById,
   deleteEvent,
+  addParticipant
 };
