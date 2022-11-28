@@ -1,6 +1,5 @@
 const { HolidayAPI } = require('holidayapi');
 
-const mailService = require('./mail.service');
 const eventService = require('./event.service');
 const ApiError = require('../utils/ApiError');
 const holidayDto = require('../utils/holidayDto');
