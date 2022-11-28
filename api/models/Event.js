@@ -5,6 +5,10 @@ module.exports.eventSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
+  parentCalendar: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Calendar',
+  },
   name: {
     type: String,
     required: true,

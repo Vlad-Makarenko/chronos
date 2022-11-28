@@ -1,7 +1,10 @@
 const { validationResult } = require('express-validator');
 
 const calendarService = require('../services/calendar.service');
+const { Calendar, User, Event } = require('../models');
 const ApiError = require('../utils/ApiError');
+const jwt = require('jsonwebtoken');
+const mailService = require('../services/mail.service');
 
 const createCalendar = async (req, res, next) => {
   try {
@@ -11,6 +14,7 @@ const createCalendar = async (req, res, next) => {
     }
     const { name, description } = req.body;
     const calendar = await calendarService.createCalendar(req.user.id, {
+      author: req.user.id,
       name,
       description,
     });
@@ -38,7 +42,7 @@ const updateCalendar = async (req, res, next) => {
       isPublic,
     );
 
-    return res.status(201).json({ calendar });
+    return res.status(201).json(calendar);
   } catch (err) {
     next(err);
   }
@@ -67,13 +71,39 @@ const getCalendar = async (req, res, next) => {
 
 const deleteCalendar = async (req, res, next) => {
   try {
-    const { calendarId } = req.params;
-    await calendarService.deleteCalendar(req.user.id, calendarId);
+    const { id } = req.params;
+    await calendarService.deleteCalendar(req.user.id, id);
     res.status(204).json({ message: 'Calendar deleted successfully' });
   } catch (err) {
     next(err);
   }
 };
+
+const sendInvite = async (req, res, next) => {
+  try {
+    const token = jwt.sign({from: req.user.id, calendar: req.params.id, to: req.body.participant}, process.env.JWT_ACCESS_SECRET, {
+      expiresIn: '7d',
+    });
+    const user = await User.findById(req.body.participant);
+    await mailService.sendInviteCalendar(req.body.participant.email, token, user.fullName, req.params.id);
+    res.status(200).json({ message: 'Invite sent successfully' });
+  } catch (err) {
+    next(err);
+  }
+}
+
+const acceptInvite = async (req, res, next) => {
+  try {
+    const key = req.params.key;
+    const participant = jwt.verify(key, process.env.JWT_ACCESS_SECRET);
+    if(!participant){
+      return next(ApiError.BadRequestError('link expired or participant invalid'));
+    }
+    await calendarService.addParticipant(participant.event, participant.to.id);
+  } catch (err) {
+    next(err);
+  }
+}
 
 module.exports = {
   createCalendar,
@@ -81,4 +111,6 @@ module.exports = {
   getAllCalendars,
   getCalendar,
   deleteCalendar,
+  sendInvite,
+  acceptInvite
 };
