@@ -28,6 +28,38 @@ class MailService {
     });
   }
 
+  async sendInviteCalendar(to, token){//TODO: добавить от кого письмо, что б оформить красивее
+    const link = `${process.env.API_URL}/api/calendar/acceptInvite/${token}`;//TODO: хз как ссылку правильнее sdelat`
+    await this.transporter.sendMail({
+      from: process.env.SMTP_USER,
+      to,
+      subject: `You have been invited to Calendar *calendar_name* by *fullName of who invites*`,
+      text: '',
+      html: `
+                <div>
+                    <h1>Here is your invitation link</h1>
+                    <a href="${link}">click me become a participant!</a>
+                </div>
+            `,
+    });
+  }
+
+  async sendInviteEvent(to, token){//TODO: добавить от кого письмо, что б оформить красивее
+    const link = `${process.env.API_URL}/api/event/acceptInvite/${token}`;//TODO: хз как ссылку правильнее sdelat`
+    await this.transporter.sendMail({
+      from: process.env.SMTP_USER,
+      to,
+      subject: `You have been invited to Event *event_name* by *fullName of who invites*`,
+      text: '',
+      html: `
+                <div>
+                    <h1>Here is your invitation link</h1>
+                    <a href="${link}">click me become a participant!</a>
+                </div>
+            `,
+    });
+  }
+
   async sendPswResetMail(to) {
     const { accessToken } = tokenService.generateTokens({ email: to });
     const link = `${process.env.CLIENT_URL}/password-reset/${accessToken}`;

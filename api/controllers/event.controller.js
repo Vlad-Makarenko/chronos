@@ -3,7 +3,7 @@ const { validationResult } = require('express-validator');
 const authService = require('../services/auth.service');
 const eventService = require('../services/event.service');
 const tokenService = require('../services/token.service');
-const { Calendar, User, Event } = require('../models');с
+const { Calendar, User, Event } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 const createEvent = async (req, res, next) => {
@@ -13,7 +13,7 @@ const createEvent = async (req, res, next) => {
       return next(ApiError.BadRequestError('validation error', errors.array()));
     }
     const calendarId = req.params.calendarId;
-    const {name, type, color, startEvent, endEvent} = req.body;
+    const {name, type, description, color, startEvent, endEvent} = req.body;
     
     //TODO: проверить правильно ли приходит айди и работает ли ваще
     const event = await eventService.createEvent(calendarId, {
@@ -83,16 +83,39 @@ const getEvent = async (req, res, next) => {
 
 const deleteEvent = async (req, res, next) => {
   try {
-    const { id } = req.params.id;
+    const id  = req.params.id;
     await eventService.deleteEvent(req.user.id, id);
-    res.status(204).json({ message: 'Event deleted successfully' });
-    // const { id } = req.params;
-    // await calendarService.deleteCalendar(req.user.id, id);
-    // res.status(204).json({ message: 'Calendar deleted successfully' });
+    res.status(204).json({ message: 'Event deleted successfully' });//TODO: ничего не выводится при удалении в постмане, но оно удаляется
   } catch (err) {
     next(err);
   }
 };
+
+const sendInvite = async (req, res, next) => {
+  try {
+    const token = jwt.sign({from: req.user.id, event: req.params.id, to: req.body.participant}, process.env.JWT_ACCESS_SECRET, {
+      expiresIn: '7d',
+    });
+    const user = await User.findById(req.body.participant);
+    await mailService.sendInviteEvent(user.email, token);//TODO: добавить от кого письмо, что б оформить красивее
+    res.status(200).json({ message: 'Invite sent successfully' });
+  } catch (err) {
+    next(err);
+  }
+}
+
+const acceptInvite = async (req, res, next) => {
+  try {
+    const key = req.params.key;
+    const participant = jwt.verify(key, process.env.JWT_ACCESS_SECRET);
+    if(!participant){
+      return next(ApiError.BadRequestError('link expired or participant invalid'));
+    }
+    //TODO: add func of updating participant
+  } catch (err) {
+    next(err);
+  }
+}
 
 module.exports = {
   createEvent,
@@ -100,6 +123,8 @@ module.exports = {
   getAllEvents,
   getEvent,
   deleteEvent,
+  sendInvite,
+  acceptInvite
 };
 
 

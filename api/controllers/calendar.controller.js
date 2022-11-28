@@ -1,8 +1,10 @@
 const { validationResult } = require('express-validator');
 
 const calendarService = require('../services/calendar.service');
-const { Calendar, User, Event } = require('../models');с
+const { Calendar, User, Event } = require('../models');
 const ApiError = require('../utils/ApiError');
+const jwt = require('jsonwebtoken');
+const mailService = require('../services/mail.service');
 
 const createCalendar = async (req, res, next) => {
   try {
@@ -77,10 +79,38 @@ const deleteCalendar = async (req, res, next) => {
   }
 };
 
+const sendInvite = async (req, res, next) => {
+  try {
+    const token = jwt.sign({from: req.user.id, calendar: req.params.id, to: req.body.participant}, process.env.JWT_ACCESS_SECRET, {
+      expiresIn: '7d',
+    });
+    const user = await User.findById(req.body.participant);
+    await mailService.sendInviteCalendar(user.email, token);//TODO: добавить от кого письмо, что б оформить красивее
+    res.status(200).json({ message: 'Invite sent successfully' });
+  } catch (err) {
+    next(err);
+  }
+}
+
+const acceptInvite = async (req, res, next) => {
+  try {
+    const key = req.params.key;
+    const participant = jwt.verify(key, process.env.JWT_ACCESS_SECRET);
+    if(!participant){
+      return next(ApiError.BadRequestError('link expired or participant invalid'));
+    }
+    //TODO: add func of updating participant
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   createCalendar,
   updateCalendar,
   getAllCalendars,
   getCalendar,
   deleteCalendar,
+  sendInvite,
+  acceptInvite
 };

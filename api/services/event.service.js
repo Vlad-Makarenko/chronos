@@ -6,17 +6,18 @@ const createEvent = async (calendarId, event) =>{
   if(!calendar){
     throw ApiError.BadRequestError('no such calendar found', errors.array());
   }
-  await Event.create(event).then((docEvent) =>
+  const createdEvent = await Event.create(event).then((docEvent) =>
     Calendar.findByIdAndUpdate(
       calendarId,
       { $push: { events: docEvent.id } },
       { new: true, useFindAndModify: false }
     )
   );
+  return createdEvent;//TODO: возвращается весь календарь а не просто ивент
+
 }
 const updateEvent = async (
-  //TODO: shared? идобавлять ли возможность изменять дату, и вообще что тут можно изменять? чи ток название и выполнено чи не
-  authorId, //TODO:а если нет автора?
+  authorId, 
   eventId,
   name,
   type,
@@ -58,21 +59,22 @@ const getEventById = async (id, userId) => {
     path: 'sharedParticipants',
     select: 'login fullName avatar id',
   });
-  if (!event || (event.author.id !== userId || event.sharedParticipants.includes(userId))) {
+  if (!event || (event.author.toString() !== userId || event.sharedParticipants.includes(userId))) {
     return null;
   }
   return event;
 };
 
 const deleteEvent = async (userId, eventId) => {
+  console.log(eventId);
   const event = await Event.findById(eventId);
   if (!event) {
     throw ApiError.BadRequestError('Event does not exist');
   }
-  if (eventId.author.toString() !== userId) {//TODO: если выдаём возможность удалять то и другие юзеры тоже могут(чисто удалять себя из котрибьюторов)
+  if (event.author.toString() !== userId) {//TODO: если выдаём возможность удалять то и другие юзеры тоже могут(чисто удалять себя из котрибьюторов)
     throw ApiError.ForbiddenError();
   }
-  eventId.delete();
+  event.delete();
 };
 
 module.exports = {

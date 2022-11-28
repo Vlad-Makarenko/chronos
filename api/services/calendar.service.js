@@ -89,6 +89,7 @@ const deleteCalendar = async (userId, calendarId) => {
   if (calendar.author.toString() !== userId) {
     throw ApiError.ForbiddenError();
   }
+  await Event.deleteMany({'parentCalendar': calendar.id})//TODO: 
   calendar.delete();
 };
 
