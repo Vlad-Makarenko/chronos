@@ -32,7 +32,7 @@ export const PswdResetForm = ({ setFormType }) => {
     <form
       onSubmit={resetHandler}
       className='flex flex-col justify-center items-center w-full'>
-      <h2 className='text-xl'>Reset password</h2>
+      <h2 className='text-2xl'>Reset password</h2>
       <p className='self-start pl-3 pr-1 text-start'>
         Enter the email from the account for which you want to reset the
         password. We will send a password reset link to this email.

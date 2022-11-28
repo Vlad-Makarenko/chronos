@@ -41,7 +41,7 @@ export const Register = ({ setFormType }) => {
     <form
       onSubmit={signUpHandler}
       className='flex flex-col justify-center items-center w-full'>
-      <h1 className='text-xl'>Sign Up</h1>
+      <h1 className='text-2xl'>Sign Up</h1>
       <label htmlFor='email' className='self-start py-3'>
         Email:
       </label>

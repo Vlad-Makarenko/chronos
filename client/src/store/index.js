@@ -3,7 +3,7 @@ import commentReducer from './commentSlice';
 import modalReducer from './modalSlice';
 import userReducer from './userSlice';
 import authReducer from './authSlice';
-import postReducer from './postSlice';
+import calendarReducer from './calendarSlice';
 import tagReducer from './tagSlice';
 
 export default configureStore({
@@ -11,8 +11,8 @@ export default configureStore({
     user: userReducer,
     modal: modalReducer,
     auth: authReducer,
+    calendar: calendarReducer,
     tag: tagReducer,
-    post: postReducer,
     comment: commentReducer,
   },
 });

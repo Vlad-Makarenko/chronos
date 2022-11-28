@@ -7,9 +7,8 @@ export const Auth = () => {
   const [formType, setFormType] = useState('login');
 
   return (
-    <div>
-      <h1>Auth Page</h1>
-      <div className='flex justify-center items-center w-1/3 '>
+    <div className='flex justify-center mt-5'>
+      <div className='flex justify-center items-center w-11/12 lg:w-1/3 '>
         {formType === 'login' && <Login setFormType={setFormType} />}
         {formType === 'pswdReset' && (
           <PswdResetForm setFormType={setFormType} />

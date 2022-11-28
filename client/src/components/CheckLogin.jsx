@@ -1,8 +1,8 @@
 import { Outlet } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Spinner } from 'flowbite-react';
 import { checkAuth, tokenAuth, buffOff } from '../store/authSlice';
+import { Loader } from './Loader';
 
 export const CheckLogin = () => {
   const dispatch = useDispatch();
@@ -20,6 +20,8 @@ export const CheckLogin = () => {
     return <Outlet />;
   }
   return (
-    <Spinner color='success' size='xl' aria-label='Success spinner example' />
+    <div className='flex mt-10'>
+      <Loader />
+    </div>
   );
 };

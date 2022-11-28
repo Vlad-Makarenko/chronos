@@ -66,9 +66,9 @@ const getCalendarById = async (id, userId) => {
 
 const getAllCalendars = async (userId) => {
   const calendar = await Calendar.find()
-    .where('author')
-    .equals(userId)
-    .select('name type description isHidden isPublic');
+    .where('author').equals(userId)
+    .populate({ path: 'participants', select: 'id avatar login' });
+    // .select('name type description events part isHidden isPublic');
   return calendar;
 };
 

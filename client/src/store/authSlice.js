@@ -70,7 +70,7 @@ export const signUp = createAsyncThunk(
   'auth/signUp',
   async (payload, { rejectWithValue }) => {
     try {
-      const response = await api.post(`${API_URL}/auth/register`, payload);
+      const response = await api.post(`${API_URL}/auth/register`, { ...payload, country: 'UA' }); // TODO: ADD COUNTRY
       // console.table({ ...response.data });
       return response.data;
     } catch (error) {

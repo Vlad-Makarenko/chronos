@@ -30,7 +30,7 @@ export const Login = ({ setFormType }) => {
     <form
       onSubmit={signInHandler}
       className='flex flex-col justify-center items-center w-full'>
-      <h1 className='text-xl'>Sign In</h1>
+      <h1 className='text-2xl'>Sign In</h1>
       <label htmlFor='login' className='self-start py-2'>
         Login:
       </label>
@@ -50,7 +50,7 @@ export const Login = ({ setFormType }) => {
         Password:
       </label>
       <PswdInput changeHandler={changeHandler} passwordInput={form.password} />
-      <span>
+      <span className='mt-3'>
         Forgot your password?
         <span
           className='text-green-500 cursor-pointer'
