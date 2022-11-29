@@ -3,9 +3,10 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../http';
 import { API_URL } from '../utils/constants';
 import { errorHandler } from '../utils/errorHandler';
+import { updateEventUtil } from '../utils/event.utils';
 
 export const getTodayEvents = createAsyncThunk(
-  'tag/getTodayEvents',
+  'event/getTodayEvents',
   async (_, { rejectWithValue }) => {
     try {
       const response = await api.get(`${API_URL}/event/today`);
@@ -13,43 +14,97 @@ export const getTodayEvents = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
-  }
+  },
 );
 
-// export const getAllTags = createAsyncThunk(
-//   'tag/getAllTags',
-//   async (_, { rejectWithValue }) => {
-//     try {
-//       const response = await api.get(`${API_URL}/categories/`);
-//       return response.data;
-//     } catch (error) {
-//       return rejectWithValue(error.response.data);
-//     }
-//   }
-// );
+export const getEvent = createAsyncThunk(
+  'event/getEvent',
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`${API_URL}/event/${payload.id}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
 
-// export const getTag = createAsyncThunk(
-//   'tag/getTag',
-//   async ({ id }, { rejectWithValue, dispatch }) => {
-//     try {
-//       // eslint-disable-next-line no-use-before-define
-//       dispatch(setDefaulTag());
-//       const response = await api.get(`${API_URL}/categories/${id}`);
-//       return response.data;
-//     } catch (error) {
-//       return rejectWithValue(error.response.data);
-//     }
-//   }
-// );
+export const getAllEvents = createAsyncThunk(
+  'event/getAllEvents',
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await api.get(
+        `${API_URL}/event/calendar/${payload.calendarId}`
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
 
-// const initialTag = {
-//   id: 0,
-//   title: 'Tags',
-//   description:
-//     'A tag is a keyword or label that categorizes your question with other, similar questions.
-// Using the right tags makes it easier for others to find and answer your question.',
-//   questionsCount: 0,
-// };
+export const createEvent = createAsyncThunk(
+  'event/createEvent',
+  async (
+    { calendarId, name, type, description, color, startEvent, endEvent },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await api.post(`${API_URL}/event/${calendarId}`, {
+        name,
+        type,
+        description,
+        color,
+        startEvent,
+        endEvent,
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const updateEvent = createAsyncThunk(
+  'event/updateEvent',
+  async({
+    id,
+    name,
+    type,
+    description,
+    color,
+    startEvent,
+    endEvent,
+    isPerformed,
+  }, { rejectWithValue }) => {
+    try {
+      const response = await api.patch(`${API_URL}/event/${id}`, {
+        name,
+        type,
+        description,
+        color,
+        startEvent,
+        endEvent,
+        isPerformed,
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const deleteEvent = createAsyncThunk(
+  'event/deleteEvent',
+  async({ id }, { rejectWithValue }) => {
+    try {
+      await api.delete(`${API_URL}/event/${id}`);
+      return id;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
 
 const eventSlice = createSlice({
   name: 'event',
@@ -64,26 +119,49 @@ const eventSlice = createSlice({
     [getTodayEvents.pending]: (state) => {
       state.isLoading = true;
     },
-    // [getAllTags.pending]: (state) => {
-    //   state.isLoading = true;
-    // },
+    [getEvent.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [getAllEvents.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [createEvent.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [updateEvent.pending]: (state) => {
+      state.isLoading = true;
+    },
     [getTodayEvents.fulfilled]: (state, action) => {
       state.todayEvents = action.payload;
       state.isLoading = false;
     },
-    // [getAllTags.fulfilled]: (state, action) => {
-    //   state.tags = action.payload;
-    //   state.isLoading = false;
-    // },
-    // [getTag.fulfilled]: (state, action) => {
-    //   state.tag = action.payload;
-    // },
-    // [getTag.rejected]: errorHandler,
-    // [getAllTags.rejected]: errorHandler,
+    [getEvent.fulfilled]: (state, action) => {
+      state.event = action.payload;
+      state.isLoading = false;
+    },
+    [getAllEvents.fulfilled]: (state, action) => {
+      state.event = action.payload;
+      state.isLoading = false;
+    },
+    [createEvent.fulfilled]: (state, action) => {
+      state.events = [...state.events, action.payload];
+      state.isLoading = false;
+    },
+    [updateEvent.fulfilled]: (state, action) => {
+      state.events = updateEventUtil(state.events, action.payload);
+      state.isLoading = false;
+    },
+    [deleteEvent.fulfilled]: (state, action) => {
+      const id = action.payload;
+      state.events = state.events.filter((item) => item._id !== id);
+      state.isLoading = false;
+    },
     [getTodayEvents.rejected]: errorHandler,
+    [getEvent.rejected]: errorHandler,
+    [getAllEvents.rejected]: errorHandler,
+    [updateEvent.rejected]: errorHandler,
   },
 });
 
-// export const { setDefaulTag } = tagSlice.actions;
 
 export default eventSlice.reducer;

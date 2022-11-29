@@ -60,7 +60,6 @@ export const deleteCalendar = createAsyncThunk(
   'calendar/deleteCalendar',
   async ({ id }, { rejectWithValue }) => {
     try {
-      console.log(id);
       await api.delete(`${API_URL}/calendar/${id}`);
       return id;
     } catch (error) {
@@ -82,31 +81,6 @@ const calendarSlice = createSlice({
     success: false,
   },
   reducers: {
-    // updateFilters(state, action) {
-    //   state.filters = action.payload.filters;
-    // },
-    // clearFilters(state) {
-    //   state.filters = DEFAUL_FILTERS;
-    // },
-    // filterPosts(state, action) {
-    //   const filteredPosts = filterPostsUtils(
-    //     action.payload.posts,
-    //     action.payload.filters,
-    //   );
-    //   state.filteredPosts = filteredPosts;
-    //   state.totalPages = countTotalPages(filteredPosts);
-    //   state.currentPagePosts = getCurentPosts(filteredPosts, 1);
-    //   state.currentPage = 1;
-    // },
-    // changePage(state, action) {
-    //   state.currentPage = action.payload.page;
-    //   state.currentPagePosts = getCurentPosts(action.payload.posts, action.payload.page);
-    // },
-    // resetFilters(state, action) {
-    //   const filteredPosts = filterPostsUtils(action.payload.posts, DEFAUL_FILTERS);
-    //   state.filteredPosts = filteredPosts;
-    //   state.totalPages = countTotalPages(filteredPosts);
-    // },
   },
   extraReducers: {
     [getAllCalendars.pending]: (state) => {
