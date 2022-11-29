@@ -64,6 +64,30 @@ const getAllEvents = async (calendarId) => {
   return events;
 };
 
+const getTodayEvents = async () => {
+  const todayDate = new Date();
+  const tomorrowDate = new Date(todayDate);
+  tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+  const events = await Event.find({
+    startEvent: {
+      $gte: new Date(
+        todayDate.getUTCFullYear(),
+        todayDate.getUTCMonth() + 1,
+        todayDate.getUTCDate(),
+      ),
+      $lt: new Date(
+        tomorrowDate.getUTCFullYear(),
+        tomorrowDate.getUTCMonth() + 1,
+        tomorrowDate.getUTCDate(),
+      ),
+    },
+  }).populate({ path: 'parentCalendar', select: 'id name' });
+  if (!events) {
+    throw ApiError.NothingFoundError('no events found', errors.array());
+  }
+  return events;
+};
+
 const getEventById = async (id, userId) => {
   const event = await Event.findById(id).populate({
     path: 'sharedParticipants',
@@ -96,6 +120,7 @@ module.exports = {
   createEvent,
   updateEvent,
   getAllEvents,
+  getTodayEvents,
   getEventById,
   deleteEvent,
   addParticipant,

@@ -4,7 +4,7 @@ import modalReducer from './modalSlice';
 import userReducer from './userSlice';
 import authReducer from './authSlice';
 import calendarReducer from './calendarSlice';
-import tagReducer from './tagSlice';
+import eventReducer from './eventSlice';
 
 export default configureStore({
   reducer: {
@@ -12,7 +12,7 @@ export default configureStore({
     modal: modalReducer,
     auth: authReducer,
     calendar: calendarReducer,
-    tag: tagReducer,
+    event: eventReducer,
     comment: commentReducer,
   },
 });

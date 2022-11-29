@@ -68,12 +68,20 @@ const updateEvent = async (req, res, next) => {
 const getAllEvents = async (req, res, next) => {
   try {
     const result = await eventService.getAllEvents(req.params.calendarId);
-    res.status(201).json(result);
+    res.status(200).json(result);
   } catch (err) {
     next(err);
   }
 };
 
+const getTodayEvents = async (req, res, next) => {
+  try {
+    const result = await eventService.getTodayEvents();
+    res.status(200).json(result);
+  } catch (err) {
+    next(err);
+  }
+};
 const getEvent = async (req, res, next) => {
   try {
     const result = await eventService.getEventById(req.params.id, req.user.id);
@@ -133,6 +141,7 @@ module.exports = {
   createEvent,
   updateEvent,
   getAllEvents,
+  getTodayEvents,
   getEvent,
   deleteEvent,
   sendInvite,

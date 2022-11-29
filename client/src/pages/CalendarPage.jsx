@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
@@ -10,6 +10,9 @@ const localizer = momentLocalizer(moment);
 const DnDCalendar = withDragAndDrop(Calendar);
 
 export const CalendarPage = () => {
+  const { views } = useMemo(() => ({
+    views: { month: true, day: true, week: true },
+  }));
   const [events, setEvents] = useState([
     {
       start: moment().toDate(),
@@ -54,28 +57,34 @@ export const CalendarPage = () => {
     },
   ]);
 
+  const eventPropGetter = useCallback((event) => ({
+    ...(event.color && { style: { backgroundColor: event.color } }),
+  }));
+
   const onEventResize = (data) => {
     const { start, end } = data;
-    setEvents([...events, events[0].start = start, events[0].end = end]);
+    setEvents([...events, (events[0].start = start), (events[0].end = end)]);
   };
 
   const onEventDrop = (data) => {
     const { start, end } = data;
-    setEvents([...events, events[0].start = start, events[0].end = end]);
+    setEvents([...events, (events[0].start = start), (events[0].end = end)]);
   };
 
   return (
-      <div className='App'>
-        <DnDCalendar
-          defaultDate={moment().toDate()}
-          defaultView='month'
-          events={events}
-          localizer={localizer}
-          onEventDrop={onEventDrop}
-          onEventResize={onEventResize}
-          resizable
-          style={{ height: '100vh' }}
-        />
-      </div>
+    <div className='App'>
+      <DnDCalendar
+        eventPropGetter={eventPropGetter}
+        views={views}
+        defaultDate={moment().toDate()}
+        defaultView='month'
+        events={events}
+        localizer={localizer}
+        onEventDrop={onEventDrop}
+        onEventResize={onEventResize}
+        resizable
+        style={{ height: '100vh' }}
+      />
+    </div>
   );
 };

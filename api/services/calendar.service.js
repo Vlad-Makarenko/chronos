@@ -31,8 +31,9 @@ const addParticipant = async (calendarId, participantId) => {
 
 const makeDefaultCalendar = async (user, country) => {
   const mainCalendar = await createCalendar(user.id, {
+    isPublic: false,
     author: user.id,
-    name: 'main calendar',
+    name: 'Main calendar',
     type: 'main',
     description:
       'This is the main calendar that displays your national holidays',

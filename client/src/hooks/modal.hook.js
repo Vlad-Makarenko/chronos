@@ -7,11 +7,12 @@ import {
   inviteOff,
   createEventOff,
   createCalendarOff,
+  editCalendarOff,
 } from '../store/modalSlice';
 
 export const useModal = () => {
   const dispatch = useDispatch();
-  const { createCalendar, createEvent, invite } = useSelector(
+  const { createCalendar, editCalendar, createEvent, invite } = useSelector(
     (state) => state.modal
   );
 
@@ -25,6 +26,11 @@ export const useModal = () => {
       <ModalWin show={createEvent} onHide={() => dispatch(createEventOff())}>
         <div>
           <h1>EVENT</h1>
+        </div>
+      </ModalWin>
+      <ModalWin show={editCalendar} onHide={() => dispatch(editCalendarOff())}>
+        <div>
+          <h1>EDIT</h1>
         </div>
       </ModalWin>
       <ModalWin

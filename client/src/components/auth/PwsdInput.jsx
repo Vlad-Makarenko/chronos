@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HiLockClosed, HiEye, HiEyeSlash } from 'react-icons/hi2';
+import { BsEyeFill, BsEyeSlashFill, BsLockFill } from 'react-icons/bs';
 
 export const PswdInput = ({ changeHandler, passwordInput, isRepeated }) => {
   const [passwordType, setPasswordType] = useState('password');
@@ -13,7 +13,8 @@ export const PswdInput = ({ changeHandler, passwordInput, isRepeated }) => {
   };
   return (
     <div className='flex items-center justify-center w-full border border-green-500 rounded-md hover:shadow-md hover:shadow-green-400'>
-      <HiLockClosed color='green' className='mx-3' />
+      <BsLockFill color='green' className='mx-3' />
+
       <input
         required
         type={passwordType}
@@ -25,9 +26,9 @@ export const PswdInput = ({ changeHandler, passwordInput, isRepeated }) => {
       />
       <div onClick={togglePassword} className='d-flex align-items-center'>
         {passwordType === 'password' ? (
-          <HiEyeSlash color='green' className='mx-3'/>
+          <BsEyeSlashFill color='green' className='mx-3'/>
         ) : (
-          <HiEye color='green' className='mx-3' />
+          <BsEyeFill color='green' className='mx-3' />
         )}
       </div>
     </div>
