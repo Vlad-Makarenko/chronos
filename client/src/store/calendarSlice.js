@@ -5,43 +5,16 @@ import { API_URL } from '../utils/constants';
 import { errorHandler } from '../utils/errorHandler';
 
 export const getAllCalendars = createAsyncThunk(
-  'post/getAllCalendars',
+  'calendar/getAllCalendars',
   async (_, { rejectWithValue }) => {
     try {
       const response = await api.get(`${API_URL}/calendar/`);
-      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
   },
 );
-
-// export const getAllUserPosts = createAsyncThunk(
-//   'post/getAllUserPosts',
-//   async ({ id }, { rejectWithValue }) => {
-//     try {
-//       const response = await api.get(`${API_URL}/posts/?page=-1&user=${id}`);
-//       // console.log(response.data);
-//       return response.data;
-//     } catch (error) {
-//       return rejectWithValue(error.response.data);
-//     }
-//   },
-// );
-
-// export const getFavoritePosts = createAsyncThunk(
-//   'post/getFavoritePosts',
-//   async (_, { rejectWithValue }) => {
-//     try {
-//       const response = await api.get(`${API_URL}/posts/favorites/?page=-1`);
-//       // console.log(response.data);
-//       return response.data;
-//     } catch (error) {
-//       return rejectWithValue(error.response.data);
-//     }
-//   },
-// );
 
 // export const getPost = createAsyncThunk(
 //   'post/getPost',
@@ -57,93 +30,46 @@ export const getAllCalendars = createAsyncThunk(
 //   },
 // );
 
-// export const createPost = createAsyncThunk(
-//   'post/createPost',
-//   async (payload, { rejectWithValue }) => {
-//     try {
-//       const response = await api.post(`${API_URL}/posts`, payload);
-//       return response.data;
-//     } catch (error) {
-//       return rejectWithValue(error.response.data);
-//     }
-//   },
-// );
+export const createCalendar = createAsyncThunk(
+  'calendar/createCalendar',
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await api.post(`${API_URL}/calendar`, payload);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
 
-// export const updatePost = createAsyncThunk(
-//   'post/updatePost',
-//   async ({
-//     id, content, title, categories, status,
-//   }, { rejectWithValue }) => {
-//     try {
-//       const response = await api.patch(`${API_URL}/posts/${id}`, {
-//         content, title, categories, status,
-//       });
-//       return response.data;
-//     } catch (error) {
-//       return rejectWithValue(error.response.data);
-//     }
-//   },
-// );
+export const updateCalendar = createAsyncThunk(
+  'calendar/updateCalendar',
+  async ({
+    id, name, description, isHidden, isPublic,
+  }, { rejectWithValue }) => {
+    try {
+      const response = await api.patch(`${API_URL}/posts/${id}`, {
+        name, description, isHidden, isPublic,
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
 
-// export const deletePost = createAsyncThunk(
-//   'post/deletePost',
-//   async ({ id }, { rejectWithValue }) => {
-//     try {
-//       const response = await api.delete(`${API_URL}/posts/${id}`);
-//       return response.data;
-//     } catch (error) {
-//       return rejectWithValue(error.response.data);
-//     }
-//   },
-// );
-
-// export const ceateLike = createAsyncThunk(
-//   'post/ceateLike',
-//   async ({ id, type }, { rejectWithValue }) => {
-//     try {
-//       const response = await api.post(`${API_URL}/posts/${id}/like`, { type });
-//       return response.data;
-//     } catch (error) {
-//       return rejectWithValue(error.response.data);
-//     }
-//   },
-// );
-
-// export const deleteLike = createAsyncThunk(
-//   'post/deleteLike',
-//   async ({ id }, { rejectWithValue }) => {
-//     try {
-//       const response = await api.delete(`${API_URL}/posts/${id}/like`);
-//       return response.data;
-//     } catch (error) {
-//       return rejectWithValue(error.response.data);
-//     }
-//   },
-// );
-
-// export const addToFavorite = createAsyncThunk(
-//   'post/addToFavorite',
-//   async ({ id }, { rejectWithValue }) => {
-//     try {
-//       const response = await api.post(`${API_URL}/posts/favorites/`, { postId: id });
-//       return response.data;
-//     } catch (error) {
-//       return rejectWithValue(error.response.data);
-//     }
-//   },
-// );
-
-// export const removeFromFavorite = createAsyncThunk(
-//   'post/removeFromFavorite',
-//   async ({ id }, { rejectWithValue }) => {
-//     try {
-//       const response = await api.delete(`${API_URL}/posts/favorites/${id}`);
-//       return response.data;
-//     } catch (error) {
-//       return rejectWithValue(error.response.data);
-//     }
-//   },
-// );
+export const deleteCalendar = createAsyncThunk(
+  'calendar/deleteCalendar',
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      console.log(id);
+      const response = await api.delete(`${API_URL}/calendar/${id}`);
+      return id;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
 
 const calendarSlice = createSlice({
   name: 'calendar',
@@ -155,6 +81,7 @@ const calendarSlice = createSlice({
     currentCalendar: {},
     error: null,
     isLoading: false,
+    success: false,
   },
   reducers: {
     // updateFilters(state, action) {
@@ -197,9 +124,10 @@ const calendarSlice = createSlice({
     //   state.isLoading = true;
     //   state.error = null;
     // },
-    // [createPost.pending]: (state) => {
-    //   state.isLoading = true;
-    // },
+    [createCalendar.pending]: (state) => {
+      state.isLoading = true;
+      state.success = false;
+    },
     [getAllCalendars.fulfilled]: (state, action) => {
       state.allCalendars = action.payload;
       state.activeCalendars = getActiveCalendars(action.payload);
@@ -215,48 +143,27 @@ const calendarSlice = createSlice({
     //   state.currentPagePosts = getCurentPosts(filteredPosts, 1);
     //   state.isLoading = false;
     // },
-    // [getAllUserPosts.fulfilled]: (state, action) => {
-    //   state.allPosts = action.payload.posts;
-    //   const filteredPosts = filterPostsUtils(action.payload.posts, DEFAUL_FILTERS);
-    //   state.filteredPosts = filteredPosts;
-    //   state.totalPages = countTotalPages(action.payload.posts);
-    //   state.currentPagePosts = getCurentPosts(filteredPosts, 1);
-    //   state.isLoading = false;
-    // },
     // [getPost.fulfilled]: (state, action) => {
     //   state.post = action.payload.post;
     //   state.postVote = action.payload.like;
     //   state.isLoading = false;
     // },
-    // [createPost.fulfilled]: (state, action) => {
-    //   state.post = action.payload;
-    //   state.isLoading = false;
-    // },
-    // [updatePost.fulfilled]: (state, action) => {
-    //   state.post.status = action.payload.status;
-    //   state.post.content = action.payload.content;
-    //   state.post.title = action.payload.title;
-    //   state.isLoading = false;
-    // },
-    // [ceateLike.fulfilled]: (state, action) => {
-    //   state.post.likeCount = action.payload.type === 'like' ?
-    //   state.post.likeCount + 1 : state.post.likeCount;
-    //   if (state.postVote && action.payload.type === 'dislike') {
-    //     state.post.likeCount -= 1;
-    //   }
-    //   state.postVote = action.payload;
-    // },
-    // [deleteLike.fulfilled]: (state) => {
-    //   state.post.likeCount = state.postVote.type === 'like' ?
-    //   state.post.likeCount - 1 : state.post.likeCount;
-    //   state.postVote = null;
-    // },
-    // [addToFavorite.fulfilled]: (state) => {
-    //   state.post.favoriteCount += 1;
-    // },
-    // [removeFromFavorite.fulfilled]: (state) => {
-    //   state.post.favoriteCount -= 1;
-    // },
+    [createCalendar.fulfilled]: (state, action) => {
+      state.activeCalendars = [...state.activeCalendars, action.payload];
+      state.isLoading = false;
+      state.success = true;
+    },
+    [deleteCalendar.fulfilled]: (state, action) => {
+      const id = action.payload;
+      state.allCalendars = state.allCalendars.filter((item) => item._id !== id);
+      state.activeCalendars = getActiveCalendars(state.allCalendars);
+      state.hiddenCalendars = getHiddenCalendars(state.allCalendars);
+      state.isLoading = false;
+    },
+    [updateCalendar.fulfilled]: (state, action) => {
+      state.currentCalendar = action.payload;
+      state.isLoading = false;
+    },
     [getAllCalendars.rejected]: errorHandler,
     // [getAllUserPosts.rejected]: errorHandler,
     // [getFavoritePosts.rejected]: errorHandler,
@@ -265,12 +172,12 @@ const calendarSlice = createSlice({
     //   state.error = action.payload.message;
     //   console.log('req error: ', action.payload);
     // },
-    // [createPost.rejected]: errorHandler,
+    [createCalendar.rejected]: errorHandler,
     // [ceateLike.rejected]: errorHandler,
     // [deleteLike.rejected]: errorHandler,
     // [addToFavorite.rejected]: errorHandler,
     // [removeFromFavorite.rejected]: errorHandler,
-    // [updatePost.rejected]: errorHandler,
+    [updateCalendar.rejected]: errorHandler,
   },
 });
 

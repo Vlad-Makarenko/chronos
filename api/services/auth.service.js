@@ -38,6 +38,7 @@ const registration = async (
     login,
     password: hashPassword,
     fullName,
+    avatar: `https://robohash.org/${login}.png`,
   });
   mailService.sendGreeting(email);
   await calendarService.makeDefaultCalendar(user, country);

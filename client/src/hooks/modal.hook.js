@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-filename-extension */
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { CalendarCreateForm } from '../components/calendar/CalendarCreateForm';
 import { ModalWin } from '../components/ModalWin';
 import {
   inviteOff,
@@ -16,7 +17,7 @@ export const useModal = () => {
 
   return (
     <div>
-      <ModalWin show={createCalendar} onHide={() => dispatch(inviteOff())}>
+      <ModalWin show={invite} onHide={() => dispatch(inviteOff())}>
         <div>
           <h1>INVITE</h1>
         </div>
@@ -26,10 +27,10 @@ export const useModal = () => {
           <h1>EVENT</h1>
         </div>
       </ModalWin>
-      <ModalWin show={invite} onHide={() => dispatch(createCalendarOff())}>
-        <div>
-          <h1>CALENDAR</h1>
-        </div>
+      <ModalWin
+        show={createCalendar}
+        onHide={() => dispatch(createCalendarOff())}>
+        <CalendarCreateForm />
       </ModalWin>
     </div>
   );

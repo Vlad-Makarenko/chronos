@@ -11,11 +11,12 @@ const createCalendar = async (req, res, next) => {
     if (!errors.isEmpty()) {
       return next(ApiError.BadRequestError('validation error', errors.array()));
     }
-    const { name, description } = req.body;
+    const { name, description, isPublic } = req.body;
     const calendar = await calendarService.createCalendar(req.user.id, {
       author: req.user.id,
       name,
       description,
+      isPublic,
     });
     return res.status(201).json(calendar);
   } catch (err) {

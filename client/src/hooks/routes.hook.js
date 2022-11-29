@@ -5,7 +5,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { ResetPassword } from '../pages/ResetPassword';
 import { Main } from '../pages/Main';
 import { Home } from '../pages/Home';
-import { Calendar } from '../pages/Calendar';
+import { CalendarPage } from '../pages/CalendarPage';
 import { Profile } from '../pages/Profile';
 import { Hidden } from '../pages/Hidden';
 import { Auth } from '../pages/Auth';
@@ -21,7 +21,7 @@ export const useRoutes = () => {
           <>
             <Route path='/' element={<Main />} exact />
             <Route path='/home' element={<Home />} exact />
-            <Route path='/calendar/:id' element={<Calendar />} exact />
+            <Route path='/calendar/:id' element={<CalendarPage />} exact />
             <Route path='/profile' element={<Profile />} exact />
             <Route path='/hidden' element={<Hidden />} exact />
             <Route

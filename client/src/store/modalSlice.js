@@ -9,22 +9,22 @@ const modalSlice = createSlice({
   },
   reducers: {
     createCalendarOn(state) {
-      state.signIn = true;
+      state.createCalendar = true;
     },
     createCalendarOff(state) {
-      state.signIn = false;
+      state.createCalendar = false;
     },
     createEventOn(state) {
-      state.signUp = true;
+      state.createEvent = true;
     },
     createEventOff(state) {
-      state.signUp = false;
+      state.createEvent = false;
     },
     inviteOn(state) {
-      state.editPost = true;
+      state.invite = true;
     },
     inviteOff(state) {
-      state.editPost = false;
+      state.invite = false;
     },
   },
 });
