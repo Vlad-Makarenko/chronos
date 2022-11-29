@@ -64,10 +64,11 @@ const getAllEvents = async (calendarId) => {
   return events;
 };
 
-const getTodayEvents = async () => {
+const getTodayEvents = async (userId) => {
   const todayDate = new Date();
   const tomorrowDate = new Date(todayDate);
   tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+  console.log(tomorrowDate.toDateString());
   const events = await Event.find({
     startEvent: {
       $gte: new Date(
@@ -81,7 +82,7 @@ const getTodayEvents = async () => {
         tomorrowDate.getUTCDate(),
       ),
     },
-  }).populate({ path: 'parentCalendar', select: 'id name' });
+  }).where('author').equals(userId).populate({ path: 'parentCalendar', select: 'id name' });
   if (!events) {
     throw ApiError.NothingFoundError('no events found', errors.array());
   }

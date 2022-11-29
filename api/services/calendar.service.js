@@ -45,7 +45,6 @@ const makeDefaultCalendar = async (user, country) => {
       year: '2021',
     })
     .then((response) => holidayDto(response.holidays, user.id));
-  console.log(holidayArr, mainCalendar.id);
   holidayArr.forEach((element) => {
     eventService.createEvent(mainCalendar.id, {
       ...element,

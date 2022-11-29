@@ -14,7 +14,7 @@ export const getTodayEvents = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
-  },
+  }
 );
 
 export const getEvent = createAsyncThunk(
@@ -26,7 +26,7 @@ export const getEvent = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
-  },
+  }
 );
 
 export const getAllEvents = createAsyncThunk(
@@ -40,7 +40,7 @@ export const getAllEvents = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
-  },
+  }
 );
 
 export const createEvent = createAsyncThunk(
@@ -62,21 +62,15 @@ export const createEvent = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
-  },
+  }
 );
 
 export const updateEvent = createAsyncThunk(
   'event/updateEvent',
-  async({
-    id,
-    name,
-    type,
-    description,
-    color,
-    startEvent,
-    endEvent,
-    isPerformed,
-  }, { rejectWithValue }) => {
+  async (
+    { id, name, type, description, color, startEvent, endEvent, isPerformed },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await api.patch(`${API_URL}/event/${id}`, {
         name,
@@ -91,19 +85,19 @@ export const updateEvent = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
-  },
+  }
 );
 
 export const deleteEvent = createAsyncThunk(
   'event/deleteEvent',
-  async({ id }, { rejectWithValue }) => {
+  async ({ id }, { rejectWithValue }) => {
     try {
       await api.delete(`${API_URL}/event/${id}`);
       return id;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
-  },
+  }
 );
 
 const eventSlice = createSlice({
@@ -162,6 +156,5 @@ const eventSlice = createSlice({
     [updateEvent.rejected]: errorHandler,
   },
 });
-
 
 export default eventSlice.reducer;

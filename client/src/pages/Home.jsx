@@ -83,7 +83,7 @@ export const Home = () => {
                 <TodayEventCard event={event} key={event._id} />
               ))
             ) : (
-              <h2 className='my-3 w-10/12 text-xl border-t border-t-green-300'>
+              <h2 className='py-2 w-10/12 text-xl border-t border-t-green-300'>
                 No events today
               </h2>
             )}

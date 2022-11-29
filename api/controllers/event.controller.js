@@ -76,7 +76,7 @@ const getAllEvents = async (req, res, next) => {
 
 const getTodayEvents = async (req, res, next) => {
   try {
-    const result = await eventService.getTodayEvents();
+    const result = await eventService.getTodayEvents(req.user.id);
     res.status(200).json(result);
   } catch (err) {
     next(err);
