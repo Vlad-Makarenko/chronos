@@ -15,6 +15,7 @@ export const CalendarPage = () => {
       start: moment().toDate(),
       end: moment().add(1, 'days').toDate(),
       title: 'Some title',
+      color: 'red',
     },
     {
       start: moment().toDate(),

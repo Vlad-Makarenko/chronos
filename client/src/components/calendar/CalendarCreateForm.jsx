@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Checkbox, Label } from 'flowbite-react';
 import { createCalendar } from '../../store/calendarSlice';
 import { useMessage } from '../../hooks/message.hook';
 import { createCalendarOff } from '../../store/modalSlice';
@@ -31,7 +30,11 @@ export const CalendarCreateForm = () => {
   }, [success]);
 
   const changeHandler = (event) => {
-    setForm({ ...form, [event.target.name]: event.target.value });
+    if (event.target.name === 'isPublic') {
+      setForm({ ...form, [event.target.name]: !form.isPublic });
+    } else {
+      setForm({ ...form, [event.target.name]: event.target.value });
+    }
   };
 
   const createHandler = (event) => {
