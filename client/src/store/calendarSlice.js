@@ -63,7 +63,7 @@ export const updateCalendar = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const response = await api.patch(`${API_URL}/posts/${id}`, {
+      const response = await api.patch(`${API_URL}/calendar/${id}`, {
         name,
         description,
         isHidden,

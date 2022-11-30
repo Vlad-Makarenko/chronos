@@ -3,23 +3,30 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 
-import { eventDateUpdate, eventsToCalendar } from '../../utils/event.utils';
+import { useDispatch, useSelector } from 'react-redux';
+import { eventDateUpdate, eventsToCalendar, getEditEventDate } from '../../utils/event.utils';
 import { useMessage } from '../../hooks/message.hook';
 
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { updateEvent } from '../../store/eventSlice';
 
 const localizer = momentLocalizer(moment);
 const DnDCalendar = withDragAndDrop(Calendar);
 
 export const BigCalendar = ({ events }) => {
   const message = useMessage();
+  const dispatch = useDispatch();
 
   const { views } = useMemo(() => ({
     views: { month: true, day: true, week: true },
   }));
-  const [displayEvents, setDisplayEvents] = useState(eventsToCalendar(events));
-  useEffect(() => {}, []);
+
+  const [displayEvents, setDisplayEvents] = useState([]);
+
+  useEffect(() => {
+    setDisplayEvents(eventsToCalendar(events));
+  }, [events]);
 
   const eventPropGetter = useCallback((event) => ({
     ...(event.color && { style: { backgroundColor: event.color } }),
@@ -29,6 +36,7 @@ export const BigCalendar = ({ events }) => {
     if (data.event.type === 'holiday') {
       return message('You can\'t change holiday', 'warning');
     }
+    dispatch(updateEvent(getEditEventDate(data)));
     setDisplayEvents(eventDateUpdate(displayEvents, data));
   };
 
@@ -36,6 +44,7 @@ export const BigCalendar = ({ events }) => {
     if (data.event.type === 'holiday') {
       return message('You can\'t interact with holiday', 'warning');
     }
+    dispatch(updateEvent(getEditEventDate(data)));
     setDisplayEvents(eventDateUpdate(displayEvents, data));
   };
 

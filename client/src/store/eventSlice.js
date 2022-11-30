@@ -68,11 +68,12 @@ export const createEvent = createAsyncThunk(
 export const updateEvent = createAsyncThunk(
   'event/updateEvent',
   async (
-    { id, name, type, description, color, startEvent, endEvent, isPerformed },
+    { _id, name, type, description, color, startEvent, endEvent, isPerformed },
     { rejectWithValue }
   ) => {
     try {
-      const response = await api.patch(`${API_URL}/event/${id}`, {
+      console.table({ _id, name, type, description, color, startEvent, endEvent, isPerformed });
+      const response = await api.patch(`${API_URL}/event/${_id}`, {
         name,
         type,
         description,
@@ -123,7 +124,7 @@ const eventSlice = createSlice({
       state.isLoading = true;
     },
     [updateEvent.pending]: (state) => {
-      state.isLoading = true;
+      // state.isLoading = true;
     },
     [getTodayEvents.fulfilled]: (state, action) => {
       state.todayEvents = action.payload;
