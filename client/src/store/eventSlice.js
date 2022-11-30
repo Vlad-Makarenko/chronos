@@ -19,9 +19,9 @@ export const getTodayEvents = createAsyncThunk(
 
 export const getEvent = createAsyncThunk(
   'event/getEvent',
-  async (payload, { rejectWithValue }) => {
+  async ({ id }, { rejectWithValue }) => {
     try {
-      const response = await api.get(`${API_URL}/event/${payload.id}`);
+      const response = await api.get(`${API_URL}/event/${id}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -31,10 +31,10 @@ export const getEvent = createAsyncThunk(
 
 export const getAllEvents = createAsyncThunk(
   'event/getAllEvents',
-  async (payload, { rejectWithValue }) => {
+  async ({ id }, { rejectWithValue }) => {
     try {
       const response = await api.get(
-        `${API_URL}/event/calendar/${payload.calendarId}`
+        `${API_URL}/event/calendar/${id}`
       );
       return response.data;
     } catch (error) {
@@ -134,7 +134,7 @@ const eventSlice = createSlice({
       state.isLoading = false;
     },
     [getAllEvents.fulfilled]: (state, action) => {
-      state.event = action.payload;
+      state.events = action.payload;
       state.isLoading = false;
     },
     [createEvent.fulfilled]: (state, action) => {

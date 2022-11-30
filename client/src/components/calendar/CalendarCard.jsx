@@ -42,7 +42,7 @@ export const CalendarCard = ({ calendar }) => {
           </Tooltip>
         )}
       </div>
-      <div onClick={() => navigate('/')} className='flex flex-col'>
+      <div onClick={() => navigate(`/calendar/${calendar._id}`)} className='flex flex-col'>
         <span className='flex items-center font-bold mb-2 mt-1 w-full justify-center text-xl'>
           {calendar.name}
         </span>

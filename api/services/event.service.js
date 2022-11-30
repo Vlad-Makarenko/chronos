@@ -73,12 +73,12 @@ const getTodayEvents = async (userId) => {
     startEvent: {
       $gte: new Date(
         todayDate.getUTCFullYear(),
-        todayDate.getUTCMonth() + 1,
+        todayDate.getUTCMonth(),
         todayDate.getUTCDate(),
       ),
       $lt: new Date(
         tomorrowDate.getUTCFullYear(),
-        tomorrowDate.getUTCMonth() + 1,
+        tomorrowDate.getUTCMonth(),
         tomorrowDate.getUTCDate(),
       ),
     },

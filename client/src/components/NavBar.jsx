@@ -29,7 +29,6 @@ export const NavBar = () => {
 
   return (
     <Navbar
-      // fluid={true}
       rounded={true}
       className='border-b shadow-md shadow-green-200 cursor-pointer'>
       <Navbar.Brand onClick={() => navigate('/')}>
@@ -127,7 +126,7 @@ export const NavBar = () => {
             onClick={() => navigate('/calendar/main')}
             active={active === 'calendar'}>
             <span
-              className={`flex items-center cursor-pointer p-3 px-5 rounded-md hover:bg-gradient-to-l from-gray-100 hover:text-yellow-900 ${
+              className={`flex items-center cursor-pointer p-3 px-5 rounded-md border-r hover:bg-gradient-to-l from-gray-100 hover:text-yellow-900 ${
                 active === '/calendar/main'
                   ? 'bg-gradient-to-l from-green-100'
                   : ''

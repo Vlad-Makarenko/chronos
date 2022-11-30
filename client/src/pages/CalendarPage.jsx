@@ -1,90 +1,45 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
-import moment from 'moment';
-import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+
+import { getCalendar } from '../store/calendarSlice';
+import { getAllEvents } from '../store/eventSlice';
+import { BigCalendar } from '../components/calendar/BigCalendar';
+import { Loader } from '../components/Loader';
 
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
-const localizer = momentLocalizer(moment);
-const DnDCalendar = withDragAndDrop(Calendar);
-
 export const CalendarPage = () => {
-  const { views } = useMemo(() => ({
-    views: { month: true, day: true, week: true },
-  }));
-  const [events, setEvents] = useState([
-    {
-      start: moment().toDate(),
-      end: moment().add(1, 'days').toDate(),
-      title: 'Some title',
-      color: 'red',
-    },
-    {
-      start: moment().toDate(),
-      end: moment().add(1, 'days').toDate(),
-      title: 'Some title',
-    },
-    {
-      start: moment().toDate(),
-      end: moment().add(1, 'days').toDate(),
-      title: 'Some title',
-    },
-    {
-      start: moment().toDate(),
-      end: moment().add(1, 'hours').toDate(),
-      title: 'Some title',
-    },
-    {
-      start: moment().toDate(),
-      end: moment().add(1, 'days').toDate(),
-      title: 'Some title',
-    },
-    {
-      start: moment().toDate(),
-      end: moment().add(1, 'days').toDate(),
-      title: 'Some title',
-    },
-    {
-      start: moment().toDate(),
-      end: moment().add(1, 'days').toDate(),
-      title: 'Some title',
-    },
-    {
-      start: moment().toDate(),
-      end: moment().add(1, 'days').toDate(),
-      title: 'Some title',
-    },
-  ]);
+  const dispatch = useDispatch();
+  const { id } = useParams();
+  const { currentCalendar, isLoading: calendarLoading } = useSelector((state) => state.calendar);
+  const { events, isLoading: eventLoading } = useSelector((state) => state.event);
 
-  const eventPropGetter = useCallback((event) => ({
-    ...(event.color && { style: { backgroundColor: event.color } }),
-  }));
+  useEffect(() => {
+    dispatch(getCalendar({ id }));
+    dispatch(getAllEvents({ id }));
+  }, [id]);
 
-  const onEventResize = (data) => {
-    const { start, end } = data;
-    setEvents([...events, (events[0].start = start), (events[0].end = end)]);
-  };
-
-  const onEventDrop = (data) => {
-    const { start, end } = data;
-    setEvents([...events, (events[0].start = start), (events[0].end = end)]);
-  };
+  if (calendarLoading || eventLoading) {
+    return <Loader />;
+  }
 
   return (
-    <div className='App'>
-      <DnDCalendar
-        eventPropGetter={eventPropGetter}
-        views={views}
-        defaultDate={moment().toDate()}
-        defaultView='month'
-        events={events}
-        localizer={localizer}
-        onEventDrop={onEventDrop}
-        onEventResize={onEventResize}
-        resizable
-        style={{ height: '100vh' }}
-      />
+    <div className='container w-full flex flex-col mx-auto p-3'>
+      <div className='w-full flex justify-between items-center mb-2 p-3'>
+        <h1 className='text-2xl'>
+          <b>{currentCalendar.name}</b> calendar
+        </h1>
+        <button className='p-3 border shadow-md hover:bg-gray-200 hover:shadow-green-200 border-green-300 rounded-md'>
+          More info
+        </button>
+      </div>
+      <div
+        className='w-full flex p-3 border shadow-md shadow-green-200 border-green-300 rounded-md'
+        style={{ height: '80vh' }}>
+        <BigCalendar calendar={currentCalendar} events={events} />
+      </div>
     </div>
   );
 };

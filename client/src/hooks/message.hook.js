@@ -7,6 +7,8 @@ export const useMessage = () => useCallback((text, type = 'info') => {
     toast.success(text);
   } else if (type === 'error') {
     toast.error(text);
+  } else if (type === 'warning') {
+    toast.warning(text);
   } else {
     toast.info(text);
   }
