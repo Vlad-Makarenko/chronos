@@ -49,7 +49,17 @@ export const BigCalendar = ({ events }) => {
       localizer={localizer}
       onEventDrop={onEventDrop}
       onEventResize={onEventResize}
+      onSelectSlot={(slotInfo) => {
+        console.log(slotInfo);
+      }}
+      onSelectEvent={(slotInfo) => {
+        console.log(slotInfo);
+      }}
+      onSelecting={(slotInfo) => {
+        console.log(slotInfo);
+      }}
       resizable
+      selectable
       className='w-full h-full'
     />
   );

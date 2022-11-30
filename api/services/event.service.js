@@ -68,7 +68,6 @@ const getTodayEvents = async (userId) => {
   const todayDate = new Date();
   const tomorrowDate = new Date(todayDate);
   tomorrowDate.setDate(tomorrowDate.getDate() + 1);
-  console.log(tomorrowDate.toDateString());
   const events = await Event.find({
     startEvent: {
       $gte: new Date(

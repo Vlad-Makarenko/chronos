@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import { getCalendar } from '../store/calendarSlice';
+import { getCalendar, getMainCalendar } from '../store/calendarSlice';
 import { getAllEvents } from '../store/eventSlice';
 import { BigCalendar } from '../components/calendar/BigCalendar';
 import { Loader } from '../components/Loader';
@@ -13,13 +13,27 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 export const CalendarPage = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
-  const { currentCalendar, isLoading: calendarLoading } = useSelector((state) => state.calendar);
-  const { events, isLoading: eventLoading } = useSelector((state) => state.event);
+  const { currentCalendar, isLoading: calendarLoading } = useSelector(
+    (state) => state.calendar
+  );
+  const { events, isLoading: eventLoading } = useSelector(
+    (state) => state.event
+  );
 
   useEffect(() => {
-    dispatch(getCalendar({ id }));
-    dispatch(getAllEvents({ id }));
+    if (id === 'main') {
+      dispatch(getMainCalendar());
+    } else {
+      dispatch(getCalendar({ id }));
+      // dispatch(getAllEvents({ id }));
+    }
   }, [id]);
+
+  useEffect(() => {
+    if (currentCalendar._id) {
+      dispatch(getAllEvents({ id: currentCalendar._id }));
+    }
+  }, [currentCalendar._id]);
 
   if (calendarLoading || eventLoading) {
     return <Loader />;

@@ -69,6 +69,17 @@ const getCalendar = async (req, res, next) => {
   }
 };
 
+const getMainCalendar = async (req, res, next) => {
+  try {
+    const result = await calendarService.getMainCalendar(
+      req.user.id,
+    );
+    res.status(201).json(result);
+  } catch (err) {
+    next(err);
+  }
+};
+
 const deleteCalendar = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -116,6 +127,7 @@ const acceptInvite = async (req, res, next) => {
 };
 
 module.exports = {
+  getMainCalendar,
   createCalendar,
   updateCalendar,
   getAllCalendars,

@@ -18,6 +18,7 @@ router.patch(
   calendarController.updateCalendar,
 );
 router.get('/', authMiddleware, calendarController.getAllCalendars);
+router.get('/main', authMiddleware, calendarController.getMainCalendar);
 router.get('/:id', authMiddleware, calendarController.getCalendar);
 router.delete('/:id', authMiddleware, calendarController.deleteCalendar);
 router.post('/invite/:id', authMiddleware, calendarController.sendInvite);

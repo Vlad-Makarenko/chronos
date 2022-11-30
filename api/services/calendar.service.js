@@ -64,11 +64,27 @@ const getCalendarById = async (id, userId) => {
   return calendar;
 };
 
+const getMainCalendar = async (userId) => {
+  const calendar = await Calendar.findOne()
+    .where('author')
+    .equals(userId)
+    .where('type')
+    .equals('main')
+    .populate('events')
+    .populate({ path: 'author', select: 'login fullName avatar id' })
+    .populate({ path: 'participants', select: 'login fullName avatar id' });
+  if (!calendar || (!calendar.isPublic && calendar.author.id !== userId)) {
+    return null;
+  }
+  return calendar;
+};
+
 const getAllCalendars = async (userId) => {
   const calendar = await Calendar.find()
-    .where('author').equals(userId)
+    .where('author')
+    .equals(userId)
     .populate({ path: 'participants', select: 'id avatar login' });
-    // .select('name type description events part isHidden isPublic');
+  // .select('name type description events part isHidden isPublic');
   return calendar;
 };
 
@@ -98,7 +114,6 @@ const updateCalendar = async (
 
 const deleteCalendar = async (userId, calendarId) => {
   const calendar = await Calendar.findById(calendarId);
-  console.log(calendar);
   if (!calendar) {
     throw ApiError.BadRequestError('Calendar does not exist');
   }
@@ -111,6 +126,7 @@ const deleteCalendar = async (userId, calendarId) => {
 
 module.exports = {
   makeDefaultCalendar,
+  getMainCalendar,
   getCalendarById,
   getAllCalendars,
   createCalendar,

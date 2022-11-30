@@ -1,6 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../http';
-import { getActiveCalendars, getHiddenCalendars, getMainCalendar } from '../utils/calendar.utils';
+import {
+  getActiveCalendars,
+  getHiddenCalendars,
+  getMainCalendar as getMainCalendarUtil,
+} from '../utils/calendar.utils';
 import { API_URL } from '../utils/constants';
 import { errorHandler } from '../utils/errorHandler';
 
@@ -13,7 +17,7 @@ export const getAllCalendars = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
-  },
+  }
 );
 
 export const getCalendar = createAsyncThunk(
@@ -25,7 +29,19 @@ export const getCalendar = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
-  },
+  }
+);
+
+export const getMainCalendar = createAsyncThunk(
+  'post/getCalendar',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`${API_URL}/calendar/main`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
 );
 
 export const createCalendar = createAsyncThunk(
@@ -37,23 +53,27 @@ export const createCalendar = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
-  },
+  }
 );
 
 export const updateCalendar = createAsyncThunk(
   'calendar/updateCalendar',
-  async ({
-    id, name, description, isHidden, isPublic,
-  }, { rejectWithValue }) => {
+  async (
+    { id, name, description, isHidden, isPublic },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await api.patch(`${API_URL}/posts/${id}`, {
-        name, description, isHidden, isPublic,
+        name,
+        description,
+        isHidden,
+        isPublic,
       });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
-  },
+  }
 );
 
 export const deleteCalendar = createAsyncThunk(
@@ -65,7 +85,7 @@ export const deleteCalendar = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
-  },
+  }
 );
 
 const calendarSlice = createSlice({
@@ -80,13 +100,16 @@ const calendarSlice = createSlice({
     isLoading: false,
     success: false,
   },
-  reducers: {
-  },
+  reducers: {},
   extraReducers: {
     [getAllCalendars.pending]: (state) => {
       state.isLoading = true;
     },
     [getCalendar.pending]: (state) => {
+      state.isLoading = true;
+      state.error = null;
+    },
+    [getMainCalendar.pending]: (state) => {
       state.isLoading = true;
       state.error = null;
     },
@@ -98,11 +121,16 @@ const calendarSlice = createSlice({
       state.allCalendars = action.payload;
       state.activeCalendars = getActiveCalendars(action.payload);
       state.hiddenCalendars = getHiddenCalendars(action.payload);
-      state.mainCalendar = getMainCalendar(action.payload);
+      state.mainCalendar = getMainCalendarUtil(action.payload);
       state.isLoading = false;
     },
     [getCalendar.fulfilled]: (state, action) => {
       state.currentCalendar = action.payload;
+      state.isLoading = false;
+    },
+    [getMainCalendar.fulfilled]: (state, action) => {
+      state.currentCalendar = action.payload;
+      state.mainCalendar = action.payload;
       state.isLoading = false;
     },
     [createCalendar.fulfilled]: (state, action) => {
@@ -127,6 +155,7 @@ const calendarSlice = createSlice({
       state.error = action.payload.message;
       console.log('req error: ', action.payload);
     },
+    [getMainCalendar.rejected]: errorHandler,
     [createCalendar.rejected]: errorHandler,
     [updateCalendar.rejected]: errorHandler,
   },
