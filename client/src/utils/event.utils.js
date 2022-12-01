@@ -16,6 +16,7 @@ export const getEditEventDate = (data) => ({
   start: data.start,
   endEvent: data.end.toString(),
   end: data.end,
+  allDay: data.isAllDay || false
 });
 
 export const eventDateUpdate = (events, data) => events.map((item) => {
@@ -26,6 +27,7 @@ export const eventDateUpdate = (events, data) => events.map((item) => {
       start: data.start,
       endEvent: data.end.toString(),
       end: data.end,
+      allDay: data.isAllDay,
     };
   }
   return item;

@@ -21,6 +21,25 @@ export const checkAuth = createAsyncThunk(
   }
 );
 
+export const signUp = createAsyncThunk(
+  'auth/signUp',
+  async (payload, { rejectWithValue }) => {
+    try {
+      const location = await axios.get('https://ipapi.co/json/');
+      const response = await api.post(`${API_URL}/auth/register`, {
+        ...payload,
+        country: location.data.country_code,
+        language: location.data.languages.split(',')[0],
+      });
+      localStorage.setItem('token', response.data.accessToken);
+      // console.table({ ...response.data });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const signIn = createAsyncThunk(
   'auth/signIn',
   async (payload, { rejectWithValue }) => {
@@ -58,19 +77,6 @@ export const resetPswd = createAsyncThunk(
         `${API_URL}/auth/password-reset`,
         payload
       );
-      // console.table({ ...response.data });
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
-
-export const signUp = createAsyncThunk(
-  'auth/signUp',
-  async (payload, { rejectWithValue }) => {
-    try {
-      const response = await api.post(`${API_URL}/auth/register`, { ...payload, country: 'UA' }); // TODO: ADD COUNTRY
       // console.table({ ...response.data });
       return response.data;
     } catch (error) {
@@ -150,10 +156,10 @@ const authSlice = createSlice({
       state.isAuthenticated = true;
       state.isLoading = false;
     },
-    [signUp.fulfilled]: (state) => {
-      toast.success(
-        'Registration was successful. Confirm your email and log in'
-      );
+    [signUp.fulfilled]: (state, action) => {
+      state.me = { ...action.payload, accessToken: undefined };
+      state.isAuthenticated = true;
+      toast.success('Registration was successful');
       state.success = true;
       state.isLoading = false;
     },

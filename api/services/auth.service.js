@@ -15,6 +15,7 @@ const registration = async (
   repeatedPassword,
   fullName,
   country,
+  language,
 ) => {
   if (password !== repeatedPassword) {
     throw ApiError.BadRequestError('Passwords don\'t match');
@@ -41,13 +42,13 @@ const registration = async (
     avatar: `https://robohash.org/${login}.png`,
   });
   mailService.sendGreeting(email);
-  await calendarService.makeDefaultCalendar(user, country);
+  await calendarService.makeDefaultCalendar(user, country, language);
 
   const tokens = tokenService.generateTokens(userDto(user));
   await tokenService.saveToken(user.id, tokens.refreshToken);
 
   return {
-    accessToken: tokens.accessToken,
+    ...tokens,
     ...userDto(user),
   };
 };

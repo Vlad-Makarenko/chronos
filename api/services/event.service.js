@@ -4,7 +4,7 @@ const ApiError = require('../utils/ApiError');
 const createEvent = async (calendarId, event) => {
   const calendar = await Calendar.findById(calendarId);
   if (!calendar) {
-    throw ApiError.BadRequestError('no such calendar found', errors.array());
+    throw ApiError.BadRequestError('no such calendar found');
   }
   const createdEvent = await Event.create(event).then((docEvent) => Calendar.findByIdAndUpdate(
     calendarId,
@@ -37,10 +37,14 @@ const updateEvent = async (
   startEvent,
   endEvent,
   isPerformed,
+  allDay = false,
 ) => {
-  const event = await Event.findById(eventId); // TODO: если тайп ивента холидей то не апдейтить
+  const event = await Event.findById(eventId);
   if (!event) {
-    throw ApiError.BadRequestError('no such event found', errors.array());
+    throw ApiError.BadRequestError('no such event found');
+  }
+  if (event.type === 'holiday') {
+    throw ApiError.BadRequestError('holiday events cannot be changed');
   }
   if (event.author.toString() !== authorId) {
     throw ApiError.ForbiddenError();
@@ -52,6 +56,7 @@ const updateEvent = async (
   event.startEvent = startEvent || event.startEvent;
   event.endEvent = endEvent || event.endEvent;
   event.isPerformed = isPerformed || event.isPerformed;
+  event.allDay = allDay;
   await event.save();
   return event;
 };
@@ -59,7 +64,7 @@ const updateEvent = async (
 const getAllEvents = async (calendarId) => {
   const events = await Event.find().where('parentCalendar').equals(calendarId);
   if (!events) {
-    throw ApiError.NothingFoundError('no events found', errors.array());
+    throw ApiError.NothingFoundError('no events found');
   }
   return events;
 };
@@ -83,7 +88,7 @@ const getTodayEvents = async (userId) => {
     },
   }).where('author').equals(userId).populate({ path: 'parentCalendar', select: 'id name' });
   if (!events) {
-    throw ApiError.NothingFoundError('no events found', errors.array());
+    throw ApiError.NothingFoundError('no events found');
   }
   return events;
 };

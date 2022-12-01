@@ -33,9 +33,7 @@ export const getAllEvents = createAsyncThunk(
   'event/getAllEvents',
   async ({ id }, { rejectWithValue }) => {
     try {
-      const response = await api.get(
-        `${API_URL}/event/calendar/${id}`
-      );
+      const response = await api.get(`${API_URL}/event/calendar/${id}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -68,11 +66,31 @@ export const createEvent = createAsyncThunk(
 export const updateEvent = createAsyncThunk(
   'event/updateEvent',
   async (
-    { _id, name, type, description, color, startEvent, endEvent, isPerformed },
+    {
+      _id,
+      name,
+      type,
+      description,
+      color,
+      startEvent,
+      endEvent,
+      isPerformed,
+      allDay,
+    },
     { rejectWithValue }
   ) => {
     try {
-      console.table({ _id, name, type, description, color, startEvent, endEvent, isPerformed });
+      console.table({
+        _id,
+        name,
+        type,
+        description,
+        color,
+        startEvent,
+        endEvent,
+        isPerformed,
+        allDay,
+      });
       const response = await api.patch(`${API_URL}/event/${_id}`, {
         name,
         type,
@@ -81,6 +99,7 @@ export const updateEvent = createAsyncThunk(
         startEvent,
         endEvent,
         isPerformed,
+        allDay,
       });
       return response.data;
     } catch (error) {

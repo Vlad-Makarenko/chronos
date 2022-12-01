@@ -9,5 +9,6 @@ module.exports = (holidayArr, author) => holidayArr.map((holiday) => {
     color: 'red',
     startEvent: correctDate.toUTCString(),
     endEvent: correctDate.toUTCString(),
+    allDay: true,
   };
 });

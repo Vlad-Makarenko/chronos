@@ -37,6 +37,10 @@ module.exports.eventSchema = new mongoose.Schema({
     type: Date,
     require: true,
   },
+  allDay: {
+    type: Boolean,
+    default: false,
+  },
   isPerformed: {
     type: Boolean,
     default: false,

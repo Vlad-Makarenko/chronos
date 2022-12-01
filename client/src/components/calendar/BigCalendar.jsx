@@ -41,6 +41,7 @@ export const BigCalendar = ({ events }) => {
   };
 
   const onEventDrop = (data) => {
+    console.log(data);
     if (data.event.type === 'holiday') {
       return message('You can\'t interact with holiday', 'warning');
     }

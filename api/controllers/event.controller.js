@@ -12,7 +12,7 @@ const createEvent = async (req, res, next) => {
     }
     const { calendarId } = req.params;
     const {
-      name, type, description, color, startEvent, endEvent,
+      name, type, description, color, startEvent, endEvent, allDay,
     } = req.body;
 
     const event = await eventService.createEvent(calendarId, {
@@ -24,6 +24,7 @@ const createEvent = async (req, res, next) => {
       color,
       startEvent,
       endEvent,
+      allDay,
     });
 
     return res.status(201).json(event);
@@ -46,6 +47,7 @@ const updateEvent = async (req, res, next) => {
       startEvent,
       endEvent,
       isPerformed,
+      allDay,
     } = req.body;
     const event = await eventService.updateEvent(
       req.user.id,
@@ -57,6 +59,7 @@ const updateEvent = async (req, res, next) => {
       startEvent,
       endEvent,
       isPerformed,
+      allDay,
     );
 
     return res.status(201).json(event);

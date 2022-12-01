@@ -27,11 +27,11 @@ export const Register = ({ setFormType }) => {
     dispatch(signUp(form));
   };
 
-  useEffect(() => {
-    if (isAuthenticated || success) {
-      navigate('/');
-    }
-  }, [isAuthenticated, success]);
+  // useEffect(() => {
+  //   if (isAuthenticated || success) {
+  //     navigate('/');
+  //   }
+  // }, [isAuthenticated, success]);
 
   const changeHandler = (event) => {
     setForm({ ...form, [event.target.name]: event.target.value });

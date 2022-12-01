@@ -29,7 +29,7 @@ const addParticipant = async (calendarId, participantId) => {
   return calendar;
 };
 
-const makeDefaultCalendar = async (user, country) => {
+const makeDefaultCalendar = async (user, country, language) => {
   const mainCalendar = await createCalendar(user.id, {
     isPublic: false,
     author: user.id,
@@ -42,6 +42,7 @@ const makeDefaultCalendar = async (user, country) => {
   const holidayArr = await holidayApi
     .holidays({
       country,
+      language,
       year: '2021',
     })
     .then((response) => holidayDto(response.holidays, user.id));
