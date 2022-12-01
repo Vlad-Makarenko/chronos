@@ -3,13 +3,14 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { eventDateUpdate, eventsToCalendar, getEditEventDate } from '../../utils/event.utils';
 import { useMessage } from '../../hooks/message.hook';
 
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { updateEvent } from '../../store/eventSlice';
+import { setCurrentEvent, updateEvent } from '../../store/eventSlice';
+import { createEventOn, editCalendarOn } from '../../store/modalSlice';
 
 const localizer = momentLocalizer(moment);
 const DnDCalendar = withDragAndDrop(Calendar);
@@ -41,7 +42,6 @@ export const BigCalendar = ({ events }) => {
   };
 
   const onEventDrop = (data) => {
-    console.log(data);
     if (data.event.type === 'holiday') {
       return message('You can\'t interact with holiday', 'warning');
     }
@@ -59,14 +59,12 @@ export const BigCalendar = ({ events }) => {
       localizer={localizer}
       onEventDrop={onEventDrop}
       onEventResize={onEventResize}
-      onSelectSlot={(slotInfo) => {
-        console.log(slotInfo);
+      onSelectSlot={() => {
+        dispatch(createEventOn());
       }}
       onSelectEvent={(slotInfo) => {
-        console.log(slotInfo);
-      }}
-      onSelecting={(slotInfo) => {
-        console.log(slotInfo);
+        dispatch(setCurrentEvent(slotInfo));
+        dispatch(editCalendarOn());
       }}
       resizable
       selectable

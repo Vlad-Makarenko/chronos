@@ -32,3 +32,9 @@ export const eventDateUpdate = (events, data) => events.map((item) => {
   }
   return item;
 });
+
+export const eventTypes = [
+  { value: 'task', label: 'Task' },
+  { value: 'reminder', label: 'Reminder' },
+  { value: 'arrangement', label: 'Arrangement' },
+];

@@ -44,17 +44,18 @@ export const getAllEvents = createAsyncThunk(
 export const createEvent = createAsyncThunk(
   'event/createEvent',
   async (
-    { calendarId, name, type, description, color, startEvent, endEvent },
+    { id, name, type, description, color, startEvent, endEvent, allDay },
     { rejectWithValue }
   ) => {
     try {
-      const response = await api.post(`${API_URL}/event/${calendarId}`, {
+      const response = await api.post(`${API_URL}/event/${id}`, {
         name,
         type,
         description,
         color,
         startEvent,
         endEvent,
+        allDay,
       });
       return response.data;
     } catch (error) {
@@ -80,17 +81,6 @@ export const updateEvent = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      console.table({
-        _id,
-        name,
-        type,
-        description,
-        color,
-        startEvent,
-        endEvent,
-        isPerformed,
-        allDay,
-      });
       const response = await api.patch(`${API_URL}/event/${_id}`, {
         name,
         type,
@@ -127,8 +117,14 @@ const eventSlice = createSlice({
     todayEvents: [],
     event: {},
     isLoading: false,
+    success: false,
   },
-  reducers: {},
+  reducers: {
+    setCurrentEvent(state, action) {
+      state.event = action.payload;
+      state.success = false;
+    },
+  },
   extraReducers: {
     [getTodayEvents.pending]: (state) => {
       state.isLoading = true;
@@ -141,9 +137,7 @@ const eventSlice = createSlice({
     },
     [createEvent.pending]: (state) => {
       state.isLoading = true;
-    },
-    [updateEvent.pending]: (state) => {
-      // state.isLoading = true;
+      state.success = false;
     },
     [getTodayEvents.fulfilled]: (state, action) => {
       state.todayEvents = action.payload;
@@ -160,6 +154,7 @@ const eventSlice = createSlice({
     [createEvent.fulfilled]: (state, action) => {
       state.events = [...state.events, action.payload];
       state.isLoading = false;
+      state.success = true;
     },
     [updateEvent.fulfilled]: (state, action) => {
       state.events = updateEventUtil(state.events, action.payload);
@@ -176,5 +171,7 @@ const eventSlice = createSlice({
     [updateEvent.rejected]: errorHandler,
   },
 });
+
+export const { setCurrentEvent } = eventSlice.actions;
 
 export default eventSlice.reducer;

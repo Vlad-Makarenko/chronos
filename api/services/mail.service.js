@@ -73,7 +73,7 @@ class MailService {
     await this.transporter.sendMail({
       from: process.env.SMTP_USER,
       to,
-      subject: `Password reset for Stack Overclone`,
+      subject: `Password reset for Chronos`,
       text: '',
       html: `
                 <div>

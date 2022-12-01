@@ -2,17 +2,19 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CalendarCreateForm } from '../components/calendar/CalendarCreateForm';
+import { CreateEventForm } from '../components/event/CreateEventForm';
 import { ModalWin } from '../components/ModalWin';
 import {
   inviteOff,
   createEventOff,
   createCalendarOff,
   editCalendarOff,
+  editEventOff,
 } from '../store/modalSlice';
 
 export const useModal = () => {
   const dispatch = useDispatch();
-  const { createCalendar, editCalendar, createEvent, invite } = useSelector(
+  const { createCalendar, editCalendar, createEvent, editEvent, invite } = useSelector(
     (state) => state.modal
   );
 
@@ -23,12 +25,15 @@ export const useModal = () => {
           <h1>INVITE</h1>
         </div>
       </ModalWin>
-      <ModalWin show={createEvent} onHide={() => dispatch(createEventOff())}>
-        <div>
-          <h1>EVENT</h1>
-        </div>
+      <ModalWin show={createEvent} header={'Event creation'} onHide={() => dispatch(createEventOff())}>
+        <CreateEventForm />
       </ModalWin>
       <ModalWin show={editCalendar} onHide={() => dispatch(editCalendarOff())}>
+        <div>
+          <h1>EDIT</h1>
+        </div>
+      </ModalWin>
+      <ModalWin show={editEvent} onHide={() => dispatch(editEventOff())}>
         <div>
           <h1>EDIT</h1>
         </div>

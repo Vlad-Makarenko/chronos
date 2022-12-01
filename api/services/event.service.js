@@ -6,11 +6,14 @@ const createEvent = async (calendarId, event) => {
   if (!calendar) {
     throw ApiError.BadRequestError('no such calendar found');
   }
-  const createdEvent = await Event.create(event).then((docEvent) => Calendar.findByIdAndUpdate(
-    calendarId,
-    { $push: { events: docEvent.id } },
-    { new: true, useFindAndModify: false },
-  ));
+  const createdEvent = await Event.create(event).then(async (docEvent) => {
+    await Calendar.findByIdAndUpdate(
+      calendarId,
+      { $push: { events: docEvent.id } },
+      { new: true, useFindAndModify: false },
+    );
+    return docEvent;
+  });
   return createdEvent;
 };
 

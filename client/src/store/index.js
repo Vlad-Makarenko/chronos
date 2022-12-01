@@ -15,4 +15,7 @@ export default configureStore({
     event: eventReducer,
     comment: commentReducer,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+    serializableCheck: false,
+  }),
 });

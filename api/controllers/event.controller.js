@@ -14,7 +14,6 @@ const createEvent = async (req, res, next) => {
     const {
       name, type, description, color, startEvent, endEvent, allDay,
     } = req.body;
-
     const event = await eventService.createEvent(calendarId, {
       author: req.user.id,
       parentCalendar: calendarId,
