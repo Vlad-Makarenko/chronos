@@ -27,7 +27,7 @@ export const CreateEventForm = () => {
     setForm({
       ...form,
       color:
-      // eslint-disable-next-line no-nested-ternary
+        // eslint-disable-next-line no-nested-ternary
         form.type === 'reminder'
           ? '#FFA500'
           : form.type === 'arrangement'
@@ -68,7 +68,9 @@ export const CreateEventForm = () => {
         ...form,
         id: currentCalendar._id,
         startEvent: new Date(form.startEvent).toLocaleString(),
-        endEvent: new Date(form.endEvent || new Date(form.startEvent)).toLocaleString(),
+        endEvent: new Date(
+          form.endEvent || new Date(form.startEvent)
+        ).toLocaleString(),
       })
     );
   };
@@ -148,6 +150,7 @@ export const CreateEventForm = () => {
           End at:
         </label>
         <input
+          required={!form.allDay}
           type='datetime-local'
           name='endEvent'
           value={form.allDay ? '' : form.endEvent}

@@ -1,13 +1,11 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import moment from 'moment';
 import { Tooltip } from 'flowbite-react';
 import { MdInfo } from 'react-icons/md';
 import { HiClock } from 'react-icons/hi';
-import { useNavigate } from 'react-router-dom';
 
 export const TodayEventCard = ({ event }) => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   return (
     <div className='flex border-t cursor-pointer w-11/12  mx-3 my-3 border-t-green-400  p-2 px-4 hover:bg-gradient-to-br from-green-100 animate-appear'>

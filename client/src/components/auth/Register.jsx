@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BsFillPersonFill } from 'react-icons/bs';
 import { HiAtSymbol } from 'react-icons/hi';
 import { MdLabel } from 'react-icons/md';
-import { useNavigate } from 'react-router-dom';
 
 import { PswdInput } from './PwsdInput';
 import { signUp } from '../../store/authSlice';
 
 export const Register = ({ setFormType }) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [form, setForm] = useState({
     login: '',
     email: '',
@@ -18,7 +16,7 @@ export const Register = ({ setFormType }) => {
     repeatedPassword: '',
     fullName: '',
   });
-  const { isLoading, isAuthenticated, success } = useSelector(
+  const { isLoading } = useSelector(
     (state) => state.auth
   );
 
@@ -26,12 +24,6 @@ export const Register = ({ setFormType }) => {
     e.preventDefault();
     dispatch(signUp(form));
   };
-
-  // useEffect(() => {
-  //   if (isAuthenticated || success) {
-  //     navigate('/');
-  //   }
-  // }, [isAuthenticated, success]);
 
   const changeHandler = (event) => {
     setForm({ ...form, [event.target.name]: event.target.value });
