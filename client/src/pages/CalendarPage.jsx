@@ -25,7 +25,6 @@ export const CalendarPage = () => {
       dispatch(getMainCalendar());
     } else {
       dispatch(getCalendar({ id }));
-      // dispatch(getAllEvents({ id }));
     }
   }, [id]);
 

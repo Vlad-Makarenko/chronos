@@ -9,8 +9,8 @@ import { useMessage } from '../../hooks/message.hook';
 
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { setCurrentEvent, updateEvent } from '../../store/eventSlice';
-import { createEventOn, editCalendarOn } from '../../store/modalSlice';
+import { getEvent, setCurrentEvent, updateEvent } from '../../store/eventSlice';
+import { createEventOn, editCalendarOn, editEventOn, infoEventOn } from '../../store/modalSlice';
 
 const localizer = momentLocalizer(moment);
 const DnDCalendar = withDragAndDrop(Calendar);
@@ -27,6 +27,7 @@ export const BigCalendar = ({ events }) => {
 
   useEffect(() => {
     setDisplayEvents(eventsToCalendar(events));
+    console.log(eventsToCalendar(events));
   }, [events]);
 
   const eventPropGetter = useCallback((event) => ({
@@ -63,8 +64,8 @@ export const BigCalendar = ({ events }) => {
         dispatch(createEventOn());
       }}
       onSelectEvent={(slotInfo) => {
-        dispatch(setCurrentEvent(slotInfo));
-        dispatch(editCalendarOn());
+        dispatch(getEvent({ id: slotInfo._id }));
+        dispatch(infoEventOn());
       }}
       resizable
       selectable

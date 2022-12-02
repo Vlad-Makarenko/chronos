@@ -67,10 +67,10 @@ export const CreateEventForm = () => {
       createEvent({
         ...form,
         id: currentCalendar._id,
-        startEvent: new Date(form.startEvent).toLocaleString(),
+        startEvent: new Date(form.startEvent).toISOString(),
         endEvent: new Date(
           form.endEvent || new Date(form.startEvent)
-        ).toLocaleString(),
+        ).toISOString(),
       })
     );
   };
