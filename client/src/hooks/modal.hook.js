@@ -43,7 +43,19 @@ export const useModal = () => {
           <h1>EDIT</h1>
         </div>
       </ModalWin>
-      <ModalWin show={infoEvent} header={'Event info'} onHide={() => dispatch(infoEventOff())}>
+      <ModalWin
+        show={infoEvent}
+        header={
+          <div>
+            <h3 className='text-lg font-medium leading-6 text-gray-900'>
+              Event Information
+            </h3>
+            <p className='mt-1 max-w-2xl text-sm text-gray-500'>
+              Details about event
+            </p>
+          </div>
+        }
+        onHide={() => dispatch(infoEventOff())}>
         <InfoEventForm />
       </ModalWin>
       <ModalWin show={editEvent} onHide={() => dispatch(editEventOff())}>
