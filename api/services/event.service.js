@@ -100,11 +100,14 @@ const getEventById = async (id, userId) => {
   const event = await Event.findById(id).populate({
     path: 'sharedParticipants',
     select: 'login fullName avatar id',
+  }).populate({
+    path: 'author',
+    select: 'login fullName avatar id',
   });
   if (
     !event
-    || event.author.toString() !== userId
-    || event.sharedParticipants.includes(userId)
+    || event.author.id.toString() !== userId
+    // || !event.sharedParticipants.id.includes(userId) TODO:
   ) {
     return null;
   }

@@ -22,6 +22,7 @@ export const getEvent = createAsyncThunk(
   async ({ id }, { rejectWithValue }) => {
     try {
       const response = await api.get(`${API_URL}/event/${id}`);
+      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
