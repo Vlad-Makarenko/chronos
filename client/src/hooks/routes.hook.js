@@ -29,7 +29,7 @@ export const useRoutes = () => {
               element={<ResetPassword />}
               exact
             />
-            <Route path='*' element={<Navigate to='/' replace />} />
+            <Route path='*' element={<Navigate to='/home' replace />} />
           </>
         ) : (
           <>

@@ -23,7 +23,7 @@ api.interceptors.response.use(
         localStorage.setItem('token', response.data.accessToken);
         return api.request(originalReq);
       } catch (err) {
-        console.log(err.message); // TODO: toast ?
+        console.log(err.message);
       }
     }
     throw error;

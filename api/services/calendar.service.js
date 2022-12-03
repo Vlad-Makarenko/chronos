@@ -7,8 +7,8 @@ const holidayDto = require('../utils/holidayDto');
 const { Calendar, User, Event } = require('../models');
 
 const createCalendar = async (userId, calendar) => await Calendar.create(calendar)
-  .then((docCalendar) => {
-    User.findByIdAndUpdate(
+  .then(async (docCalendar) => {
+    await User.findByIdAndUpdate(
       userId,
       { $push: { calendars: docCalendar.id } },
       { new: true, useFindAndModify: false },

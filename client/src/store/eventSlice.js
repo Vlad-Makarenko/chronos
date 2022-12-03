@@ -22,7 +22,6 @@ export const getEvent = createAsyncThunk(
   async ({ id }, { rejectWithValue }) => {
     try {
       const response = await api.get(`${API_URL}/event/${id}`);
-      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -117,6 +116,7 @@ const eventSlice = createSlice({
     events: [],
     todayEvents: [],
     event: {},
+    eventLoading: false,
     isLoading: false,
     success: false,
   },
@@ -131,7 +131,7 @@ const eventSlice = createSlice({
       state.isLoading = true;
     },
     [getEvent.pending]: (state) => {
-      state.isLoading = true;
+      state.eventLoading = true;
     },
     [getAllEvents.pending]: (state) => {
       state.isLoading = true;
@@ -146,7 +146,7 @@ const eventSlice = createSlice({
     },
     [getEvent.fulfilled]: (state, action) => {
       state.event = action.payload;
-      state.isLoading = false;
+      state.eventLoading = false;
     },
     [getAllEvents.fulfilled]: (state, action) => {
       state.events = action.payload;
@@ -167,7 +167,11 @@ const eventSlice = createSlice({
       state.isLoading = false;
     },
     [getTodayEvents.rejected]: errorHandler,
-    [getEvent.rejected]: errorHandler,
+    [getEvent.rejected]: (state, action) => {
+      state.eventLoading = false;
+      toast.error(action.payload.message);
+      console.log('Request error: ', action.payload);
+    },
     [getAllEvents.rejected]: errorHandler,
     [updateEvent.rejected]: errorHandler,
   },

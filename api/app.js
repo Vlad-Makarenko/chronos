@@ -24,7 +24,7 @@ app.use(cors({ credentials: true, origin: process.env.CLIENT_URL }));
 
 app.use('/api/auth', authRouter);
 app.use('/api/calendar', calendarRouter);
-app.use('/api/user', userRouter);
+app.use('/api/users', userRouter);
 app.use('/api/event', eventRouter);
 
 app.use(errorMiddleware);

@@ -54,6 +54,25 @@ export const signIn = createAsyncThunk(
   }
 );
 
+export const editProfile = createAsyncThunk(
+  'auth/editProfile',
+  async ({
+    fullName, email, login, avatar,
+  }, { rejectWithValue }) => {
+    try {
+      const response = await api.patch(`${API_URL}/users`, {
+        fullName,
+        email,
+        login,
+        avatar
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
 export const resetPassword = createAsyncThunk(
   'auth/resetPassword',
   async ({ token, password, repeatedPassword }, { rejectWithValue }) => {
@@ -151,6 +170,9 @@ const authSlice = createSlice({
       state.isLoading = true;
       state.error = null;
     },
+    [editProfile.pending]: (state) => {
+      state.isLoading = true;
+    },
     [signIn.fulfilled]: (state, action) => {
       state.me = { ...action.payload, accessToken: undefined };
       state.isAuthenticated = true;
@@ -161,6 +183,10 @@ const authSlice = createSlice({
       state.isAuthenticated = true;
       toast.success('Registration was successful');
       state.success = true;
+      state.isLoading = false;
+    },
+    [editProfile.fulfilled]: (state, action) => {
+      state.me = action.payload;
       state.isLoading = false;
     },
     [resetPswd.fulfilled]: (state) => {
@@ -185,6 +211,7 @@ const authSlice = createSlice({
     },
     [signIn.rejected]: errorHandler,
     [signUp.rejected]: errorHandler,
+    [editProfile.rejected]: errorHandler,
     [logOut.rejected]: errorHandler,
     [resetPassword.rejected]: errorHandler,
     [resetPswd.rejected]: errorHandler,

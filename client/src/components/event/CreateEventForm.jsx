@@ -58,7 +58,6 @@ export const CreateEventForm = () => {
     } else {
       setForm({ ...form, [event.target.name]: event.target.value });
     }
-    console.table(form);
   };
 
   const createHandler = (event) => {

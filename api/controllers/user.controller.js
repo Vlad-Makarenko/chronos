@@ -1,47 +1,44 @@
 const { validationResult } = require('express-validator');
-
-const authService = require('../services/auth.service');
-const tokenService = require('../services/token.service');
+const userService = require('../services/user.service');
 const ApiError = require('../utils/ApiError');
 
-const updateUser = async (req, res, next) => {
+const allUsers = async (req, res, next) => {
   try {
-    // const { login, password } = req.body;
-    // const userData = await authService.authorization(login, password);
-    // res.cookie('refreshToken', userData.refreshToken, {
-    //   maxAge: 30 * 24 * 3600 * 1000,
-    //   httpOnly: true,
-    // });
-    // return res.json({ ...userData, refreshToken: undefined });
+    const users = await userService.getAllUsers();
+    res.json(users);
   } catch (err) {
     next(err);
   }
 };
 
-const getAllUsers = async (req, res, next) => {
+const userById = async (req, res, next) => {
   try {
-    // const { refreshToken } = req.cookies;
-    // await tokenService.removeToken(refreshToken);
-
-    // res.clearCookie('refreshToken');
-    // return res.status(204).json('OK');
+    const { id } = req.params;
+    const user = await userService.getUser(id);
+    res.json(user);
   } catch (err) {
     next(err);
   }
 };
 
-const getUser = async (req, res, next) => {
+const userUpdate = async (req, res, next) => {
   try {
-    // const { email } = req.body;
-    // await authService.passwordReset(email);
-    // res.status(204).json({ message: 'The link has been sent to your email' });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return next(ApiError.BadRequestError('validation error', errors.array()));
+    }
+    const user = await userService.updateUser(
+      req.body,
+      req.user.id,
+    );
+    res.status(201).json(user);
   } catch (err) {
     next(err);
   }
 };
 
 module.exports = {
-  updateUser,
-  getAllUsers,
-  getUser,
+  allUsers,
+  userById,
+  userUpdate,
 };
