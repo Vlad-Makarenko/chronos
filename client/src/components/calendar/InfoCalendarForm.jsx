@@ -5,7 +5,7 @@ import { Avatar, Checkbox, Label, Button } from 'flowbite-react';
 import Select from 'react-select';
 
 import { Loader } from '../Loader';
-import { editCalendarOn, infoCalendarOff, infoEventOff } from '../../store/modalSlice';
+import { editCalendarOn, infoCalendarOff } from '../../store/modalSlice';
 import { deleteCalendar, updateCalendar } from '../../store/calendarSlice';
 
 export const InfoCalendarForm = () => {
@@ -35,7 +35,7 @@ export const InfoCalendarForm = () => {
             />
             <p className='cursor-pointer' onClick={() => {
               navigate(`/user/${currentCalendar.author._id}`);
-              dispatch(infoEventOff());
+              dispatch(infoCalendarOff());
             }}>
               {currentCalendar.author ? currentCalendar.author.login : ''}
             </p>
