@@ -3,54 +3,47 @@ import { useDispatch, useSelector } from 'react-redux';
 import Select from 'react-select';
 
 import { useMessage } from '../../hooks/message.hook';
-import { createEventOff, editEventOff } from '../../store/modalSlice';
-import { createEvent, updateEvent } from '../../store/eventSlice';
-import { currentEventType, eventTypes } from '../../utils/event.utils';
+import { editEventOff } from '../../store/modalSlice';
+import { setSuccessFalse, updateEvent } from '../../store/eventSlice';
+import { eventTypes } from '../../utils/event.utils';
 
 export const EditEventForm = () => {
   const dispatch = useDispatch();
   const message = useMessage();
 
-  const { currentCalendar } = useSelector((state) => state.calendar);
   const { isLoading, success, event } = useSelector((state) => state.event);
-  const [value, setValue] = useState({ value: 'task', label: 'Task' });
   const [form, setForm] = useState({
     name: event.name,
     description: event.description,
     color: event.color,
     type: event.type,
     allDay: event.allDay,
-    startEvent: new Date(event.startEvent || new Date()).toISOString().substring(0, 16),
-    endEvent: new Date(event.endEvent || new Date()).toISOString().substring(0, 16),
+    startEvent: new Date(event.startEvent || new Date())
+      .toISOString()
+      .substring(0, 16),
+    endEvent: new Date(event.endEvent || new Date())
+      .toISOString()
+      .substring(0, 16),
   });
 
   useEffect(() => {
-    setForm({ name: event.name,
+    setForm({
+      name: event.name,
       description: event.description,
       color: event.color,
       type: event.type,
       allDay: event.allDay,
-      startEvent: new Date(event.startEvent || new Date()).toISOString().substring(0, 16),
-      endEvent: new Date(event.endEvent || new Date()).toISOString().substring(0, 16) });
+      startEvent: new Date(event.startEvent || new Date())
+        .toISOString()
+        .substring(0, 16),
+      endEvent: new Date(event.endEvent || new Date())
+        .toISOString()
+        .substring(0, 16),
+    });
   }, [event]);
 
   useEffect(() => {
-    setForm({
-      ...form,
-      color:
-        // eslint-disable-next-line no-nested-ternary
-        form.type === 'reminder'
-          ? '#FFA500'
-          : form.type === 'arrangement'
-            ? '#0000FF'
-            : '#008000',
-    });
-    setValue(currentEventType(form.type));
-  }, [form.type]);
-
-  useEffect(() => {
     if (success) {
-      message('Event successfully updated!', 'success');
       setForm({
         name: event.name,
         description: event.description,
@@ -61,6 +54,7 @@ export const EditEventForm = () => {
         endEvent: event.endEvent,
       });
       dispatch(editEventOff());
+      dispatch(setSuccessFalse());
     }
   }, [success]);
 
@@ -74,10 +68,22 @@ export const EditEventForm = () => {
 
   const editHandler = (item) => {
     item.preventDefault();
+    if (form.allDay) {
+      setForm({
+        ...form,
+        endEvent: new Date(form.startEvent)
+          .toISOString(),
+      });
+    }
+    if (
+      (new Date(form.startEvent).getTime() > new Date(form.endEvent).getTime()) && !form.allDay
+    ) {
+      return message('Bad date', 'error');
+    }
     dispatch(
       updateEvent({
         ...form,
-        id: currentCalendar._id,
+        _id: event._id,
         startEvent: new Date(form.startEvent).toISOString(),
         endEvent: new Date(
           form.endEvent || new Date(form.startEvent)
@@ -124,17 +130,13 @@ export const EditEventForm = () => {
         <Select
           className='w-full'
           classNamePrefix='select'
-          isClearable
           isSearchable
           name='type'
           onChange={(option) => {
-            setValue(option);
             setForm({ ...form, type: option.value });
           }}
-          placeholder='Select event type'
+          placeholder={`${form.type}`}
           options={eventTypes}
-          value={value}
-          // defaultValue={eventTypes[0]}
         />
       </div>
       <div className='flex items-center justify-center self-start'>

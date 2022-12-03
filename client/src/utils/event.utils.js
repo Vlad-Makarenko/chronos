@@ -38,14 +38,3 @@ export const eventTypes = [
   { value: 'reminder', label: 'Reminder' },
   { value: 'arrangement', label: 'Arrangement' },
 ];
-
-export const currentEventType = (type) => {
-  if (type === 'task') {
-    return { value: 'task', label: 'Task' };
-  } if (type === 'reminder') {
-    return { value: 'reminder', label: 'Reminder' };
-  } if (type === 'arrangement') {
-    return { value: 'arrangement', label: 'Arrangement' };
-  }
-  return {};
-};

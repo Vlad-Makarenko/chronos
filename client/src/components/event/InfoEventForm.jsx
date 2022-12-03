@@ -22,9 +22,6 @@ export const InfoEventForm = () => {
   return (
     <div className='overflow-hidden bg-white animate-appear sm:rounded-lg'>
       <dl>
-        {/* если мы хотим поставить фон белый, вместо bg-gray-50 ----> bg-white */}
-        {/* TODO: ссылка на юзеров, ивент при драг н дропе не меняет энд дату, перечеркивать имя
-        ивента */}
         <div className=' bg-white px-4 pb-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
           <dt className='flex items-center text-sm font-medium text-gray-500'>
             Author
@@ -108,7 +105,7 @@ export const InfoEventForm = () => {
             {event.allDay ? (
               <b>( Event lasts all day )</b>
             ) : (
-              new Date(event.startEvent).toLocaleString()
+              new Date(event.endEvent).toLocaleString()
             )}
           </dd>
         </div>

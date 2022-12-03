@@ -4,7 +4,7 @@ import Select from 'react-select';
 
 import { useMessage } from '../../hooks/message.hook';
 import { createEventOff } from '../../store/modalSlice';
-import { createEvent } from '../../store/eventSlice';
+import { createEvent, setSuccessFalse } from '../../store/eventSlice';
 import { eventTypes } from '../../utils/event.utils';
 
 export const CreateEventForm = () => {
@@ -38,7 +38,6 @@ export const CreateEventForm = () => {
 
   useEffect(() => {
     if (success) {
-      message('Event successfully created!', 'success');
       setForm({
         name: '',
         description: '',
@@ -49,6 +48,7 @@ export const CreateEventForm = () => {
         endEvent: '',
       });
       dispatch(createEventOff());
+      dispatch(setSuccessFalse());
     }
   }, [success]);
 

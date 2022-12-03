@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { createCalendar } from '../../store/calendarSlice';
+import { createCalendar, setSuccessFalse } from '../../store/calendarSlice';
 import { useMessage } from '../../hooks/message.hook';
 import { createCalendarOff } from '../../store/modalSlice';
 
@@ -26,6 +26,7 @@ export const CalendarCreateForm = () => {
         isPublic: true,
       });
       dispatch(createCalendarOff());
+      dispatch(setSuccessFalse());
     }
   }, [success]);
 

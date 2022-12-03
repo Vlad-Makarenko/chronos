@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 
 import api from '../http';
 import { API_URL } from '../utils/constants';
@@ -140,6 +141,9 @@ const eventSlice = createSlice({
       state.event = action.payload;
       state.success = false;
     },
+    setSuccessFalse(state) {
+      state.success = false;
+    }
   },
   extraReducers: {
     [getTodayEvents.pending]: (state) => {
@@ -168,13 +172,17 @@ const eventSlice = createSlice({
       state.isLoading = false;
     },
     [createEvent.fulfilled]: (state, action) => {
+      toast.success('Event has been successfully created!');
       state.events = [...state.events, action.payload];
       state.isLoading = false;
       state.success = true;
     },
     [updateEvent.fulfilled]: (state, action) => {
+      toast.success('Event has been successfully updated!');
       state.events = updateEventUtil(state.events, action.payload);
+      state.todayEvents = updateEventUtil(state.todayEvents, action.payload);
       state.isLoading = false;
+      state.success = true;
     },
     [deleteEvent.fulfilled]: (state, action) => {
       const id = action.payload;
@@ -192,6 +200,6 @@ const eventSlice = createSlice({
   },
 });
 
-export const { setCurrentEvent } = eventSlice.actions;
+export const { setCurrentEvent, setSuccessFalse } = eventSlice.actions;
 
 export default eventSlice.reducer;

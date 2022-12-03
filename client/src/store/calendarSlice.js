@@ -100,7 +100,11 @@ const calendarSlice = createSlice({
     isLoading: false,
     success: false,
   },
-  reducers: {},
+  reducers: {
+    setSuccessFalse(state) {
+      state.success = false;
+    }
+  },
   extraReducers: {
     [getAllCalendars.pending]: (state) => {
       state.isLoading = true;
@@ -160,5 +164,7 @@ const calendarSlice = createSlice({
     [updateCalendar.rejected]: errorHandler,
   },
 });
+
+export const { setSuccessFalse } = calendarSlice.actions;
 
 export default calendarSlice.reducer;
