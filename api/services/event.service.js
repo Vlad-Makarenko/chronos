@@ -89,7 +89,10 @@ const getTodayEvents = async (userId) => {
         tomorrowDate.getUTCDate(),
       ),
     },
-  }).where('author').equals(userId).populate({ path: 'parentCalendar', select: 'id name' });
+  })
+    .where('author')
+    .equals(userId)
+    .populate({ path: 'parentCalendar', select: 'id name' });
   if (!events) {
     throw ApiError.NothingFoundError('no events found');
   }
@@ -97,18 +100,16 @@ const getTodayEvents = async (userId) => {
 };
 
 const getEventById = async (id, userId) => {
-  const event = await Event.findById(id).populate({
-    path: 'sharedParticipants',
-    select: 'login fullName avatar id',
-  }).populate({
-    path: 'author',
-    select: 'login fullName avatar id',
-  });
-  if (
-    !event
-    || event.author.id.toString() !== userId
-    // || !event.sharedParticipants.id.includes(userId) TODO:
-  ) {
+  const event = await Event.findById(id)
+    .populate({
+      path: 'sharedParticipants',
+      select: 'login fullName avatar id',
+    })
+    .populate({
+      path: 'author',
+      select: 'login fullName avatar id',
+    });
+  if (!event) {
     return null;
   }
   return event;

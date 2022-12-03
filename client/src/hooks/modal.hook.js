@@ -2,6 +2,8 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CalendarCreateForm } from '../components/calendar/CalendarCreateForm';
+import { EditCalendarForm } from '../components/calendar/EditCalendarForm';
+import { InfoCalendarForm } from '../components/calendar/InfoCalendarForm';
 import { CreateEventForm } from '../components/event/CreateEventForm';
 import { EditEventForm } from '../components/event/EditEventForm';
 import { InfoEventForm } from '../components/event/InfoEventForm';
@@ -15,6 +17,7 @@ import {
   editEventOff,
   infoEventOff,
   settingsOff,
+  infoCalendarOff,
 } from '../store/modalSlice';
 
 export const useModal = () => {
@@ -26,12 +29,16 @@ export const useModal = () => {
     editEvent,
     invite,
     infoEvent,
-    settings
+    infoCalendar,
+    settings,
   } = useSelector((state) => state.modal);
 
   return (
     <div>
-      <ModalWin show={settings} header={'Profile settings'} onHide={() => dispatch(settingsOff())}>
+      <ModalWin
+        show={settings}
+        header={'Profile settings'}
+        onHide={() => dispatch(settingsOff())}>
         <ProfileSettings />
       </ModalWin>
       <ModalWin show={invite} onHide={() => dispatch(inviteOff())}>
@@ -40,15 +47,22 @@ export const useModal = () => {
         </div>
       </ModalWin>
       <ModalWin
+        show={createCalendar}
+        header={'Calendar creation'}
+        onHide={() => dispatch(createCalendarOff())}>
+        <CalendarCreateForm />
+      </ModalWin>
+      <ModalWin
         show={createEvent}
         header={'Event creation'}
         onHide={() => dispatch(createEventOff())}>
         <CreateEventForm />
       </ModalWin>
-      <ModalWin show={editCalendar} onHide={() => dispatch(editCalendarOff())}>
-        <div>
-          <h1>EDIT</h1>
-        </div>
+      <ModalWin show={editCalendar} header={'Calendar edition'} onHide={() => dispatch(editCalendarOff())}>
+        <EditCalendarForm />
+      </ModalWin>
+      <ModalWin show={editEvent} header={'Event edition'} onHide={() => dispatch(editEventOff())}>
+        <EditEventForm />
       </ModalWin>
       <ModalWin
         show={infoEvent}
@@ -65,14 +79,20 @@ export const useModal = () => {
         onHide={() => dispatch(infoEventOff())}>
         <InfoEventForm />
       </ModalWin>
-      <ModalWin show={editEvent} onHide={() => dispatch(editEventOff())}>
-        <EditEventForm />
-      </ModalWin>
       <ModalWin
-        show={createCalendar}
-        header={'Calendar creation'}
-        onHide={() => dispatch(createCalendarOff())}>
-        <CalendarCreateForm />
+        show={infoCalendar}
+        header={
+          <div>
+            <h3 className='text-lg font-medium leading-6 text-gray-900'>
+              Calendar Information
+            </h3>
+            <p className='mt-1 max-w-2xl text-sm text-gray-500'>
+              Details about calendar
+            </p>
+          </div>
+        }
+        onHide={() => dispatch(infoCalendarOff())}>
+        <InfoCalendarForm />
       </ModalWin>
     </div>
   );

@@ -11,8 +11,8 @@ import {
   MdPeople,
 } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
-import { deleteCalendar } from '../../store/calendarSlice';
-import { editCalendarOn } from '../../store/modalSlice';
+import { deleteCalendar, getCalendar } from '../../store/calendarSlice';
+import { editCalendarOn, infoCalendarOn } from '../../store/modalSlice';
 
 export const CalendarCard = ({ calendar }) => {
   const navigate = useNavigate();
@@ -22,12 +22,22 @@ export const CalendarCard = ({ calendar }) => {
     <div className='flex flex-col border cursor-pointer w-5/12 lg:w-1/5 mx-3 my-5 border-green-400 rounded-lg p-1 pb-3 hover:shadow-md hover:shadow-green-400 animate-appear'>
       <div className='flex self-end'>
         <Tooltip content={calendar.description}>
-          <MdInfo color='green' className='mx-1' />
+          <MdInfo
+            onClick={() => {
+              dispatch(getCalendar({ id: calendar._id }));
+              dispatch(infoCalendarOn());
+            }}
+            color='green'
+            className='mx-1'
+          />
         </Tooltip>
         {calendar.type !== 'main' && me.id === calendar.author && (
           <Tooltip content='Edit calendar'>
             <MdEdit
-              onClick={() => dispatch(editCalendarOn())}
+              onClick={() => {
+                dispatch(getCalendar({ id: calendar._id }));
+                dispatch(editCalendarOn());
+              }}
               color='green'
               className='mx-1'
             />
@@ -43,7 +53,9 @@ export const CalendarCard = ({ calendar }) => {
           </Tooltip>
         )}
       </div>
-      <div onClick={() => navigate(`/calendar/${calendar._id}`)} className='flex flex-col'>
+      <div
+        onClick={() => navigate(`/calendar/${calendar._id}`)}
+        className='flex flex-col'>
         <span className='flex items-center font-bold mb-2 mt-1 w-full justify-center text-xl'>
           {calendar.name}
         </span>

@@ -9,6 +9,7 @@ import { Loader } from '../components/Loader';
 
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { infoCalendarOn } from '../store/modalSlice';
 
 export const CalendarPage = () => {
   const dispatch = useDispatch();
@@ -44,7 +45,11 @@ export const CalendarPage = () => {
         <h1 className='text-2xl'>
           <b>{currentCalendar.name}</b> calendar
         </h1>
-        <button className='p-3 border shadow-md hover:bg-gray-200 hover:shadow-green-200 border-green-300 rounded-md'>
+        <button
+        onClick={() => {
+          dispatch(infoCalendarOn());
+        }}
+        className='p-3 border shadow-md hover:bg-gray-200 hover:shadow-green-200 border-green-300 rounded-md'>
           More info
         </button>
       </div>

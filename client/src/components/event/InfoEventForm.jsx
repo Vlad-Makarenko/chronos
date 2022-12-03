@@ -12,7 +12,8 @@ export const InfoEventForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { eventLoading, event } = useSelector((state) => state.event);
-  const [isPerformed, setIsPerformed] = useState(!!event.isPeformed);
+  const { me } = useSelector((state) => state.auth);
+  const [isPerformed, setIsPerformed] = useState(!!event.isPerformed);
 
   useEffect(() => {
     setIsPerformed(!!event.isPerformed);
@@ -110,7 +111,7 @@ export const InfoEventForm = () => {
           </dd>
         </div>
       </dl>
-      <div className='border-t mt-3 py-3 px-4 border-gray-200'>
+      {event.author && event.author._id === me.id && <div className='border-t mt-3 py-3 px-4 border-gray-200'>
         <Checkbox disabled={event.type === 'holiday'} onChange={() => {
           dispatch(updateEvent({ ...event, isPerformed: !isPerformed }));
           setIsPerformed(!isPerformed);
@@ -128,7 +129,7 @@ export const InfoEventForm = () => {
             dispatch(infoEventOff());
           }} gradientMonochrome='failure'>Delete Event</Button>
         </div>
-      </div>
+      </div>}
     </div>
   );
 };

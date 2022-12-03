@@ -1,9 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
+
 import api from '../http';
 import {
   getActiveCalendars,
   getHiddenCalendars,
-  getMainCalendar as getMainCalendarUtil,
+  updateCalendarsUtil,
 } from '../utils/calendar.utils';
 import { API_URL } from '../utils/constants';
 import { errorHandler } from '../utils/errorHandler';
@@ -59,11 +61,11 @@ export const createCalendar = createAsyncThunk(
 export const updateCalendar = createAsyncThunk(
   'calendar/updateCalendar',
   async (
-    { id, name, description, isHidden, isPublic },
+    { _id, name, description, isHidden, isPublic },
     { rejectWithValue }
   ) => {
     try {
-      const response = await api.patch(`${API_URL}/calendar/${id}`, {
+      const response = await api.patch(`${API_URL}/calendar/${_id}`, {
         name,
         description,
         isHidden,
@@ -94,10 +96,14 @@ const calendarSlice = createSlice({
     allCalendars: [],
     activeCalendars: [],
     hiddenCalendars: [],
-    mainCalendar: {},
-    currentCalendar: {},
+    currentCalendar: {
+      name: '',
+      description: '',
+      isPublic: true,
+    },
     error: null,
     isLoading: false,
+    calendarLoading: false,
     success: false,
   },
   reducers: {
@@ -110,7 +116,7 @@ const calendarSlice = createSlice({
       state.isLoading = true;
     },
     [getCalendar.pending]: (state) => {
-      state.isLoading = true;
+      state.calendarLoading = true;
       state.error = null;
     },
     [getMainCalendar.pending]: (state) => {
@@ -125,19 +131,18 @@ const calendarSlice = createSlice({
       state.allCalendars = action.payload;
       state.activeCalendars = getActiveCalendars(action.payload);
       state.hiddenCalendars = getHiddenCalendars(action.payload);
-      state.mainCalendar = getMainCalendarUtil(action.payload);
       state.isLoading = false;
     },
     [getCalendar.fulfilled]: (state, action) => {
       state.currentCalendar = action.payload;
-      state.isLoading = false;
+      state.calendarLoading = false;
     },
     [getMainCalendar.fulfilled]: (state, action) => {
       state.currentCalendar = action.payload;
-      state.mainCalendar = action.payload;
       state.isLoading = false;
     },
     [createCalendar.fulfilled]: (state, action) => {
+      toast.success('Calendar has been successfully created!');
       state.activeCalendars = [...state.activeCalendars, action.payload];
       state.isLoading = false;
       state.success = true;
@@ -150,12 +155,17 @@ const calendarSlice = createSlice({
       state.isLoading = false;
     },
     [updateCalendar.fulfilled]: (state, action) => {
+      toast.success('Calendar has been successfully updated!');
       state.currentCalendar = action.payload;
+      state.allCalendars = updateCalendarsUtil(state.allCalendars, action.payload);
+      state.activeCalendars = getActiveCalendars(state.allCalendars);
+      state.hiddenCalendars = getHiddenCalendars(state.allCalendars);
       state.isLoading = false;
+      state.success = true;
     },
     [getAllCalendars.rejected]: errorHandler,
     [getCalendar.rejected]: (state, action) => {
-      state.isLoading = false;
+      state.calendarLoading = false;
       state.error = action.payload.message;
       console.log('req error: ', action.payload);
     },

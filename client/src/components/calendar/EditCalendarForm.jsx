@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { createCalendar, setSuccessFalse } from '../../store/calendarSlice';
-import { createCalendarOff } from '../../store/modalSlice';
+import { setSuccessFalse, updateCalendar } from '../../store/calendarSlice';
+import { editCalendarOff } from '../../store/modalSlice';
 
-export const CalendarCreateForm = () => {
+export const EditCalendarForm = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { isLoading, success } = useSelector((state) => state.calendar);
+  const { isLoading, success, currentCalendar } = useSelector((state) => state.calendar);
   const [form, setForm] = useState({
     name: '',
     description: '',
@@ -15,14 +13,21 @@ export const CalendarCreateForm = () => {
   });
 
   useEffect(() => {
+    setForm({
+      name: currentCalendar.name,
+      description: currentCalendar.description,
+      isPublic: currentCalendar.isPublic,
+    });
+  }, [currentCalendar]);
+
+  useEffect(() => {
     if (success) {
-      navigate('/home');
       setForm({
         name: '',
         description: '',
         isPublic: true,
       });
-      dispatch(createCalendarOff());
+      dispatch(editCalendarOff());
       dispatch(setSuccessFalse());
     }
   }, [success]);
@@ -37,7 +42,7 @@ export const CalendarCreateForm = () => {
 
   const createHandler = (event) => {
     event.preventDefault();
-    dispatch(createCalendar(form));
+    dispatch(updateCalendar({ ...form, _id: currentCalendar._id }));
   };
   return (
     <form
@@ -85,7 +90,7 @@ export const CalendarCreateForm = () => {
         type='submit'
         className='mt-2 mb-2 w-full text-white rounded-md bg-green-500 p-3 hover:bg-green-600 hover:shadow-md hover:shadow-green-400'
         disabled={isLoading}>
-        Create calendar
+        Save changes
       </button>
     </form>
   );

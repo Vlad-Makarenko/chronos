@@ -108,8 +108,8 @@ const updateCalendar = async (
   }
   calendar.name = name || calendar.name;
   calendar.description = description || calendar.description;
-  calendar.isHidden = isHidden || calendar.isHidden;
-  calendar.isPublic = isPublic || calendar.isPublic;
+  calendar.isHidden = isHidden;
+  calendar.isPublic = isPublic;
   await calendar.save();
   return calendar;
 };
