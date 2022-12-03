@@ -3,6 +3,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CalendarCreateForm } from '../components/calendar/CalendarCreateForm';
 import { CreateEventForm } from '../components/event/CreateEventForm';
+import { EditEventForm } from '../components/event/EditEventForm';
 import { InfoEventForm } from '../components/event/InfoEventForm';
 import { ModalWin } from '../components/ModalWin';
 import {
@@ -59,9 +60,7 @@ export const useModal = () => {
         <InfoEventForm />
       </ModalWin>
       <ModalWin show={editEvent} onHide={() => dispatch(editEventOff())}>
-        <div>
-          <h1>EDIT</h1>
-        </div>
+        <EditEventForm />
       </ModalWin>
       <ModalWin
         show={createCalendar}
