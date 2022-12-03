@@ -5,6 +5,7 @@ import { CalendarCreateForm } from '../components/calendar/CalendarCreateForm';
 import { CreateEventForm } from '../components/event/CreateEventForm';
 import { InfoEventForm } from '../components/event/InfoEventForm';
 import { ModalWin } from '../components/ModalWin';
+import { ProfileSettings } from '../components/user/ProfileSettings';
 import {
   inviteOff,
   createEventOff,
@@ -12,6 +13,7 @@ import {
   editCalendarOff,
   editEventOff,
   infoEventOff,
+  settingsOff,
 } from '../store/modalSlice';
 
 export const useModal = () => {
@@ -23,10 +25,14 @@ export const useModal = () => {
     editEvent,
     invite,
     infoEvent,
+    settings
   } = useSelector((state) => state.modal);
 
   return (
     <div>
+      <ModalWin show={settings} header={'Profile settings'} onHide={() => dispatch(settingsOff())}>
+        <ProfileSettings />
+      </ModalWin>
       <ModalWin show={invite} onHide={() => dispatch(inviteOff())}>
         <div>
           <h1>INVITE</h1>
@@ -65,6 +71,7 @@ export const useModal = () => {
       </ModalWin>
       <ModalWin
         show={createCalendar}
+        header={'Calendar creation'}
         onHide={() => dispatch(createCalendarOff())}>
         <CalendarCreateForm />
       </ModalWin>

@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { logOut } from '../store/authSlice';
 import logoImg from '../assets/logo.png';
+import { settingsOn } from '../store/modalSlice';
 
 export const NavBar = () => {
   const [active, setActive] = useState('home');
@@ -60,13 +61,13 @@ export const NavBar = () => {
             </Dropdown.Header>
             <Dropdown.Item
               className='flex'
-              onClick={() => navigate('/profile')}>
+              onClick={() => navigate(`/user/${me.id}`)}>
               <BiUserCircle className='mr-2' />
               Profile
             </Dropdown.Item>
             <Dropdown.Item
               className='flex'
-              onClick={() => navigate('/profile')} // TODO: add Settings
+              onClick={() => dispatch(settingsOn())} // TODO: add Settings
             >
               <GoGear className='mr-2' />
               Settings

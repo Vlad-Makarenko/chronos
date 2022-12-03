@@ -6,10 +6,10 @@ import { ResetPassword } from '../pages/ResetPassword';
 import { Main } from '../pages/Main';
 import { Home } from '../pages/Home';
 import { CalendarPage } from '../pages/CalendarPage';
-import { Profile } from '../pages/Profile';
 import { Hidden } from '../pages/Hidden';
 import { Auth } from '../pages/Auth';
 import { CheckLogin } from '../components/CheckLogin';
+import { User } from '../pages/User';
 
 export const useRoutes = () => {
   const { isAuthenticated, buf } = useSelector((state) => state.auth);
@@ -19,10 +19,10 @@ export const useRoutes = () => {
       <Route element={<CheckLogin />}>
         {isAuthenticated || buf ? (
           <>
-            <Route path='/' element={<Main />} exact />
+            {/* <Route path='/' element={<Main />} exact /> */}
             <Route path='/home' element={<Home />} exact />
             <Route path='/calendar/:id' element={<CalendarPage />} exact />
-            <Route path='/profile' element={<Profile />} exact />
+            <Route path='/user/:id' element={<User />} exact />
             <Route path='/hidden' element={<Hidden />} exact />
             <Route
               path='/password-reset/:token'

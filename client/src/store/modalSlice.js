@@ -8,9 +8,16 @@ const modalSlice = createSlice({
     createEvent: false,
     invite: false,
     editEvent: false,
-    infoEvent: false
+    infoEvent: false,
+    settings: false
   },
   reducers: {
+    settingsOn(state) {
+      state.settings = true;
+    },
+    settingsOff(state) {
+      state.settings = false;
+    },
     createCalendarOn(state) {
       state.createCalendar = true;
     },
@@ -62,7 +69,9 @@ export const {
   editEventOn,
   editEventOff,
   infoEventOn,
-  infoEventOff
+  infoEventOff,
+  settingsOn,
+  settingsOff
 } = modalSlice.actions;
 
 export default modalSlice.reducer;

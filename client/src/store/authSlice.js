@@ -186,6 +186,7 @@ const authSlice = createSlice({
       state.isLoading = false;
     },
     [editProfile.fulfilled]: (state, action) => {
+      toast.success('Profile has been successfully updated');
       state.me = action.payload;
       state.isLoading = false;
     },
@@ -195,7 +196,7 @@ const authSlice = createSlice({
       state.isLoading = false;
     },
     [resetPassword.fulfilled]: (state) => {
-      toast.success('Password successfully reseted');
+      toast.success('Password has been successfully reset');
       state.success = true;
       state.isLoading = false;
     },

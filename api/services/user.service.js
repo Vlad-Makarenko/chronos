@@ -13,10 +13,10 @@ const getAllUsers = async () => {
 
 const getUser = async (id) => {
   const user = await User.findById(id)
-    .select('id login email avatar fullName')
+    .select('id login email avatar fullName createdAt')
     .populate({
       path: 'calendars',
-      select: 'name description events participants createdAt',
+      select: 'name description events participants isPublic',
       match: { isPublic: true },
     });
   if (!user) {

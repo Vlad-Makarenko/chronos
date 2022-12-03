@@ -45,7 +45,6 @@ export const CalendarCreateForm = () => {
     <form
       onSubmit={createHandler}
       className='flex flex-col justify-center items-center w-full mb-4'>
-      <h1 className='text-xl'>Create calendar</h1>
       <label htmlFor='password' className='self-start'>
         Name:
       </label>

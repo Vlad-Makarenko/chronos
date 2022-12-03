@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Tooltip } from 'flowbite-react';
 import {
   MdEventNote,
@@ -17,13 +17,14 @@ import { editCalendarOn } from '../../store/modalSlice';
 export const CalendarCard = ({ calendar }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { me } = useSelector((state) => state.auth);
   return (
     <div className='flex flex-col border cursor-pointer w-5/12 lg:w-1/5 mx-3 my-5 border-green-400 rounded-lg p-1 pb-3 hover:shadow-md hover:shadow-green-400 animate-appear'>
       <div className='flex self-end'>
         <Tooltip content={calendar.description}>
           <MdInfo color='green' className='mx-1' />
         </Tooltip>
-        {calendar.type !== 'main' && (
+        {calendar.type !== 'main' && me.id === calendar.author && (
           <Tooltip content='Edit calendar'>
             <MdEdit
               onClick={() => dispatch(editCalendarOn())}
@@ -32,7 +33,7 @@ export const CalendarCard = ({ calendar }) => {
             />
           </Tooltip>
         )}
-        {calendar.type !== 'main' && (
+        {calendar.type !== 'main' && me.id === calendar.author && (
           <Tooltip content='Delete calendar'>
             <MdDelete
               onClick={() => dispatch(deleteCalendar({ id: calendar._id }))}
