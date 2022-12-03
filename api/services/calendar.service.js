@@ -50,6 +50,7 @@ const makeDefaultCalendar = async (user, country, language) => {
     eventService.createEvent(mainCalendar.id, {
       ...element,
       parentCalendar: mainCalendar.id,
+      description: 'National holiday',
     });
   });
 };

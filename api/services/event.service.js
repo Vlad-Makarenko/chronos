@@ -58,7 +58,7 @@ const updateEvent = async (
   event.color = color || event.color;
   event.startEvent = startEvent || event.startEvent;
   event.endEvent = endEvent || event.endEvent;
-  event.isPerformed = isPerformed || event.isPerformed;
+  event.isPerformed = isPerformed;
   event.allDay = allDay;
   await event.save();
   return event;
