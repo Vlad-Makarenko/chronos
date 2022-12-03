@@ -115,7 +115,22 @@ const eventSlice = createSlice({
   initialState: {
     events: [],
     todayEvents: [],
-    event: {},
+    event: {
+      name: '',
+      type: '',
+      color: '',
+      startEvent: '',
+      endEvent: '',
+      allDay: false,
+      isPerformed: false,
+      author: {
+        _id: 0,
+        login: '',
+        fullName: '',
+        avatar: '',
+      },
+      sharedParticipants: []
+    },
     eventLoading: false,
     isLoading: false,
     success: false,

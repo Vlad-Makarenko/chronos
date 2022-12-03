@@ -13,7 +13,7 @@ export const EditEventForm = () => {
 
   const { currentCalendar } = useSelector((state) => state.calendar);
   const { isLoading, success, event } = useSelector((state) => state.event);
-  const [value, setValue] = useState({});
+  const [value, setValue] = useState({ value: 'task', label: 'Task' });
   const [form, setForm] = useState({
     name: event.name,
     description: event.description,
@@ -25,7 +25,6 @@ export const EditEventForm = () => {
   });
 
   useEffect(() => {
-    console.log(event.type);
     setForm({ name: event.name,
       description: event.description,
       color: event.color,
@@ -46,8 +45,6 @@ export const EditEventForm = () => {
             ? '#0000FF'
             : '#008000',
     });
-    console.log(form.type);
-    console.log(currentEventType(form.type));
     setValue(currentEventType(form.type));
   }, [form.type]);
 
@@ -68,7 +65,6 @@ export const EditEventForm = () => {
   }, [success]);
 
   const changeHandler = (item) => {
-    console.log(item.target.value);
     if (item.target.name === 'allDay') {
       setForm({ ...form, [item.target.name]: !form.allDay });
     } else {
@@ -131,10 +127,14 @@ export const EditEventForm = () => {
           isClearable
           isSearchable
           name='type'
-          onChange={(option) => setForm({ ...form, type: option.value })}
+          onChange={(option) => {
+            setValue(option);
+            setForm({ ...form, type: option.value });
+          }}
           placeholder='Select event type'
           options={eventTypes}
-          value={ value }
+          value={value}
+          // defaultValue={eventTypes[0]}
         />
       </div>
       <div className='flex items-center justify-center self-start'>

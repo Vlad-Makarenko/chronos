@@ -161,8 +161,4 @@ const calendarSlice = createSlice({
   },
 });
 
-// export const {
-//   clearError, updateFilters, clearFilters, filterPosts, resetFilters, changePage,
-// } = calendarSlice.actions;
-
 export default calendarSlice.reducer;

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { Avatar, Checkbox, Label, Button } from 'flowbite-react';
 import Select from 'react-select';
 
@@ -9,6 +10,7 @@ import { editEventOn, infoEventOff } from '../../store/modalSlice';
 
 export const InfoEventForm = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { eventLoading, event } = useSelector((state) => state.event);
   const [isPerformed, setIsPerformed] = useState(!!event.isPeformed);
 
@@ -33,7 +35,10 @@ export const InfoEventForm = () => {
               alt='User settings'
               img={event.author ? event.author.avatar : ''}
             />
-            <p className='cursor-pointer' onClick={() => console.log('loh')}>
+            <p className='cursor-pointer' onClick={() => {
+              navigate(`/user/${event.author._id}`);
+              dispatch(infoEventOff());
+            }}>
               {event.author ? event.author.login : ''}
             </p>
           </dd>
@@ -82,7 +87,10 @@ export const InfoEventForm = () => {
                   />
                   <p
                     className='cursor-pointer'
-                    onClick={() => console.log('loh')}>
+                    onClick={() => {
+                      navigate(`/user/${event.sharedParticipants._id}`);
+                      dispatch(infoEventOff());
+                    }}>
                     {event.sharedParticipants
                       ? event.sharedParticipants.login
                       : ''}
@@ -107,7 +115,6 @@ export const InfoEventForm = () => {
       </dl>
       <div className='border-t mt-3 py-3 px-4 border-gray-200'>
         <Checkbox disabled={event.type === 'holiday'} onChange={() => {
-          console.log(isPerformed);
           dispatch(updateEvent({ ...event, isPerformed: !isPerformed }));
           setIsPerformed(!isPerformed);
         }} checked={isPerformed} className='cursor-pointer' id='remember' />
