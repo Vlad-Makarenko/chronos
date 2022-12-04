@@ -111,6 +111,18 @@ export const deleteEvent = createAsyncThunk(
   }
 );
 
+export const acceptEventInvite = createAsyncThunk(
+  'event/acceptEventInvite',
+  async ({ key }, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`${API_URL}/event/acceptInvite/${key}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const eventSlice = createSlice({
   name: 'event',
   initialState: {
@@ -159,6 +171,9 @@ const eventSlice = createSlice({
       state.isLoading = true;
       state.success = false;
     },
+    [acceptEventInvite.pending]: (state) => {
+      state.isLoading = true;
+    },
     [getTodayEvents.fulfilled]: (state, action) => {
       state.todayEvents = action.payload;
       state.isLoading = false;
@@ -176,6 +191,10 @@ const eventSlice = createSlice({
       state.events = [...state.events, action.payload];
       state.isLoading = false;
       state.success = true;
+    },
+    [acceptEventInvite.fulfilled]: (state) => {
+      toast.success('Invite has been successfully accepted!');
+      state.isLoading = false;
     },
     [updateEvent.fulfilled]: (state, action) => {
       toast.success('Event has been successfully updated!');
@@ -195,6 +214,7 @@ const eventSlice = createSlice({
       toast.error(action.payload.message);
       console.log('Request error: ', action.payload);
     },
+    [acceptEventInvite.rejected]: errorHandler,
     [getAllEvents.rejected]: errorHandler,
     [updateEvent.rejected]: errorHandler,
   },

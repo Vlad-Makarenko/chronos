@@ -19,6 +19,7 @@ module.exports.eventSchema = new mongoose.Schema({
     default: 'task',
   },
   description: String,
+  inviteLink: String,
   color: {
     type: String,
     default: '#008000',

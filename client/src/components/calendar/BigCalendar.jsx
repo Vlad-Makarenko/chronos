@@ -3,6 +3,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 
+import invert from 'invert-color';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   eventDateUpdate,
@@ -38,7 +39,9 @@ export const BigCalendar = ({ events }) => {
   }, [events]);
 
   const eventPropGetter = useCallback((event) => ({
-    ...(event.color && { style: { backgroundColor: event.color } }),
+    ...(event.color && {
+      style: { backgroundColor: event.color, color: invert(event.color, true) },
+    }),
   }));
 
   const onEventResize = (data) => {

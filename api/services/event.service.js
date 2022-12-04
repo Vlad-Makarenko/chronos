@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const { Calendar, Event, User } = require('../models');
 const ApiError = require('../utils/ApiError');
 
@@ -15,19 +16,6 @@ const createEvent = async (calendarId, event) => {
     return docEvent;
   });
   return createdEvent;
-};
-
-const addParticipant = async (eventId, participantId) => {
-  const participant = await User.findById(participantId);
-  if (!participant) {
-    throw ApiError.BadRequestError('wrong user');
-  }
-  const event = await Event.findByIdAndUpdate(
-    eventId,
-    { $push: { sharedParticipants: participantId } },
-    { new: true, useFindAndModify: false },
-  );
-  return event;
 };
 
 const updateEvent = async (
@@ -64,11 +52,19 @@ const updateEvent = async (
   return event;
 };
 
-const getAllEvents = async (calendarId) => {
-  const events = await Event.find().where('parentCalendar').equals(calendarId);
-  if (!events) {
-    throw ApiError.NothingFoundError('no events found');
+const getAllEvents = async (calendarId, userId) => {
+  const calendar = await Calendar.findById(calendarId);
+  if (calendar.type === 'main') {
+    const events = await Event.find({
+      $or: [
+        { parentCalendar: mongoose.Types.ObjectId(calendar.id) },
+        { sharedParticipants: mongoose.Types.ObjectId(userId) },
+      ],
+    }).populate({ path: 'sharedParticipants', select: 'login fullName avatar id' });
+
+    return events;
   }
+  const events = await Event.find().where('parentCalendar').equals(calendarId);
   return events;
 };
 
@@ -112,6 +108,42 @@ const getEventById = async (id, userId) => {
   if (!event) {
     return null;
   }
+  return event;
+};
+
+const addParticipant = async (userId, link) => {
+  const participant = await User.findById(userId);
+  if (!participant) {
+    throw ApiError.BadRequestError('User is not authorized');
+  }
+  const candidate = await Event.findOne().where('inviteLink').equals(link);
+  if (!candidate) {
+    throw ApiError.BadRequestError('Wrong link');
+  }
+  if (candidate.sharedParticipants.includes(userId)) {
+    throw ApiError.BadRequestError('You have already accepted this invitation');
+  }
+  if (candidate.author.toString() === userId) {
+    throw ApiError.BadRequestError('Їбанутий? куди ти... куди ти жмав');
+  }
+  const calendar = await Calendar.findOne()
+    .where('author')
+    .equals(userId)
+    .where('type')
+    .equals('main');
+  const event = await Event.findByIdAndUpdate(
+    candidate.id,
+    {
+      $push: { sharedParticipants: userId },
+    },
+    { new: true, useFindAndModify: false },
+  );
+  console.log(calendar, candidate, event);
+  await Calendar.findByIdAndUpdate(
+    calendar.id,
+    { $push: { events: event.id } },
+    { new: true, useFindAndModify: false },
+  );
   return event;
 };
 

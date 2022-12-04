@@ -1,5 +1,6 @@
 const { validationResult } = require('express-validator');
 
+const uuid = require('uuid');
 const eventService = require('../services/event.service');
 const mailService = require('../services/mail.service');
 const ApiError = require('../utils/ApiError');
@@ -24,6 +25,7 @@ const createEvent = async (req, res, next) => {
       startEvent,
       endEvent,
       allDay,
+      inviteLink: `${process.env.CLIENT_URL}/acceptInvite/event/${uuid.v4()}`,
     });
 
     return res.status(201).json(event);
@@ -69,7 +71,7 @@ const updateEvent = async (req, res, next) => {
 
 const getAllEvents = async (req, res, next) => {
   try {
-    const result = await eventService.getAllEvents(req.params.calendarId);
+    const result = await eventService.getAllEvents(req.params.calendarId, req.user.id);
     res.status(200).json(result);
   } catch (err) {
     next(err);
@@ -127,13 +129,9 @@ const sendInvite = async (req, res, next) => {
 const acceptInvite = async (req, res, next) => {
   try {
     const { key } = req.params;
-    const participant = jwt.verify(key, process.env.JWT_ACCESS_SECRET);
-    if (!participant) {
-      return next(
-        ApiError.BadRequestError('link expired or participant invalid'),
-      );
-    }
-    await eventService.addParticipant(participant.event, participant.to.id);
+    const link = `${process.env.CLIENT_URL}/acceptInvite/event/${key}`;
+    const event = await eventService.addParticipant(req.user.id, link);
+    res.status(201).json(event);
   } catch (err) {
     next(err);
   }

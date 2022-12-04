@@ -3,6 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Avatar, Checkbox, Label, Button } from 'flowbite-react';
 import Select from 'react-select';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { RiFileCopy2Fill } from 'react-icons/ri';
+import { useMessage } from '../../hooks/message.hook';
 
 import { Loader } from '../Loader';
 import { deleteEvent, updateEvent } from '../../store/eventSlice';
@@ -10,6 +13,7 @@ import { editEventOn, infoEventOff } from '../../store/modalSlice';
 
 export const InfoEventForm = () => {
   const dispatch = useDispatch();
+  const message = useMessage();
   const navigate = useNavigate();
   const { eventLoading, event } = useSelector((state) => state.event);
   const { me } = useSelector((state) => state.auth);
@@ -33,10 +37,12 @@ export const InfoEventForm = () => {
               alt='User settings'
               img={event.author ? event.author.avatar : ''}
             />
-            <p className='cursor-pointer' onClick={() => {
-              navigate(`/user/${event.author._id}`);
-              dispatch(infoEventOff());
-            }}>
+            <p
+              className='cursor-pointer'
+              onClick={() => {
+                navigate(`/user/${event.author._id}`);
+                dispatch(infoEventOff());
+              }}>
               {event.author ? event.author.login : ''}
             </p>
           </dd>
@@ -77,21 +83,15 @@ export const InfoEventForm = () => {
                   <Avatar
                     className='pr-3'
                     alt='User settings'
-                    img={
-                      event.sharedParticipants
-                        ? event.sharedParticipants.avatar
-                        : ''
-                    }
+                    img={participant.avatar}
                   />
                   <p
                     className='cursor-pointer'
                     onClick={() => {
-                      navigate(`/user/${event.sharedParticipants._id}`);
+                      navigate(`/user/${participant._id}`);
                       dispatch(infoEventOff());
                     }}>
-                    {event.sharedParticipants
-                      ? event.sharedParticipants.login
-                      : ''}
+                    {participant.login}
                   </p>
                 </div>
               ))}
@@ -111,25 +111,62 @@ export const InfoEventForm = () => {
           </dd>
         </div>
       </dl>
-      {event.author && event.author._id === me.id && <div className='border-t mt-3 py-3 px-4 border-gray-200'>
-        <Checkbox disabled={event.type === 'holiday'} onChange={() => {
-          dispatch(updateEvent({ ...event, isPerformed: !isPerformed }));
-          setIsPerformed(!isPerformed);
-        }} checked={isPerformed} className='cursor-pointer' id='remember' />
-        <Label className='pl-5 cursor-pointer' htmlFor='remember'>
-          Event is performed
-        </Label>
-        <div className='flex justify-between mt-5'>
-          <Button disabled={event.type === 'holiday'} onClick={() => {
-            dispatch(infoEventOff());
-            dispatch(editEventOn());
-          }} gradientMonochrome='cyan'>Edit Event</Button>
-          <Button disabled={event.type === 'holiday'} onClick={() => {
-            dispatch(deleteEvent({ id: event._id }));
-            dispatch(infoEventOff());
-          }} gradientMonochrome='failure'>Delete Event</Button>
+      {event.author
+        && event.author._id === me.id
+        && event.type !== 'holiday' && (
+          <>
+            <div className='border-t my-3'></div>
+            <div className='w-full  mt-3 flex border rounded-md border-green-200'>
+              <span className='w-9/12 py-3 px-4 text-sm'>
+                {event.inviteLink}
+              </span>
+              <CopyToClipboard
+                text={event.inviteLink}
+                onCopy={() => message('Invitation link copied')}>
+                <button className='w-3/12 flex items-center justify-center text-white rounded-md bg-green-500 hover:bg-green-600 hover:shadow-md hover:shadow-green-400'>
+                  <RiFileCopy2Fill color='white' className='mr-3' /> Copy
+                </button>
+              </CopyToClipboard>
+            </div>
+          </>
+      )}
+      {event.author && event.author._id === me.id && (
+        <div className='border-t mt-3 py-3 px-4 border-gray-200'>
+          <Checkbox
+            disabled={event.type === 'holiday'}
+            onChange={() => {
+              dispatch(updateEvent({ ...event, isPerformed: !isPerformed }));
+              setIsPerformed(!isPerformed);
+            }}
+            checked={isPerformed}
+            className='cursor-pointer'
+            id='remember'
+          />
+          <Label className='pl-5 cursor-pointer' htmlFor='remember'>
+            Event is performed
+          </Label>
+          <div className='flex justify-between mt-5'>
+            <Button
+              disabled={event.type === 'holiday'}
+              onClick={() => {
+                dispatch(infoEventOff());
+                dispatch(editEventOn());
+              }}
+              gradientMonochrome='cyan'>
+              Edit Event
+            </Button>
+            <Button
+              disabled={event.type === 'holiday'}
+              onClick={() => {
+                dispatch(deleteEvent({ id: event._id }));
+                dispatch(infoEventOff());
+              }}
+              gradientMonochrome='failure'>
+              Delete Event
+            </Button>
+          </div>
         </div>
-      </div>}
+      )}
     </div>
   );
 };

@@ -18,7 +18,7 @@ const createCalendar = async (req, res, next) => {
       name,
       description,
       isPublic,
-      inviteLink: `${process.env.CLIENT_URL}/acceptInvite/${uuid.v4()}`,
+      inviteLink: `${process.env.CLIENT_URL}/acceptInvite/calendar/${uuid.v4()}`,
     });
     return res.status(201).json(calendar);
   } catch (err) {
@@ -126,7 +126,7 @@ const sendInvite = async (req, res, next) => {
 const acceptInvite = async (req, res, next) => {
   try {
     const { key } = req.params;
-    const link = `${process.env.CLIENT_URL}/acceptInvite/${key}`;
+    const link = `${process.env.CLIENT_URL}/acceptInvite/calendar/${key}`;
     const calendar = await calendarService.addParticipant(req.user.id, link);
     res.status(201).json(calendar);
   } catch (err) {
