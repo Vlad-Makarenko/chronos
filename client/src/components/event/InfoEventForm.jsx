@@ -4,8 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { Avatar, Checkbox, Label, Button } from 'flowbite-react';
 import Select from 'react-select';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { RiFileCopy2Fill } from 'react-icons/ri';
+import { RiFileCopy2Fill, RiMailAddLine } from 'react-icons/ri';
 import { useMessage } from '../../hooks/message.hook';
+import { usersToSelect } from '../../utils/user.utils';
 
 import { Loader } from '../Loader';
 import { deleteEvent, updateEvent } from '../../store/eventSlice';
@@ -15,9 +16,16 @@ export const InfoEventForm = () => {
   const dispatch = useDispatch();
   const message = useMessage();
   const navigate = useNavigate();
+
+  const { users, isLoading: usersLoading } = useSelector((state) => state.user);
   const { eventLoading, event } = useSelector((state) => state.event);
   const { me } = useSelector((state) => state.auth);
   const [isPerformed, setIsPerformed] = useState(!!event.isPerformed);
+  const [userOptions, setUserOptions] = useState([]);
+
+  useEffect(() => {
+    setUserOptions(usersToSelect(users));
+  }, [usersLoading]);
 
   useEffect(() => {
     setIsPerformed(!!event.isPerformed);
@@ -116,10 +124,27 @@ export const InfoEventForm = () => {
         && event.type !== 'holiday' && (
           <>
             <div className='border-t my-3'></div>
+            <div className='flex'>
+              <Select
+                className='basic-single w-9/12 p-0 pt-2 m-0'
+                classNamePrefix='select'
+                isClearable
+                isSearchable
+                isMulti
+                name='categories'
+                options={userOptions}
+                placeholder='Type user login to invite.'
+              />
+              <button className='w-3/12 flex items-center justify-center text-white rounded-md bg-green-500 hover:bg-green-600 hover:shadow-md hover:shadow-green-400'>
+                <RiMailAddLine color='white' className='mr-3' /> Send invite
+              </button>
+            </div>
             <div className='w-full  mt-3 flex border rounded-md border-green-200'>
-              <span className='w-9/12 py-3 px-4 text-sm'>
-                {event.inviteLink}
-              </span>
+              <input
+                disabled
+                value={event.inviteLink}
+                className='w-9/12 py-3 px-4 text-sm'
+              />
               <CopyToClipboard
                 text={event.inviteLink}
                 onCopy={() => message('Invitation link copied')}>

@@ -80,8 +80,8 @@ export const BigCalendar = ({ events }) => {
       }}
       onSelectEvent={(slotInfo) => {
         dispatch(getEvent({ id: slotInfo._id }));
-        dispatch(infoEventOn());
         dispatch(getAllUsers());
+        dispatch(infoEventOn());
       }}
       resizable
       selectable

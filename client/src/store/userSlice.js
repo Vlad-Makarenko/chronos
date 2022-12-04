@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../http';
 import { API_URL } from '../utils/constants';
