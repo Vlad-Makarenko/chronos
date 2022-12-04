@@ -121,13 +121,14 @@ export const CreateEventForm = () => {
       </div>
       <div className='flex items-center justify-center self-start'>
         <input
+          id='allDay'
           type='checkbox'
           onChange={changeHandler}
           checked={form.allDay}
           name='allDay'
           className='ml-1 mr-3 my-2 rounded-sm'
         />
-        <label htmlFor='allDay'>make this event an all day event</label>
+        <label htmlFor='allDay' className='cursor-pointer'>make this event an all day event</label>
       </div>
       <div className='flex items-center self-start w-full'>
         <label htmlFor='start' className='text-xl mr-3'>

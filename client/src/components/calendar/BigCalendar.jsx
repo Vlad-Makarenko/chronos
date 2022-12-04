@@ -3,8 +3,12 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 
-import { useDispatch } from 'react-redux';
-import { eventDateUpdate, eventsToCalendar, getEditEventDate } from '../../utils/event.utils';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  eventDateUpdate,
+  eventsToCalendar,
+  getEditEventDate,
+} from '../../utils/event.utils';
 import { useMessage } from '../../hooks/message.hook';
 
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
@@ -19,6 +23,9 @@ const DnDCalendar = withDragAndDrop(Calendar);
 export const BigCalendar = ({ events }) => {
   const message = useMessage();
   const dispatch = useDispatch();
+
+  const { currentCalendar } = useSelector((state) => state.calendar);
+  const { me } = useSelector((state) => state.auth);
 
   const { views } = useMemo(() => ({
     views: { month: true, day: true, week: true },
@@ -61,7 +68,12 @@ export const BigCalendar = ({ events }) => {
       onEventDrop={onEventDrop}
       onEventResize={onEventResize}
       onSelectSlot={() => {
-        dispatch(createEventOn());
+        if (
+          currentCalendar.participants.some((itm) => itm._id === me.id)
+          || currentCalendar.author._id === me.id
+        ) {
+          dispatch(createEventOn());
+        }
       }}
       onSelectEvent={(slotInfo) => {
         dispatch(getEvent({ id: slotInfo._id }));

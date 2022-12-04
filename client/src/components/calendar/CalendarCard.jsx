@@ -11,7 +11,7 @@ import {
   MdPeople,
 } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
-import { deleteCalendar, getCalendar } from '../../store/calendarSlice';
+import { deleteCalendar, deleteParticipant, getCalendar } from '../../store/calendarSlice';
 import { editCalendarOn, infoCalendarOn } from '../../store/modalSlice';
 
 export const CalendarCard = ({ calendar }) => {
@@ -21,7 +21,7 @@ export const CalendarCard = ({ calendar }) => {
   return (
     <div className='flex flex-col border cursor-pointer w-5/12 lg:w-1/5 mx-3 my-5 border-green-400 rounded-lg p-1 pb-3 hover:shadow-md hover:shadow-green-400 animate-appear'>
       <div className='flex self-end'>
-        <Tooltip content={calendar.description}>
+        <Tooltip content='More info'>
           <MdInfo
             onClick={() => {
               dispatch(getCalendar({ id: calendar._id }));
@@ -47,6 +47,15 @@ export const CalendarCard = ({ calendar }) => {
           <Tooltip content='Delete calendar'>
             <MdDelete
               onClick={() => dispatch(deleteCalendar({ id: calendar._id }))}
+              color='green'
+              className='mx-1'
+            />
+          </Tooltip>
+        )}
+        {calendar.participants.includes(me.id) && (
+          <Tooltip content='Remove me from this calendar'>
+            <MdDelete
+              onClick={() => dispatch(deleteParticipant({ id: calendar._id }))}
               color='green'
               className='mx-1'
             />

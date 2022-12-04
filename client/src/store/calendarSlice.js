@@ -90,6 +90,18 @@ export const deleteCalendar = createAsyncThunk(
   }
 );
 
+export const deleteParticipant = createAsyncThunk(
+  'calendar/deleteParticipant',
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      await api.delete(`${API_URL}/calendar/participant/${id}`);
+      return id;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const acceptCalendarInvite = createAsyncThunk(
   'calendar/acceptCalendarInvite',
   async ({ key }, { rejectWithValue }) => {
@@ -167,6 +179,13 @@ const calendarSlice = createSlice({
       state.success = true;
     },
     [deleteCalendar.fulfilled]: (state, action) => {
+      const id = action.payload;
+      state.allCalendars = state.allCalendars.filter((item) => item._id !== id);
+      state.activeCalendars = getActiveCalendars(state.allCalendars);
+      state.hiddenCalendars = getHiddenCalendars(state.allCalendars);
+      state.isLoading = false;
+    },
+    [deleteParticipant.fulfilled]: (state, action) => {
       const id = action.payload;
       state.allCalendars = state.allCalendars.filter((item) => item._id !== id);
       state.activeCalendars = getActiveCalendars(state.allCalendars);

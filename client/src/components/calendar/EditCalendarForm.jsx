@@ -5,7 +5,9 @@ import { editCalendarOff } from '../../store/modalSlice';
 
 export const EditCalendarForm = () => {
   const dispatch = useDispatch();
-  const { isLoading, success, currentCalendar } = useSelector((state) => state.calendar);
+  const { isLoading, success, currentCalendar } = useSelector(
+    (state) => state.calendar
+  );
   const [form, setForm] = useState({
     name: '',
     description: '',
@@ -78,13 +80,16 @@ export const EditCalendarForm = () => {
       </div>
       <div className='flex items-center justify-center self-start'>
         <input
+          id='public'
           type='checkbox'
           onChange={changeHandler}
           checked={!form.isPublic}
           name='isPublic'
           className='ml-1 mr-3 my-2 rounded-sm'
         />
-        <label htmlFor='remember'>make it private</label>
+        <label htmlFor='public' className='cursor-pointer'>
+          make it private
+        </label>
       </div>
       <button
         type='submit'

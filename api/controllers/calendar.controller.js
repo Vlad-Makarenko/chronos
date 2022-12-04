@@ -92,6 +92,16 @@ const deleteCalendar = async (req, res, next) => {
   }
 };
 
+const deleteParticipant = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    await calendarService.deleteParticipant(req.user.id, id);
+    res.status(204).json({ message: 'Calendar deleted successfully' });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const sendInvite = async (req, res, next) => {
   try {
     const token = jwt.sign(
@@ -131,6 +141,7 @@ module.exports = {
   getAllCalendars,
   getCalendar,
   deleteCalendar,
+  deleteParticipant,
   sendInvite,
   acceptInvite,
 };
