@@ -15,6 +15,7 @@ module.exports.calendarSchema = new mongoose.Schema({
     default: 'own',
   },
   description: String,
+  inviteLink: String,
   participants: [
     {
       type: mongoose.Schema.Types.ObjectId,

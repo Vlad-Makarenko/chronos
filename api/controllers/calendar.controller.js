@@ -1,5 +1,6 @@
 const { validationResult } = require('express-validator');
 
+const uuid = require('uuid');
 const jwt = require('jsonwebtoken');
 const calendarService = require('../services/calendar.service');
 const ApiError = require('../utils/ApiError');
@@ -17,6 +18,7 @@ const createCalendar = async (req, res, next) => {
       name,
       description,
       isPublic,
+      inviteLink: `${process.env.CLIENT_URL}/acceptInvite/${uuid.v4()}`,
     });
     return res.status(201).json(calendar);
   } catch (err) {
@@ -114,13 +116,9 @@ const sendInvite = async (req, res, next) => {
 const acceptInvite = async (req, res, next) => {
   try {
     const { key } = req.params;
-    const participant = jwt.verify(key, process.env.JWT_ACCESS_SECRET);
-    if (!participant) {
-      return next(
-        ApiError.BadRequestError('link expired or participant invalid'),
-      );
-    }
-    await calendarService.addParticipant(participant.event, participant.to.id);
+    const link = `${process.env.CLIENT_URL}/acceptInvite/${key}`;
+    const calendar = await calendarService.addParticipant(req.user.id, link);
+    res.status(201).json(calendar);
   } catch (err) {
     next(err);
   }

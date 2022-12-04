@@ -10,6 +10,7 @@ import { Hidden } from '../pages/Hidden';
 import { Auth } from '../pages/Auth';
 import { CheckLogin } from '../components/CheckLogin';
 import { User } from '../pages/User';
+import { AcceptInvite } from '../pages/AcceptInvite';
 
 export const useRoutes = () => {
   const { isAuthenticated, buf } = useSelector((state) => state.auth);
@@ -24,6 +25,7 @@ export const useRoutes = () => {
             <Route path='/calendar/:id' element={<CalendarPage />} exact />
             <Route path='/user/:id' element={<User />} exact />
             <Route path='/hidden' element={<Hidden />} exact />
+            <Route path='/acceptInvite/:key' element={<AcceptInvite />} exact />
             <Route
               path='/password-reset/:token'
               element={<ResetPassword />}

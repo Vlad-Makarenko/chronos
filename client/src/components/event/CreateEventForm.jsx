@@ -2,14 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Select from 'react-select';
 
-import { useMessage } from '../../hooks/message.hook';
 import { createEventOff } from '../../store/modalSlice';
 import { createEvent, setSuccessFalse } from '../../store/eventSlice';
 import { eventTypes } from '../../utils/event.utils';
 
 export const CreateEventForm = () => {
   const dispatch = useDispatch();
-  const message = useMessage();
 
   const { currentCalendar } = useSelector((state) => state.calendar);
   const { isLoading, success } = useSelector((state) => state.event);

@@ -22,6 +22,6 @@ router.get('/main', authMiddleware, calendarController.getMainCalendar);
 router.get('/:id', authMiddleware, calendarController.getCalendar);
 router.delete('/:id', authMiddleware, calendarController.deleteCalendar);
 router.post('/invite/:id', authMiddleware, calendarController.sendInvite);
-router.patch('/acceptInvite/:key', authMiddleware, calendarController.acceptInvite);
+router.get('/acceptInvite/:key', authMiddleware, calendarController.acceptInvite);
 
 module.exports = router;

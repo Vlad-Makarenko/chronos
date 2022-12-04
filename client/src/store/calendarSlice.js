@@ -35,7 +35,7 @@ export const getCalendar = createAsyncThunk(
 );
 
 export const getMainCalendar = createAsyncThunk(
-  'post/getCalendar',
+  'post/getMainCalendar',
   async (_, { rejectWithValue }) => {
     try {
       const response = await api.get(`${API_URL}/calendar/main`);
@@ -90,6 +90,18 @@ export const deleteCalendar = createAsyncThunk(
   }
 );
 
+export const acceptCalendarInvite = createAsyncThunk(
+  'calendar/acceptCalendarInvite',
+  async ({ key }, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`${API_URL}/calendar/acceptInvite/${key}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const calendarSlice = createSlice({
   name: 'calendar',
   initialState: {
@@ -113,6 +125,9 @@ const calendarSlice = createSlice({
   },
   extraReducers: {
     [getAllCalendars.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [acceptCalendarInvite.pending]: (state) => {
       state.isLoading = true;
     },
     [getCalendar.pending]: (state) => {
@@ -141,6 +156,10 @@ const calendarSlice = createSlice({
       state.currentCalendar = action.payload;
       state.isLoading = false;
     },
+    [acceptCalendarInvite.fulfilled]: (state) => {
+      toast.success('Invite has been successfully accepted!');
+      state.isLoading = false;
+    },
     [createCalendar.fulfilled]: (state, action) => {
       toast.success('Calendar has been successfully created!');
       state.activeCalendars = [...state.activeCalendars, action.payload];
@@ -164,6 +183,7 @@ const calendarSlice = createSlice({
       state.success = true;
     },
     [getAllCalendars.rejected]: errorHandler,
+    [acceptCalendarInvite.rejected]: errorHandler,
     [getCalendar.rejected]: (state, action) => {
       state.calendarLoading = false;
       state.error = action.payload.message;

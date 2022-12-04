@@ -1,4 +1,5 @@
 const { HolidayAPI } = require('holidayapi');
+const mongoose = require('mongoose');
 
 const eventService = require('./event.service');
 const ApiError = require('../utils/ApiError');
@@ -16,14 +17,24 @@ const createCalendar = async (userId, calendar) => await Calendar.create(calenda
     return docCalendar;
   });
 
-const addParticipant = async (calendarId, participantId) => {
-  const participant = await User.findById(participantId);
+const addParticipant = async (userId, link) => {
+  const participant = await User.findById(userId);
   if (!participant) {
-    throw ApiError.BadRequestError('wrong user');
+    throw ApiError.BadRequestError('User is not authorized');
+  }
+  const candidate = await Calendar.findOne().where('inviteLink').equals(link);
+  if (!candidate) {
+    throw ApiError.BadRequestError('Wrong link');
+  }
+  if (candidate.participants.includes(userId)) {
+    throw ApiError.BadRequestError('You have already accepted this invitation');
   }
   const calendar = await Calendar.findByIdAndUpdate(
-    calendarId,
-    { $push: { sharedParticipants: participantId } },
+    candidate.id,
+    {
+      $push: { participants: userId },
+      type: 'shared',
+    },
     { new: true, useFindAndModify: false },
   );
   return calendar;
@@ -82,9 +93,14 @@ const getMainCalendar = async (userId) => {
 };
 
 const getAllCalendars = async (userId) => {
-  const calendar = await Calendar.find()
-    .where('author')
-    .equals(userId)
+  const calendar = await Calendar.find({
+    $or: [
+      { author: mongoose.Types.ObjectId(userId) },
+      { participants: mongoose.Types.ObjectId(userId) },
+    ],
+  })
+    // .where('author')
+    // .equals(userId)
     .populate({ path: 'participants', select: 'id avatar login' });
   // .select('name type description events part isHidden isPublic');
   return calendar;
