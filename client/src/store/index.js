@@ -1,5 +1,4 @@
 import { configureStore } from '@reduxjs/toolkit';
-import commentReducer from './commentSlice';
 import modalReducer from './modalSlice';
 import userReducer from './userSlice';
 import authReducer from './authSlice';
@@ -13,7 +12,6 @@ export default configureStore({
     auth: authReducer,
     calendar: calendarReducer,
     event: eventReducer,
-    comment: commentReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     serializableCheck: false,

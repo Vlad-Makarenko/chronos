@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Navbar, Dropdown, Avatar } from 'flowbite-react';
 import { BiPowerOff, BiUserCircle } from 'react-icons/bi';
 import { GoGear, GoEyeClosed, GoHome } from 'react-icons/go';
-import { BsCalendarRangeFill, BsNewspaper } from 'react-icons/bs';
+import { BsCalendarRangeFill } from 'react-icons/bs';
 import { Switch, useDarkreader } from 'react-darkreader';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -67,7 +67,7 @@ export const NavBar = () => {
             </Dropdown.Item>
             <Dropdown.Item
               className='flex'
-              onClick={() => dispatch(settingsOn())} // TODO: add Settings
+              onClick={() => dispatch(settingsOn())}
             >
               <GoGear className='mr-2' />
               Settings

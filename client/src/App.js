@@ -8,6 +8,7 @@ import { ScrollToTop } from './components/ScrollToTop';
 import { useModal } from './hooks/modal.hook';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
+import { Footer } from './components/Footer';
 
 const App = () => {
   const routes = useRoutes();
@@ -18,6 +19,7 @@ const App = () => {
       <Router>
         <NavBar />
         <div className='App'>{routes}</div>
+        <Footer />
         <ScrollToTop />
         {modals}
       </Router>

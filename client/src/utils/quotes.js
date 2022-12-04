@@ -17,7 +17,7 @@ export const timeQuotes = [{ quote: 'The two most powerful warriors are patience
   { quote: 'Time flies over us, but leaves its shadow behind.', author: 'Nathaniel Hawthorne' },
   { quote: 'Time is what keeps everything from happening at once.', author: 'Ray Cummings' },
   { quote: 'It’s not that we have little time, but more that we waste a good deal of it.', author: 'Seneca' },
-  { quote: 'I wish I could turn back the clock and find you sooner so I can love you longer.', author: 'Unknown' },
+  { quote: 'I wish I could turn back the clock and find you sooner so I can love you longer.', author: 'Unknown author' },
   { quote: 'Time moves slowly, but passes quickly.', author: 'Alice Walker' },
   { quote: 'You will never find time for anything. If you want time, you must make it.', author: 'Charles Buxton' },
   { quote: 'There’s never enough time to do all the nothing you want.', author: 'Bill Watterson' },
@@ -26,7 +26,7 @@ export const timeQuotes = [{ quote: 'The two most powerful warriors are patience
   { quote: 'Time is a great healer, but a poor beautician.', author: 'Lucille S. Harper' },
   { quote: 'No measure of time with you will be long enough. But let’s start with forever.', author: 'Stephenie Meyer' },
   { quote: 'You can’t turn back the clock. But you can wind it up again.', author: 'Bonnie Prudden' },
-  { quote: 'Time has no meaning when you’re in love.', author: 'Unknown' },
+  { quote: 'Time has no meaning when you’re in love.', author: 'Unknown author' },
   { quote: 'Better three hours too soon than one minute too late.', author: 'William Shakespeare' },
   { quote: 'There is never a time or place for true love. It happens accidentally, in a heartbeat, in a single flashing, throbbing moment.', author: 'Sarah Dessen' },
   { quote: 'There is a time for work and a time for love. That leaves no other time.', author: 'Coco Chanel' },
@@ -35,7 +35,9 @@ export const timeQuotes = [{ quote: 'The two most powerful warriors are patience
   { quote: 'Lost time is never found again.', author: 'Benjamin Franklin' },
   { quote: 'The only reason for time is so that everything doesn’t happen at once.', author: 'Albert Einstein' },
   { quote: 'Time you enjoy wasted was not time wasted.', author: 'John Lennon' },
-  { quote: 'Time is precious. Make sure you spend it with the right people.', author: 'Unknown' },
+  { quote: 'Time is precious. Make sure you spend it with the right people.', author: 'Unknown author' },
   { quote: 'Who controls the past, controls the future: who controls the present controls the past.', author: 'George Orwell' },
   { quote: 'Time, which changes people, does not alter the image we have of them.', author: 'Marcel Proust' },
   { quote: 'Own time, or time will own you.', author: 'Brian Norgard' }];
+
+export const getRandomQuote = () => timeQuotes[Math.floor(Math.random() * timeQuotes.length)];

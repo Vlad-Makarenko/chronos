@@ -125,7 +125,7 @@ const authSlice = createSlice({
       email: 'email@example.com',
       login: 'Login',
       fullName: 'Full Name',
-      avatar: 'default.png',
+      avatar: 'https://d1fdloi71mui9q.cloudfront.net/o7cT7VKiQ1KMvXKf5j1Z_4WFdLoIRs3rUMwlw',
     },
     isAuthenticated: false,
     isLoading: false,
