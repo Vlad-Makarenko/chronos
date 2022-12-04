@@ -32,10 +32,4 @@ module.exports.userSchema = new mongoose.Schema({
       ref: 'Calendar',
     },
   ],
-  // friends: [
-  //   {
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     ref: 'User',
-  //   },
-  // ],
 });

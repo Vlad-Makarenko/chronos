@@ -1,5 +1,5 @@
 module.exports = (holidayArr, author) => holidayArr.map((holiday) => {
-  console.log(holiday);
+  // console.log(holiday);
   const correctDate = new Date(holiday.date);
   correctDate.setFullYear(new Date().getFullYear());
   return {

@@ -30,7 +30,7 @@ const addParticipant = async (userId, link) => {
     throw ApiError.BadRequestError('You have already accepted this invitation');
   }
   if (candidate.author.toString() === userId) {
-    throw ApiError.BadRequestError('Їбанутий? куди ти... куди ти жмав');
+    throw ApiError.BadRequestError('You are already an author');
   }
   const calendar = await Calendar.findByIdAndUpdate(
     candidate.id,
@@ -102,13 +102,10 @@ const getAllCalendars = async (userId) => {
       { participants: mongoose.Types.ObjectId(userId) },
     ],
   });
-  // .populate({ path: 'participants', select: 'id avatar login' });
-  // .select('name type description events part isHidden isPublic');
   return calendar;
 };
 
 const updateCalendar = async (
-  // TODO: shared?
   userId,
   calendarId,
   name,
@@ -139,7 +136,7 @@ const deleteCalendar = async (userId, calendarId) => {
   if (calendar.author.toString() !== userId) {
     throw ApiError.ForbiddenError();
   }
-  await Event.deleteMany({ parentCalendar: calendar.id }); // TODO:
+  await Event.deleteMany({ parentCalendar: calendar.id });
   calendar.delete();
 };
 
@@ -148,11 +145,9 @@ const deleteParticipant = async (userId, calendarId) => {
   if (!calendar) {
     throw ApiError.BadRequestError('Calendar does not exist');
   }
-  console.log(calendar);
   calendar.participants = calendar.participants.filter(
     (participant) => participant.toString() !== userId,
   );
-  console.log(calendar);
   await calendar.save();
 };
 

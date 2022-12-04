@@ -32,7 +32,6 @@ const registration = async (
       `User with login ${login} is already registered`,
     );
   }
-  // TODO: add random avatar
   const hashPassword = await bcrypt.hash(password, 4);
   const user = await User.create({
     email,

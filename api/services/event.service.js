@@ -124,7 +124,7 @@ const addParticipant = async (userId, link) => {
     throw ApiError.BadRequestError('You have already accepted this invitation');
   }
   if (candidate.author.toString() === userId) {
-    throw ApiError.BadRequestError('Їбанутий? куди ти... куди ти жмав');
+    throw ApiError.BadRequestError('You are already an author');
   }
   const calendar = await Calendar.findOne()
     .where('author')
@@ -138,7 +138,6 @@ const addParticipant = async (userId, link) => {
     },
     { new: true, useFindAndModify: false },
   );
-  console.log(calendar, candidate, event);
   await Calendar.findByIdAndUpdate(
     calendar.id,
     { $push: { events: event.id } },
@@ -153,8 +152,6 @@ const deleteEvent = async (userId, eventId) => {
     throw ApiError.BadRequestError('Event does not exist');
   }
   if (event.author.toString() !== userId) {
-    // TODO: если выдаём возможность удалять то и другие юзеры тоже могут
-    // (чисто удалять себя из котрибьюторов)
     throw ApiError.ForbiddenError();
   }
   event.delete();

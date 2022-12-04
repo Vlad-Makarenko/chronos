@@ -29,7 +29,7 @@ export const ProfileSettings = () => {
   };
 
   const imgErrHandler = ({ currentTarget }) => {
-    currentTarget.onerror = null; // prevents looping
+    currentTarget.onerror = null;
     message('invalid link to image for avatar', 'error');
     setForm({ ...form, avatar: me.avatar });
   };
