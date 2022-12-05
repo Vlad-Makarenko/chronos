@@ -71,7 +71,10 @@ const updateEvent = async (req, res, next) => {
 
 const getAllEvents = async (req, res, next) => {
   try {
-    const result = await eventService.getAllEvents(req.params.calendarId, req.user.id);
+    const result = await eventService.getAllEvents(
+      req.params.calendarId,
+      req.user.id,
+    );
     res.status(200).json(result);
   } catch (err) {
     next(err);

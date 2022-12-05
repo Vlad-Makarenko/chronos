@@ -81,10 +81,7 @@ const refreshToken = async (Token) => {
   }
   const user = await User.findById(userInfo.id);
   const tokens = tokenService.generateTokens(userDto(user));
-  await tokenService.saveToken(
-    user.id,
-    tokens.refreshToken,
-  );
+  await tokenService.saveToken(user.id, tokens.refreshToken);
 
   return {
     ...tokens,

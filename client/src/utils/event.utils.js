@@ -1,7 +1,9 @@
 import moment from 'moment';
 
-export const updateEventUtil = (events, event) => [...events
-  .filter((item) => item._id !== event._id), event];
+export const updateEventUtil = (events, event) => [
+  ...events.filter((item) => item._id !== event._id),
+  event,
+];
 
 export const eventsToCalendar = (events) => events.map((item) => ({
   ...item,
@@ -16,7 +18,7 @@ export const getEditEventDate = (data) => ({
   start: data.start,
   endEvent: data.end.toString(),
   end: data.end,
-  allDay: data.isAllDay || false
+  allDay: data.isAllDay || false,
 });
 
 export const eventDateUpdate = (events, data) => events.map((item) => {

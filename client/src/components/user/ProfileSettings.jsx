@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BsFillPersonFill, BsImage } from 'react-icons/bs';
 import { HiAtSymbol } from 'react-icons/hi';
@@ -19,6 +19,15 @@ export const ProfileSettings = () => {
     avatar: me.avatar,
   });
 
+  useEffect(() => {
+    setForm({
+      login: me.login,
+      email: me.email,
+      fullName: me.fullName,
+      avatar: me.avatar,
+    });
+  }, [me]);
+
   const editHandler = (e) => {
     e.preventDefault();
     dispatch(editProfile(form));
@@ -38,7 +47,13 @@ export const ProfileSettings = () => {
       onSubmit={editHandler}
       className='flex flex-col justify-center items-center w-full'>
       <div className='flex flex-row justify-center items-center'>
-        <Avatar alt='User avatar' img={form.avatar} onError={imgErrHandler} rounded={true} size='xl'/>
+        <Avatar
+          alt='User avatar'
+          img={form.avatar}
+          onError={imgErrHandler}
+          rounded={true}
+          size='xl'
+        />
       </div>
       <label htmlFor='email' className='self-start py-3'>
         Avatar:

@@ -46,13 +46,7 @@ export const NavBar = () => {
           <Dropdown
             arrowIcon={false}
             inline={true}
-            label={
-              <Avatar
-                alt='User avatar'
-                img={me.avatar}
-                rounded={true}
-              />
-            }>
+            label={<Avatar alt='User avatar' img={me.avatar} rounded={true} />}>
             <Dropdown.Header>
               <span className='block text-sm'>{me.fullName}</span>
               <span className='block truncate text-sm font-medium'>
@@ -67,8 +61,7 @@ export const NavBar = () => {
             </Dropdown.Item>
             <Dropdown.Item
               className='flex'
-              onClick={() => dispatch(settingsOn())}
-            >
+              onClick={() => dispatch(settingsOn())}>
               <GoGear className='mr-2' />
               Settings
             </Dropdown.Item>
@@ -89,19 +82,6 @@ export const NavBar = () => {
       </div>
       {isAuthenticated && (
         <Navbar.Collapse>
-          {/* <Navbar.Link
-            onClick={() => navigate('/')}
-            // active={active === '/'}>
-          >
-            <span
-              className={`flex items-center cursor-pointer p-3 px-5 rounded-md
-              border-r hover:bg-gradient-to-l from-gray-100 hover:text-yellow-900 ${
-                active === '/' ? 'bg-gradient-to-l from-green-100' : ''
-              }`}>
-              <BsNewspaper className='mr-2' />
-              Main
-            </span>
-          </Navbar.Link> */}
           <Navbar.Link
             onClick={() => navigate('/home')}
             active={active === 'home'}>

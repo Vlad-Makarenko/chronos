@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { HiAtSymbol } from 'react-icons/hi';
 
@@ -9,20 +9,12 @@ export const PswdResetForm = ({ setFormType }) => {
   const [form, setForm] = useState({
     email: '',
   });
-  const { isLoading, isAuthenticated, success } = useSelector(
-    (state) => state.auth
-  );
+  const { isLoading } = useSelector((state) => state.auth);
 
   const resetHandler = (e) => {
     e.preventDefault();
     dispatch(resetPswd(form));
   };
-
-  useEffect(() => {
-    if (isAuthenticated || success) {
-      dispatch(ResetPswdOff());
-    }
-  }, [isAuthenticated, success]);
 
   const changeHandler = (event) => {
     setForm({ ...form, [event.target.name]: event.target.value });
@@ -32,7 +24,7 @@ export const PswdResetForm = ({ setFormType }) => {
     <form
       onSubmit={resetHandler}
       className='flex flex-col justify-center items-center w-full'>
-      <h2 className='text-2xl'>Reset password</h2>
+      <h2 className='text-4xl py-4'>Reset password</h2>
       <p className='self-start pl-3 pr-1 text-start'>
         Enter the email from the account for which you want to reset the
         password. We will send a password reset link to this email.
@@ -52,7 +44,10 @@ export const PswdResetForm = ({ setFormType }) => {
           placeholder='Email'
         />
       </div>
-      <button type='submit' className='mt-2 mb-2 w-full text-white rounded-md bg-green-500 p-3 hover:bg-green-600 hover:shadow-md hover:shadow-green-400' disabled={isLoading}>
+      <button
+        type='submit'
+        className='mt-2 mb-2 w-full text-white rounded-md bg-green-500 p-3 hover:bg-green-600 hover:shadow-md hover:shadow-green-400'
+        disabled={isLoading}>
         Send mail
       </button>
       <span>

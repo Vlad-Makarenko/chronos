@@ -87,19 +87,14 @@ export const Footer = () => {
                 rel='noreferrer'>
                 <BsInstagram className='mx-3' />
               </a>
-              <a
-                href='https://twitter.com'
-                target='_blank'
-                rel='noreferrer'>
+              <a href='https://twitter.com' target='_blank' rel='noreferrer'>
                 <BsTwitter className='mx-3' />
               </a>
             </div>
           </div>
           <div className='flex items-center'>
-            <AiOutlineCopyright className='mx-2'/>
-            <span className=''>
-              Chronos 2022
-            </span>
+            <AiOutlineCopyright className='mx-2' />
+            <span className=''>Chronos 2022</span>
           </div>
         </div>
       </div>

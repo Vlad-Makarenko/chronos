@@ -60,7 +60,10 @@ const getAllEvents = async (calendarId, userId) => {
         { parentCalendar: mongoose.Types.ObjectId(calendar.id) },
         { sharedParticipants: mongoose.Types.ObjectId(userId) },
       ],
-    }).populate({ path: 'sharedParticipants', select: 'login fullName avatar id' });
+    }).populate({
+      path: 'sharedParticipants',
+      select: 'login fullName avatar id',
+    });
 
     return events;
   }

@@ -142,7 +142,7 @@ const eventSlice = createSlice({
         fullName: '',
         avatar: '',
       },
-      sharedParticipants: []
+      sharedParticipants: [],
     },
     eventLoading: false,
     isLoading: false,
@@ -155,7 +155,7 @@ const eventSlice = createSlice({
     },
     setSuccessFalse(state) {
       state.success = false;
-    }
+    },
   },
   extraReducers: {
     [getTodayEvents.pending]: (state) => {

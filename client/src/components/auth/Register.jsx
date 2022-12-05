@@ -16,9 +16,7 @@ export const Register = ({ setFormType }) => {
     repeatedPassword: '',
     fullName: '',
   });
-  const { isLoading } = useSelector(
-    (state) => state.auth
-  );
+  const { isLoading } = useSelector((state) => state.auth);
 
   const signUpHandler = (e) => {
     e.preventDefault();

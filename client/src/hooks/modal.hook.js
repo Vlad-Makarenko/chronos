@@ -10,7 +10,6 @@ import { InfoEventForm } from '../components/event/InfoEventForm';
 import { ModalWin } from '../components/ModalWin';
 import { ProfileSettings } from '../components/user/ProfileSettings';
 import {
-  inviteOff,
   createEventOff,
   createCalendarOff,
   editCalendarOff,
@@ -27,7 +26,6 @@ export const useModal = () => {
     editCalendar,
     createEvent,
     editEvent,
-    invite,
     infoEvent,
     infoCalendar,
     settings,
@@ -41,11 +39,6 @@ export const useModal = () => {
         onHide={() => dispatch(settingsOff())}>
         <ProfileSettings />
       </ModalWin>
-      <ModalWin show={invite} onHide={() => dispatch(inviteOff())}>
-        <div>
-          <h1>INVITE</h1>
-        </div>
-      </ModalWin>
       <ModalWin
         show={createCalendar}
         header={'Calendar creation'}
@@ -58,10 +51,16 @@ export const useModal = () => {
         onHide={() => dispatch(createEventOff())}>
         <CreateEventForm />
       </ModalWin>
-      <ModalWin show={editCalendar} header={'Calendar edition'} onHide={() => dispatch(editCalendarOff())}>
+      <ModalWin
+        show={editCalendar}
+        header={'Calendar edition'}
+        onHide={() => dispatch(editCalendarOff())}>
         <EditCalendarForm />
       </ModalWin>
-      <ModalWin show={editEvent} header={'Event edition'} onHide={() => dispatch(editEventOff())}>
+      <ModalWin
+        show={editEvent}
+        header={'Event edition'}
+        onHide={() => dispatch(editEventOff())}>
         <EditEventForm />
       </ModalWin>
       <ModalWin

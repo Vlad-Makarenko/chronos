@@ -71,12 +71,12 @@ export const EditEventForm = () => {
     if (form.allDay) {
       setForm({
         ...form,
-        endEvent: new Date(form.startEvent)
-          .toISOString(),
+        endEvent: new Date(form.startEvent).toISOString(),
       });
     }
     if (
-      (new Date(form.startEvent).getTime() > new Date(form.endEvent).getTime()) && !form.allDay
+      new Date(form.startEvent).getTime() > new Date(form.endEvent).getTime()
+      && !form.allDay
     ) {
       return message('Bad date', 'error');
     }
@@ -148,7 +148,9 @@ export const EditEventForm = () => {
           name='allDay'
           className='ml-1 mr-3 my-2 rounded-sm'
         />
-        <label htmlFor='allDay' className='cursor-pointer'>make this event an all day event</label>
+        <label htmlFor='allDay' className='cursor-pointer'>
+          make this event an all day event
+        </label>
       </div>
       <div className='flex items-center self-start w-full'>
         <label htmlFor='start' className='text-xl mr-3'>

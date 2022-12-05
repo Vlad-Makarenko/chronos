@@ -18,7 +18,10 @@ export const TodayEventCard = ({ event }) => {
         dispatch(getAllUsers());
       }}
       className='flex border-t cursor-pointer w-11/12  mx-3 my-3 border-t-green-400  p-2 px-4 hover:bg-gradient-to-br from-green-100 animate-appear'>
-      <div className={`${event.isPerformed ? 'line-through' : ''} flex h-full items-center w-2/3 font-bold mb-2 py-1 text-xl`}>
+      <div
+        className={`${
+          event.isPerformed ? 'line-through' : ''
+        } flex h-full items-center w-2/3 font-bold mb-2 py-1 text-xl`}>
         {event.name}
       </div>
       <div className='w-1/3 flex h-full items-center justify-end'>

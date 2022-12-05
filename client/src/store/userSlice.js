@@ -12,7 +12,7 @@ export const getAllUsers = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
-  },
+  }
 );
 
 export const getUser = createAsyncThunk(
@@ -24,7 +24,7 @@ export const getUser = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
-  },
+  }
 );
 
 const userSlice = createSlice({

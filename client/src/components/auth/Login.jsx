@@ -30,7 +30,7 @@ export const Login = ({ setFormType }) => {
     <form
       onSubmit={signInHandler}
       className='flex flex-col justify-center items-center w-full'>
-      <h1 className='text-2xl'>Sign In</h1>
+      <h1 className='text-4xl'>Sign In</h1>
       <label htmlFor='login' className='self-start py-2'>
         Login:
       </label>
@@ -59,7 +59,10 @@ export const Login = ({ setFormType }) => {
           Reset
         </span>
       </span>
-      <button type='submit' className='mt-2 mb-2 w-full text-white rounded-md bg-green-500 p-3 hover:bg-green-600 hover:shadow-md hover:shadow-green-400' disabled={isLoading}>
+      <button
+        type='submit'
+        className='mt-2 mb-2 w-full text-white rounded-md bg-green-500 p-3 hover:bg-green-600 hover:shadow-md hover:shadow-green-400'
+        disabled={isLoading}>
         Sign In
       </button>
       <p>

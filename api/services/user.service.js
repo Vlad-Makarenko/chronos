@@ -1,10 +1,10 @@
 const ApiError = require('../utils/ApiError');
 
+const userDto = require('../utils/userDto');
 const { User } = require('../models');
 
 const getAllUsers = async () => {
-  const users = await User.find()
-    .select('id login email avatar fullName');
+  const users = await User.find().select('id login email avatar fullName');
   if (!users) {
     throw ApiError.NothingFoundError();
   }
@@ -49,7 +49,7 @@ const updateUser = async (data, id) => {
   user.fullName = data.fullName || user.full_name;
   user.avatar = data.avatar || user.avatar;
   await user.save();
-  return user;
+  return userDto(user);
 };
 
 module.exports = {

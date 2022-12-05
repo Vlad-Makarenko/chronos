@@ -32,7 +32,6 @@ export const signUp = createAsyncThunk(
         language: location.data.languages.split(',')[0],
       });
       localStorage.setItem('token', response.data.accessToken);
-      // console.table({ ...response.data });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -45,7 +44,6 @@ export const signIn = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       const response = await api.post(`${API_URL}/auth/login`, payload);
-      // console.table({ ...response.data });
       localStorage.setItem('token', response.data.accessToken);
       return response.data;
     } catch (error) {
@@ -56,21 +54,19 @@ export const signIn = createAsyncThunk(
 
 export const editProfile = createAsyncThunk(
   'auth/editProfile',
-  async ({
-    fullName, email, login, avatar,
-  }, { rejectWithValue }) => {
+  async ({ fullName, email, login, avatar }, { rejectWithValue }) => {
     try {
       const response = await api.patch(`${API_URL}/users`, {
         fullName,
         email,
         login,
-        avatar
+        avatar,
       });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
-  },
+  }
 );
 
 export const resetPassword = createAsyncThunk(
@@ -96,7 +92,6 @@ export const resetPswd = createAsyncThunk(
         `${API_URL}/auth/password-reset`,
         payload
       );
-      // console.table({ ...response.data });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -125,7 +120,8 @@ const authSlice = createSlice({
       email: 'email@example.com',
       login: 'Login',
       fullName: 'Full Name',
-      avatar: 'https://d1fdloi71mui9q.cloudfront.net/o7cT7VKiQ1KMvXKf5j1Z_4WFdLoIRs3rUMwlw',
+      avatar:
+        'https://d1fdloi71mui9q.cloudfront.net/o7cT7VKiQ1KMvXKf5j1Z_4WFdLoIRs3rUMwlw',
     },
     isAuthenticated: false,
     isLoading: false,

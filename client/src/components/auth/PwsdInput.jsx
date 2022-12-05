@@ -26,7 +26,7 @@ export const PswdInput = ({ changeHandler, passwordInput, isRepeated }) => {
       />
       <div onClick={togglePassword} className='d-flex align-items-center'>
         {passwordType === 'password' ? (
-          <BsEyeSlashFill color='green' className='mx-3'/>
+          <BsEyeSlashFill color='green' className='mx-3' />
         ) : (
           <BsEyeFill color='green' className='mx-3' />
         )}

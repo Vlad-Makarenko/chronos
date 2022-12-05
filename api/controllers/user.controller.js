@@ -27,10 +27,7 @@ const userUpdate = async (req, res, next) => {
     if (!errors.isEmpty()) {
       return next(ApiError.BadRequestError('validation error', errors.array()));
     }
-    const user = await userService.updateUser(
-      req.body,
-      req.user.id,
-    );
+    const user = await userService.updateUser(req.body, req.user.id);
     res.status(201).json(user);
   } catch (err) {
     next(err);

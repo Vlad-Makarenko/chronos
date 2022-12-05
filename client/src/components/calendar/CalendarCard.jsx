@@ -11,7 +11,11 @@ import {
   MdPeople,
 } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
-import { deleteCalendar, deleteParticipant, getCalendar } from '../../store/calendarSlice';
+import {
+  deleteCalendar,
+  deleteParticipant,
+  getCalendar,
+} from '../../store/calendarSlice';
 import { editCalendarOn, infoCalendarOn } from '../../store/modalSlice';
 import { getAllUsers } from '../../store/userSlice';
 

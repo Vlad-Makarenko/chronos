@@ -133,7 +133,7 @@ const calendarSlice = createSlice({
   reducers: {
     setSuccessFalse(state) {
       state.success = false;
-    }
+    },
   },
   extraReducers: {
     [getAllCalendars.pending]: (state) => {
@@ -195,7 +195,10 @@ const calendarSlice = createSlice({
     [updateCalendar.fulfilled]: (state, action) => {
       toast.success('Calendar has been successfully updated!');
       state.currentCalendar = action.payload;
-      state.allCalendars = updateCalendarsUtil(state.allCalendars, action.payload);
+      state.allCalendars = updateCalendarsUtil(
+        state.allCalendars,
+        action.payload
+      );
       state.activeCalendars = getActiveCalendars(state.allCalendars);
       state.hiddenCalendars = getHiddenCalendars(state.allCalendars);
       state.isLoading = false;
