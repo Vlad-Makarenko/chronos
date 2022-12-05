@@ -7,7 +7,7 @@
 [![MONGODB](https://img.shields.io/static/v1?label=MongoDB&message=5.0.0&color=blueviolet)](https://shields.io/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://shields.io/)
 
-### [🌐 Website](https://thumbs.dreamstime.com/b/coming-soon-banner-template-ribbon-label-sign-177653175.jpg)  |  [📹 Demo Video]()
+### [🌐 Website](https://thumbs.dreamstime.com/b/coming-soon-banner-template-ribbon-label-sign-177653175.jpg)  |  [📹 Demo Video](https://www.youtube.com/watch?v=gaYFdGn0lis)
 
 ### API Hosted On
 - __[stackoverclone.herokuapp]() (Primary)__
@@ -42,7 +42,7 @@ This repo consists of the Frontend and Backend code of the project.
 
 2. Setup the backend code:
    
-   __NOTE:__ For Frontend Developers, if they dont want to setup the Backend Code, they can skip the Step 2, and make sure they follow the optional step mentioned in Step 3
+   __NOTE:__ For Frontend Developers, if they don't want to setup the Backend Code, they can skip the Step 2, and make sure they follow the optional step mentioned in Step 3
 
    - Create a `.env` file and the format should be as given in `.env.example`.
    - Go to the `api` directory & install the modules:
@@ -74,7 +74,7 @@ This repo consists of the Frontend and Backend code of the project.
 
 ## DEMO
 
-#### VIDEO - [Watch the video]()
+#### VIDEO - [Watch the video](https://www.youtube.com/watch?v=gaYFdGn0lis)
 
 
 #### Main page
