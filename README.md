@@ -7,7 +7,7 @@
 [![MONGODB](https://img.shields.io/static/v1?label=MongoDB&message=5.0.0&color=blueviolet)](https://shields.io/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://shields.io/)
 
-### [🌐 Website](https://thumbs.dreamstime.com/b/coming-soon-banner-template-ribbon-label-sign-177653175.jpg)  |  [📹 Demo Video](https://www.youtube.com/watch?v=gaYFdGn0lis)
+### [🌐 Website](https://chronos-calendar.netlify.app/)  |  [📹 Demo Video](https://www.youtube.com/watch?v=gaYFdGn0lis)
 
 ### API Hosted On
 - __[chronos-kiqp.onrender](https://chronos-kiqp.onrender.com/) (Primary)__
