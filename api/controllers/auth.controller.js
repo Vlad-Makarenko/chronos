@@ -31,6 +31,8 @@ const registration = async (req, res, next) => {
     res.cookie('refreshToken', userData.refreshToken, {
       maxAge: 30 * 24 * 3600 * 1000,
       httpOnly: true,
+      secure: true,
+      sameSite: 'none',
     });
     return res.json({ ...userData, refreshToken: undefined });
   } catch (err) {
@@ -45,6 +47,8 @@ const authorization = async (req, res, next) => {
     res.cookie('refreshToken', userData.refreshToken, {
       maxAge: 30 * 24 * 3600 * 1000,
       httpOnly: true,
+      secure: true,
+      sameSite: 'none',
     });
     return res.json({ ...userData, refreshToken: undefined });
   } catch (err) {
@@ -95,6 +99,8 @@ const refreshToken = async (req, res, next) => {
     res.cookie('refreshToken', userData.refreshToken, {
       maxAge: 30 * 24 * 3600 * 1000,
       httpOnly: true,
+      secure: true,
+      sameSite: 'none',
     });
     return res.status(200).json({ ...userData, refreshToken: undefined });
   } catch (err) {

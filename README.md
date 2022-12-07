@@ -10,7 +10,7 @@
 ### [🌐 Website](https://thumbs.dreamstime.com/b/coming-soon-banner-template-ribbon-label-sign-177653175.jpg)  |  [📹 Demo Video](https://www.youtube.com/watch?v=gaYFdGn0lis)
 
 ### API Hosted On
-- __[stackoverclone.herokuapp]() (Primary)__
+- __[chronos-kiqp.onrender](https://chronos-kiqp.onrender.com/) (Primary)__
 
 This is project where people can plan tasks or schedule events for others.
 
