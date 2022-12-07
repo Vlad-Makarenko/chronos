@@ -5,7 +5,7 @@ import logoImg from '../assets/logo.png';
 import { getRandomQuote } from '../utils/quotes';
 
 export const Main = () => {
-  const [quote, setQuote] = useState(getRandomQuote());
+  const [quote] = useState(getRandomQuote());
   const navigate = useNavigate();
   return (
     <div className='container mx-auto flex flex-col justify-center my-10'>
