@@ -75,7 +75,7 @@ export const NavBar = () => {
           <button
             className='p-1 px-3 bg-green-600 rounded-md text-white hover:bg-green-700 animate-pulse hover:animate-none'
             onClick={() => navigate('/auth')}>
-            Get Start!
+            Get Started!
           </button>
         )}
         {isAuthenticated && <Navbar.Toggle />}

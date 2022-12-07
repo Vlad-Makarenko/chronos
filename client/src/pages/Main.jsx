@@ -28,7 +28,7 @@ export const Main = () => {
       <button
             className='lg:p-8 lg:px-16 p-5 px-10 mt-8 bg-green-600 rounded-2xl text-white font-bold lg:text-3xl text-2xl shadow-lg shadow-green-300 hover:bg-green-700 animate-pulse hover:animate-none'
             onClick={() => navigate('/auth')}>
-            Get Start!
+            Get Started!
           </button>
       </div>
     </div>
