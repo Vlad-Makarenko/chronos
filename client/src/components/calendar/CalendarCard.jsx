@@ -17,7 +17,6 @@ import {
   getCalendar,
 } from '../../store/calendarSlice';
 import { editCalendarOn, infoCalendarOn } from '../../store/modalSlice';
-import { getAllUsers } from '../../store/userSlice';
 
 export const CalendarCard = ({ calendar }) => {
   const navigate = useNavigate();
@@ -30,7 +29,6 @@ export const CalendarCard = ({ calendar }) => {
           <MdInfo
             onClick={() => {
               dispatch(getCalendar({ id: calendar._id }));
-              dispatch(getAllUsers());
               dispatch(infoCalendarOn());
             }}
             color='green'

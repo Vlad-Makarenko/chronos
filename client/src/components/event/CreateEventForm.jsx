@@ -75,7 +75,7 @@ export const CreateEventForm = () => {
     <form
       onSubmit={createHandler}
       className='flex flex-col justify-center items-center w-full mb-4'>
-      <label htmlFor='name' className='self-start'>
+      <label htmlFor='name' className='self-start my-1'>
         Name:
       </label>
       <div className='flex tems-center justify-center w-full border border-green-500 rounded-md hover:shadow-md hover:shadow-green-400'>
@@ -89,7 +89,7 @@ export const CreateEventForm = () => {
           placeholder='Name'
         />
       </div>
-      <label htmlFor='desc' className='self-start'>
+      <label htmlFor='desc' className='self-start my-1'>
         Description:
       </label>
       <div className='flex items-center justify-center w-full border border-green-500 rounded-md hover:shadow-md hover:shadow-green-400'>
@@ -103,7 +103,7 @@ export const CreateEventForm = () => {
           placeholder='Description'
         />
       </div>
-      <label htmlFor='desc' className='self-start'>
+      <label htmlFor='desc' className='self-start my-1'>
         Type:
       </label>
       <div className='flex items-center w-full border border-green-500 rounded-md hover:shadow-md hover:shadow-green-400'>
@@ -133,7 +133,7 @@ export const CreateEventForm = () => {
         </label>
       </div>
       <div className='flex items-center self-start w-full'>
-        <label htmlFor='start' className='text-xl mr-3'>
+        <label htmlFor='start' className='text-xl mr-3 w-1/4 lg:w-1/6'>
           Start at:
         </label>
         <input
@@ -146,7 +146,7 @@ export const CreateEventForm = () => {
         />
       </div>
       <div className='flex items-center self-start w-full'>
-        <label htmlFor='start' className='text-xl mr-3'>
+        <label htmlFor='start' className='text-xl mr-3 w-1/4 lg:w-1/6'>
           End at:
         </label>
         <input
@@ -159,7 +159,7 @@ export const CreateEventForm = () => {
         />
       </div>
       <div className='flex items-center self-start w-full'>
-        <label htmlFor='start' className='text-xl mr-3'>
+        <label htmlFor='start' className='text-xl mr-3 w-1/4 lg:w-1/6'>
           Color:
         </label>
         <input

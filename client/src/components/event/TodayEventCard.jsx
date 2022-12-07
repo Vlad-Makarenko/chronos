@@ -5,7 +5,6 @@ import { Tooltip } from 'flowbite-react';
 import { MdInfo } from 'react-icons/md';
 import { HiClock } from 'react-icons/hi';
 import { infoEventOn } from '../../store/modalSlice';
-import { getAllUsers } from '../../store/userSlice';
 import { getEvent } from '../../store/eventSlice';
 
 export const TodayEventCard = ({ event }) => {
@@ -15,7 +14,6 @@ export const TodayEventCard = ({ event }) => {
       onClick={() => {
         dispatch(getEvent({ id: event._id }));
         dispatch(infoEventOn());
-        dispatch(getAllUsers());
       }}
       className='flex border-t cursor-pointer w-11/12  mx-3 my-3 border-t-green-400  p-2 px-4 hover:bg-gradient-to-br from-green-100 animate-appear'>
       <div

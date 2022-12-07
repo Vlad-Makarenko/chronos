@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RiFileCopy2Fill, RiMailAddLine } from 'react-icons/ri';
+import { RiFileCopy2Fill } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import { Avatar, Checkbox, Label, Button } from 'flowbite-react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import Select from 'react-select';
 
 import { useMessage } from '../../hooks/message.hook';
 import { Loader } from '../Loader';
 import { editCalendarOn, infoCalendarOff } from '../../store/modalSlice';
 import { deleteCalendar, updateCalendar } from '../../store/calendarSlice';
-import { usersToSelect } from '../../utils/user.utils';
 
 export const InfoCalendarForm = () => {
   const dispatch = useDispatch();
@@ -20,13 +18,7 @@ export const InfoCalendarForm = () => {
     (state) => state.calendar
   );
   const { me } = useSelector((state) => state.auth);
-  const { users, isLoading: usersLoading } = useSelector((state) => state.user);
   const [isHidden, setIsHidden] = useState(!!currentCalendar.isHidden);
-  const [userOptions, setUserOptions] = useState([]);
-
-  useEffect(() => {
-    setUserOptions(usersToSelect(users));
-  }, [usersLoading]);
 
   useEffect(() => {
     setIsHidden(!!currentCalendar.isHidden);
@@ -110,21 +102,6 @@ export const InfoCalendarForm = () => {
         && currentCalendar.type !== 'main' && (
           <>
             <div className='border-t my-3'></div>
-            <div className='flex'>
-              <Select
-                className='basic-single w-9/12 p-0 pt-2 m-0'
-                classNamePrefix='select'
-                isClearable
-                isSearchable
-                isMulti
-                name='categories'
-                options={userOptions}
-                placeholder='Type user login to invite.'
-              />
-              <button className='w-3/12 flex items-center justify-center text-white rounded-md bg-green-500 hover:bg-green-600 hover:shadow-md hover:shadow-green-400'>
-                <RiMailAddLine color='white' className='mr-3' /> Send invite
-              </button>
-            </div>
             <div className='w-full  mt-3 flex border rounded-md border-green-200'>
               <input
                 disabled

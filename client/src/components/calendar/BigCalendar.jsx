@@ -16,7 +16,6 @@ import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { getEvent, updateEvent } from '../../store/eventSlice';
 import { createEventOn, infoEventOn } from '../../store/modalSlice';
-import { getAllUsers } from '../../store/userSlice';
 
 const localizer = momentLocalizer(moment);
 const DnDCalendar = withDragAndDrop(Calendar);
@@ -80,7 +79,6 @@ export const BigCalendar = ({ events }) => {
       }}
       onSelectEvent={(slotInfo) => {
         dispatch(getEvent({ id: slotInfo._id }));
-        dispatch(getAllUsers());
         dispatch(infoEventOn());
       }}
       resizable

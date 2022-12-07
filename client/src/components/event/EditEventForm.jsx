@@ -153,7 +153,7 @@ export const EditEventForm = () => {
         </label>
       </div>
       <div className='flex items-center self-start w-full'>
-        <label htmlFor='start' className='text-xl mr-3'>
+        <label htmlFor='start' className='text-xl mr-3 w-1/4 lg:w-1/6'>
           Start at:
         </label>
         <input
@@ -166,7 +166,7 @@ export const EditEventForm = () => {
         />
       </div>
       <div className='flex items-center self-start w-full'>
-        <label htmlFor='start' className='text-xl mr-3'>
+        <label htmlFor='start' className='text-xl mr-3 w-1/4 lg:w-1/6'>
           End at:
         </label>
         <input
@@ -179,7 +179,7 @@ export const EditEventForm = () => {
         />
       </div>
       <div className='flex items-center self-start w-full'>
-        <label htmlFor='start' className='text-xl mr-3'>
+        <label htmlFor='start' className='text-xl mr-3 w-1/4 lg:w-1/6'>
           Color:
         </label>
         <input
